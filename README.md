@@ -21,6 +21,7 @@
 5. 3개 생활법률 도메인의 조문 단위 데이터셋
 6. 조문 구조 기반 청킹과 GMS 임베딩·Chroma 색인 파이프라인
 7. 자연어 검색어 확장·재정렬과 30문항 검색 평가셋
+8. 검색 법령 한정 답변 생성과 인용·원문 문구 검증
 
 ## 프로젝트 구조
 
@@ -53,6 +54,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ build_statute_chunks.py     # 조문 구조 기반 청크 생성
 │  ├─ build_statute_index.py      # GMS 임베딩·Chroma 색인
 │  ├─ search_statutes.py          # 자연어 검색어 확장·법령 검색
+│  ├─ answer_statutes.py          # 근거 제한 답변 생성·검증
 │  └─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
@@ -144,6 +146,27 @@ python scripts/evaluate_statute_retrieval.py
 현재 30문항 결과는 전체 `Recall@5 1.000`, `MRR 0.747`입니다. 이 수치는 자체 작성한 고정 평가셋에 대한 검색 성능이며, 실제 법률 판단의 정확도나 새로운 질문에 대한 일반화 성능을 뜻하지 않습니다.
 
 RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과정은 [`docs/troubleshooting.md`](docs/troubleshooting.md)에 정리했습니다.
+
+## 근거 제한 답변 생성
+
+검색된 법령을 CONTEXT로 전달하고 모든 주장에 근거 번호와 법령 원문의 인용문을 요구합니다. 생성 결과는 바로 표시하지 않고 다음 조건을 모두 검사합니다.
+
+- 모든 주장에 하나 이상의 근거 번호가 있는가?
+- 근거 번호가 실제 검색 결과에 존재하는가?
+- 답변에서 언급한 조문 번호와 연결된 근거 조문이 일치하는가?
+- 제출한 원문 인용문이 해당 검색 청크에 실제로 존재하는가?
+- 출처가 국가법령정보센터의 HTTPS URL인가?
+
+JSON 형식이나 근거 검증이 실패하면 첫 응답을 폐기하고 한 번만 다시 생성합니다. 두 번째도 실패하면 모델 문장을 노출하지 않고 고정된 차단 메시지를 반환합니다.
+
+```powershell
+python scripts/answer_statutes.py `
+  "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요" `
+  --category labor `
+  --top-k 5
+```
+
+답변 상태는 `answered`, `no_evidence`, `insufficient_evidence`, `invalid_citations`, `generation_failed` 중 하나입니다. 법률과 무관한 질문은 검색 결과가 형식적으로 존재하더라도 `insufficient_evidence`로 답변하지 않습니다.
 
 ## 테스트
 
