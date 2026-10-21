@@ -24,6 +24,12 @@ PRECEDENT_AUTHORITY_BONUS = {
     "appellate": 0.0003,
 }
 
+GENERIC_CASE_TERMS = {
+    "법률", "법령", "판례", "사례", "소송", "청구", "임금", "임금지급", "체불",
+    "해고", "해고통보", "보증금", "전세", "임대차", "임대차계약", "임대차보증금",
+    "보증금반환", "보증금회수", "상속", "상속재산", "부동산",
+}
+
 
 @dataclass(frozen=True, slots=True)
 class SearchPlan:
@@ -124,6 +130,8 @@ def _rule_terms(query: str, category: LegalCategory) -> tuple[str, ...]:
             terms.extend(("보증금의 회수", "우선변제권"))
         if re.search(r"이사|전입|등기|못\s*받", query):
             terms.extend(("대항력", "우선변제권", "임차권등기명령"))
+        if re.search(r"이사|점유.*잃|퇴거", query) and re.search(r"임차권등기|등기명령", query):
+            terms.extend(("점유 상실", "임대차 종료 후 임차권등기"))
         if re.search(r"갱신|연장|더\s*살", query):
             terms.extend(("계약갱신요구권", "묵시적 갱신"))
         if re.search(r"소액", query) and re.search(r"보증금|임차", query):
@@ -134,6 +142,12 @@ def _rule_terms(query: str, category: LegalCategory) -> tuple[str, ...]:
             terms.extend(("임대인의 의무", "목적물 사용수익 상태 유지", "수선의무"))
         if re.search(r"수리비|필요비|유익비|비용.*돌려", query):
             terms.extend(("임차인의 상환청구권", "필요비 상환"))
+        if re.search(r"보험|보증공사|보증기관", query):
+            terms.extend(("주택도시보증공사", "임차보증금 반환채권"))
+        if re.search(r"지연손해금|집.*돌려주|주택.*인도|부동산.*인도", query):
+            terms.extend(("동시이행", "임차목적물 인도", "보증채무"))
+        if re.search(r"계속|존속|보증금.*받을 때까지", query) and re.search(r"보험|임대차", query):
+            terms.extend(("임대차관계 존속", "임대차기간 중", "전세자금대출용권리보험"))
     elif category is LegalCategory.INHERITANCE:
         if re.search(r"빚|채무|대출", query):
             terms.extend(("상속채무", "상속포기", "한정승인"))
@@ -216,10 +230,17 @@ class ExpandedStatuteRetriever:
         embedder: EmbeddingProvider,
         store: VectorSearcher,
         expander: LegalQueryExpander,
+        *,
+        candidate_pool_factor: int = 3,
+        deduplicate_metadata_key: str | None = None,
     ) -> None:
+        if candidate_pool_factor < 1:
+            raise ValueError("candidate_pool_factor는 1 이상이어야 합니다.")
         self._embedder = embedder
         self._store = store
         self._expander = expander
+        self._candidate_pool_factor = candidate_pool_factor
+        self._deduplicate_metadata_key = deduplicate_metadata_key
 
     def retrieve(
         self,
@@ -250,7 +271,7 @@ class ExpandedStatuteRetriever:
 
         fused: dict[str, RetrievedChunk] = {}
         best_term_scores: dict[str, float] = {}
-        candidate_count = max(top_k * 3, 10)
+        candidate_count = max(top_k * self._candidate_pool_factor, 10)
         for (query, weight, kind), vector in zip(variants, vectors, strict=True):
             hits = self._store.search(vector, category=category, top_k=candidate_count)
             for rank, hit in enumerate(hits, start=1):
@@ -274,6 +295,14 @@ class ExpandedStatuteRetriever:
                 item.distance = min(item.distance, hit.distance)
                 item.matched_queries.append(query)
 
+        case_specific_matches: dict[str, int] = {}
+        normalized_specific_terms = {
+            normalized
+            for term in plan.legal_terms
+            if (normalized := re.sub(r"[^0-9A-Za-z가-힣]", "", term))
+            and len(normalized) >= 4
+            and normalized not in GENERIC_CASE_TERMS
+        }
         for item in fused.values():
             item.score += best_term_scores.get(item.chunk_id, 0.0)
             title = str(item.metadata.get("article_title", ""))
@@ -294,6 +323,39 @@ class ExpandedStatuteRetriever:
                     document_bonus = max(document_bonus, 0.002)
             item.score += title_bonus + document_bonus
             if item.metadata.get("document_type") == "court_case":
+                # 임베딩/RRF가 비슷한 판례 사이에서는 사건명과 본문에 실제로
+                # 나타난 구체 법률어를 이용해 재정렬한다. 짧고 일반적인 단어
+                # 하나가 순위를 독점하지 않도록 용어별·전체 보너스를 제한한다.
+                case_name = re.sub(
+                    r"[^0-9A-Za-z가-힣]", "", str(item.metadata.get("case_name", ""))
+                )
+                searchable = re.sub(
+                    r"[^0-9A-Za-z가-힣]", "",
+                    " ".join((
+                        str(item.metadata.get("case_name", "")),
+                        str(item.metadata.get("related_articles", "")),
+                        item.document,
+                    )),
+                )
+                matched_weight = 0.0
+                name_bonus = 0.0
+                meaningful_terms = 0
+                for term in plan.legal_terms:
+                    normalized_term = re.sub(r"[^0-9A-Za-z가-힣]", "", term)
+                    if len(normalized_term) < 2:
+                        continue
+                    meaningful_terms += 1
+                    specificity = min(len(normalized_term), 8) / 8
+                    if normalized_term in searchable:
+                        matched_weight += 0.001 + (0.0015 * specificity)
+                    if normalized_term in case_name:
+                        name_bonus = max(name_bonus, 0.006 + (0.006 * specificity))
+                coverage = matched_weight / meaningful_terms if meaningful_terms else 0.0
+                case_specific_matches[item.chunk_id] = sum(
+                    term in searchable for term in normalized_specific_terms
+                )
+                item.score += min(matched_weight, 0.012) + min(name_bonus, 0.012)
+                item.score += min(coverage * 2, 0.004)
                 item.score += PRECEDENT_AUTHORITY_BONUS.get(
                     str(item.metadata.get("precedent_level", "")), 0.0
                 )
@@ -302,6 +364,26 @@ class ExpandedStatuteRetriever:
             fused.values(),
             key=lambda item: (-item.score, item.distance, item.chunk_id),
         )
+        if self._deduplicate_metadata_key:
+            deduplicated: list[RetrievedChunk] = []
+            seen_values: set[str] = set()
+            for item in ranked:
+                value = str(item.metadata.get(self._deduplicate_metadata_key, ""))
+                key = value or item.chunk_id
+                if key in seen_values:
+                    continue
+                seen_values.add(key)
+                deduplicated.append(item)
+                if len(deduplicated) == top_k:
+                    break
+            ranked = deduplicated
+        if normalized_specific_terms and any(case_specific_matches.get(item.chunk_id, 0) for item in ranked):
+            # 구체 쟁점어가 실제로 확인되는 후보가 있으면 일반어만 맞은 주변 판례는
+            # 생성 근거에서 제외한다. 전부 탈락할 때는 기존 의미 검색으로 폴백한다.
+            ranked = [
+                item for item in ranked
+                if case_specific_matches.get(item.chunk_id, 0) > 0
+            ]
         return RetrievalResult(plan=plan, hits=tuple(ranked[:top_k]))
 
 

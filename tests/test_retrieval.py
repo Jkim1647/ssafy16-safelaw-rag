@@ -65,7 +65,50 @@ class FakePrecedentStore:
         ]
 
 
+class FakeLexicalPrecedentStore:
+    def search(self, query_vector, *, category, top_k):
+        return [
+            VectorSearchHit(
+                chunk_id="generic",
+                document="임대차보증금 반환에 관한 일반 사건",
+                metadata={"document_type": "court_case", "case_name": "보증금반환",
+                          "precedent_level": "supreme_court"},
+                distance=0.01,
+            ),
+            VectorSearchHit(
+                chunk_id="specific",
+                document="전세보증보험의 지연손해금과 동시이행 관계를 판단하였다.",
+                metadata={"document_type": "court_case", "case_name": "보험금",
+                          "precedent_level": "supreme_court"},
+                distance=0.02,
+            ),
+        ]
+
+
 class QueryExpansionTests(unittest.TestCase):
+    def test_candidate_pool_factor_must_be_positive(self):
+        with self.assertRaises(ValueError):
+            ExpandedStatuteRetriever(FakeEmbedder(), FakeStore(), LegalQueryExpander(),
+                                     candidate_pool_factor=0)
+
+    def test_case_chunks_are_deduplicated_before_top_k_cutoff(self):
+        class DuplicateStore:
+            def search(self, query_vector, *, category, top_k):
+                return [
+                    VectorSearchHit("case-a-1", "같은 사건 첫 청크",
+                        {"document_type": "court_case", "case_number": "2025다1"}, .01),
+                    VectorSearchHit("case-a-2", "같은 사건 둘째 청크",
+                        {"document_type": "court_case", "case_number": "2025다1"}, .02),
+                    VectorSearchHit("case-b-1", "다른 사건",
+                        {"document_type": "court_case", "case_number": "2025다2"}, .03),
+                ]
+        retriever = ExpandedStatuteRetriever(
+            FakeEmbedder(), DuplicateStore(), LegalQueryExpander(),
+            deduplicate_metadata_key="case_number",
+        )
+        result = retriever.retrieve("판례", category=LegalCategory.LABOR, top_k=2)
+        self.assertEqual([x.metadata["case_number"] for x in result.hits], ["2025다1", "2025다2"])
+
     def test_rules_translate_everyday_dismissal_language(self):
         plan = LegalQueryExpander().expand(
             "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요",
@@ -94,6 +137,22 @@ class QueryExpansionTests(unittest.TestCase):
 
         self.assertIn("보증금의 회수", plan.legal_terms)
         self.assertIn("우선변제권", plan.legal_terms)
+
+    def test_rules_distinguish_deposit_guarantee_delay_issue(self):
+        plan = LegalQueryExpander().expand(
+            "전세보증보험에 가입했는데 집을 돌려주기 전 지연손해금을 받을 수 있나요?",
+            LegalCategory.HOUSING_LEASE,
+        )
+        self.assertIn("동시이행", plan.legal_terms)
+        self.assertIn("임차목적물 인도", plan.legal_terms)
+
+    def test_rules_distinguish_continued_lease_insurance_issue(self):
+        plan = LegalQueryExpander().expand(
+            "보증금을 받을 때까지 임대차가 계속되는 보험금 판례가 있나요?",
+            LegalCategory.HOUSING_LEASE,
+        )
+        self.assertIn("임대차관계 존속", plan.legal_terms)
+        self.assertIn("전세자금대출용권리보험", plan.legal_terms)
 
     def test_rules_translate_lifetime_gift_to_special_benefit(self):
         plan = LegalQueryExpander().expand(
@@ -130,6 +189,20 @@ class QueryExpansionTests(unittest.TestCase):
         result = retriever.retrieve("같은 쟁점", category=LegalCategory.LABOR, top_k=2)
 
         self.assertEqual(result.hits[0].chunk_id, "grand-bench")
+
+    def test_specific_case_terms_rerank_close_semantic_candidates(self):
+        class SpecificLlm:
+            def invoke(self, messages):
+                return '{"rewritten_query":"전세보증보험 지연손해금",' \
+                       '"legal_terms":["전세보증보험","지연손해금"]}'
+
+        retriever = ExpandedStatuteRetriever(
+            FakeEmbedder(), FakeLexicalPrecedentStore(), LegalQueryExpander(SpecificLlm())
+        )
+        result = retriever.retrieve(
+            "전세보증보험의 지연손해금", category=LegalCategory.HOUSING_LEASE, top_k=2
+        )
+        self.assertEqual(result.hits[0].chunk_id, "specific")
 
     def test_gms_chat_response_and_repr_do_not_leak_key(self):
         def transport(request, timeout):
