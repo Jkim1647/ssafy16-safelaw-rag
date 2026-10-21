@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-21T02:59:56.038896+00:00",
+  "source": "국가법령정보센터 현행법령(시행일) Open API",
+  "source_url": "https://open.law.go.kr/LSO/openApi/openApiManual.do",
+  "document_count": 381,
+  "category_counts": {
+    "housing_lease": 96,
+    "inheritance": 127,
+    "labor": 158
+  },
+  "law_counts": {
+    "근로기준법": 132,
+    "기간제 및 단시간근로자 보호 등에 관한 법률": 26,
+    "민법": 181,
+    "주택임대차보호법": 42
+  },
+  "dataset_sha256": "1817cc9544b12eac3bb7ccb9b846a4b3a665b97cd23a2fc0573bd291fa6855be",
+  "collection_date": "2026-10-21",
+  "source_config": "data/statute_sources.json"
+}

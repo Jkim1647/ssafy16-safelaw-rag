@@ -1,0 +1,29 @@
+[
+  {
+    "law_name": "근로기준법",
+    "category": "labor",
+    "issue_tags": ["근로계약", "해고", "임금", "근로시간", "직장 내 괴롭힘"]
+  },
+  {
+    "law_name": "기간제 및 단시간근로자 보호 등에 관한 법률",
+    "category": "labor",
+    "issue_tags": ["기간제", "단시간근로자", "차별", "무기계약 전환"]
+  },
+  {
+    "law_name": "주택임대차보호법",
+    "category": "housing_lease",
+    "issue_tags": ["주택임대차", "보증금", "대항력", "우선변제권", "계약갱신"]
+  },
+  {
+    "law_name": "민법",
+    "category": "housing_lease",
+    "issue_tags": ["임대차", "전세", "보증금", "계약해지"],
+    "article_ranges": [[303, 318], [618, 654]]
+  },
+  {
+    "law_name": "민법",
+    "category": "inheritance",
+    "issue_tags": ["상속", "유언", "상속포기", "한정승인", "유류분"],
+    "article_ranges": [[997, 1118]]
+  }
+]
