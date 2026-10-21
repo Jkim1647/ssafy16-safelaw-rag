@@ -218,18 +218,25 @@ def main() -> None:
     with st.form("legal_question_form", clear_on_submit=False):
         category = st.selectbox(
             "상담 분야",
-            options=list(LegalCategory),
-            format_func=lambda item: CATEGORY_LABELS[item],
+            options=[None, *list(LegalCategory)],
+            index=0,
+            format_func=lambda item: (
+                "상담 받으실 분야를 선택해 주세요"
+                if item is None
+                else CATEGORY_LABELS[item]
+            ),
             help="현재 법령 데이터가 구축된 세 분야 중 하나를 선택하세요.",
+            key="legal_category_v2",
         )
-        st.caption(f"예시: {EXAMPLE_QUESTIONS[category]}")
+        if category is not None:
+            st.caption(f"예시: {EXAMPLE_QUESTIONS[category]}")
         question = st.text_area(
             "상황을 구체적으로 적어주세요",
             height=180,
             max_chars=2000,
             placeholder=(
-                "언제 어떤 일이 있었는지, 계약이나 통지가 어떤 방식이었는지 적어주세요. "
-                "이름·전화번호·상세 주소는 제외해도 됩니다."
+                "이름·전화번호·상세 주소 등 개인정보는 입력하지 않는 것을 권장합니다. "
+                "입력된 식별정보는 외부 호출 전에 마스킹됩니다."
             ),
         )
         with st.expander("추가로 가릴 이름·회사명 입력 (선택)"):
@@ -251,6 +258,9 @@ def main() -> None:
         st.caption(
             "SafeLaw는 법률정보 검색 보조 도구입니다. 변호사의 법률 자문을 대체하거나 승소 가능성을 예측하지 않습니다."
         )
+        return
+    if category is None:
+        st.warning("상담 받으실 분야를 선택해 주세요.")
         return
     if not question.strip():
         st.warning("검토할 상황을 입력해 주세요.")
