@@ -74,7 +74,7 @@ class StatuteRagPipeline:
         retriever: StatuteRetriever,
         answer_llm: LanguageModel,
         *,
-        max_generation_attempts: int = 2,
+        max_generation_attempts: int = 3,
     ) -> None:
         if max_generation_attempts < 1:
             raise ValueError("max_generation_attempts는 1 이상이어야 합니다.")
@@ -114,14 +114,23 @@ class StatuteRagPipeline:
         for attempt in range(1, self._max_generation_attempts + 1):
             attempt_messages = list(messages)
             if attempt > 1:
+                correction = (
+                    "CONTEXT를 다시 사용하여 지정된 JSON 형식만 정확히 출력하라. "
+                    "각 evidence_quotes.quote는 CONTEXT에서 공백을 제외하고도 연속으로 일치하는 "
+                    "8자 이상의 원문을 그대로 복사하라. 근거가 부족하면 억지로 답하지 말라."
+                )
+                if attempt == self._max_generation_attempts:
+                    correction += (
+                        " 이번은 마지막 인용 교정이다. answerable=true라면 summary 한 개만 작성하고 "
+                        "issues, favorable_factors, unfavorable_factors, additional_facts, next_steps는 "
+                        "모두 빈 배열로 두어라. summary에는 가장 직접적인 근거 하나만 인용하라."
+                    )
                 attempt_messages.append(
                     {
                         "role": "user",
                         "content": (
                             "직전 응답은 폐기됐다. 실패 이유: " + retry_reason + " "
-                            "CONTEXT를 다시 사용하여 지정된 JSON 형식만 정확히 출력하라. "
-                            "각 evidence_quotes.quote는 CONTEXT에서 공백을 제외하고도 연속으로 일치하는 "
-                            "8자 이상의 원문을 그대로 복사하라. 근거가 부족하면 억지로 답하지 말라."
+                            + correction
                         ),
                     }
                 )

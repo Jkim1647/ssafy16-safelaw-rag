@@ -67,6 +67,8 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ search_statutes.py          # 자연어 검색어 확장·법령 검색
 │  ├─ answer_statutes.py          # 근거 제한 답변 생성·검증
 │  ├─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
+│  ├─ evaluate_end_to_end_rag.py # 검색-생성-검증 전체 품질 측정
+│  ├─ inspect_chroma.py           # Chroma 문서·메타데이터 조회
 │  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
@@ -144,6 +146,21 @@ python scripts/build_statute_index.py
 
 현재 데이터에서는 381개 조문이 386개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
 
+### Chroma DB 내용 확인
+
+`data/indexes/statutes/chroma.sqlite3`과 `data/indexes/cases/chroma.sqlite3`은 일반 텍스트 파일이 아닙니다. VS Code의 SQLite 확장으로 내부 테이블을 볼 수는 있지만, HNSW 벡터 세그먼트는 사람이 직접 해석하거나 수정하는 대상이 아닙니다. 다음 명령으로 Chroma API를 통해 본문과 메타데이터를 안전하게 확인합니다.
+
+```powershell
+# 두 컬렉션의 전체 건수와 샘플 3건
+.\.venv\Scripts\python.exe scripts\inspect_chroma.py
+
+# 임대차 판례 5개만 확인
+.\.venv\Scripts\python.exe scripts\inspect_chroma.py `
+  --collection cases --category housing_lease --limit 5
+```
+
+기준 색인은 법령 `386`개, 판례 `652`개 벡터입니다. 판례 컬렉션은 질문 기반 API 보강으로 새 청크가 증분 추가되므로 로컬의 현재 건수는 더 클 수 있습니다. 정확한 현재 건수는 위 조회 명령으로 확인합니다. `data/indexes/`와 동적 캐시는 재생성 가능한 산출물이므로 Git에 올리지 않습니다.
+
 역할별 채팅 모델 배치와 임베딩 모델 혼용 시 주의점은 [`docs/model-routing.md`](docs/model-routing.md)에 정리했습니다.
 
 ## 판례 데이터셋과 색인
@@ -200,6 +217,8 @@ RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과�
 
 검색부터 답변 생성·인용 검증·답변 거부까지 연결한 30문항 평가는 [`docs/end-to-end-rag-evaluation.md`](docs/end-to-end-rag-evaluation.md)에 정리했습니다.
 
+최종 End-to-End 평가는 답변 가능 24문항과 거부 대상 6문항으로 구성합니다. 3회 인용 교정 적용 후 답변 성공률 `0.7500`, 인용 정확성 `1.0000`, 근거 없는 주장 차단률 `1.0000`, 답변 거부 정확성 `1.0000`을 기록했습니다. 남은 6건은 `invalid_citations`로 안전하게 차단됐으며, 법률적 정답률이 아니라 개발자 작성 평가셋에 대한 시스템 지표입니다.
+
 ## 근거 제한 답변 생성
 
 검색된 법령을 CONTEXT로 전달하고 모든 주장에 근거 번호와 법령 원문의 인용문을 요구합니다. 생성 결과는 바로 표시하지 않고 다음 조건을 모두 검사합니다.
@@ -210,7 +229,7 @@ RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과�
 - 제출한 원문 인용문이 해당 검색 청크에 실제로 존재하는가?
 - 출처가 국가법령정보센터의 HTTPS URL인가?
 
-JSON 형식이나 근거 검증이 실패하면 첫 응답을 폐기하고 한 번만 다시 생성합니다. 두 번째도 실패하면 모델 문장을 노출하지 않고 고정된 차단 메시지를 반환합니다.
+JSON 형식이나 근거 검증이 실패하면 응답을 폐기하고 실패 이유를 포함해 다시 생성합니다. 마지막 3차 시도는 가장 직접적인 근거 하나와 짧은 요약만 요구합니다. 3차 시도도 실패하면 모델 문장을 노출하지 않고 고정된 차단 메시지를 반환합니다.
 
 ```powershell
 python scripts/answer_statutes.py `
