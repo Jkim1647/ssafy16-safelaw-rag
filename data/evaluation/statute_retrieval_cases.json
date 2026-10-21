@@ -1,0 +1,182 @@
+[
+  {
+    "id": "labor-01",
+    "category": "labor",
+    "query": "회사에 입사했는데 월급과 근무시간을 말로만 알려주고 계약서를 주지 않았어요.",
+    "expected": [{"law_name": "근로기준법", "article_no": "제17조"}]
+  },
+  {
+    "id": "labor-02",
+    "category": "labor",
+    "query": "특별한 이유도 설명하지 않고 사장이 마음에 안 든다며 저를 잘랐어요.",
+    "expected": [{"law_name": "근로기준법", "article_no": "제23조"}]
+  },
+  {
+    "id": "labor-03",
+    "category": "labor",
+    "query": "아무런 예고 없이 오늘 당장 그만 나오라고 하는데 한 달 전에 알려줘야 하는 것 아닌가요?",
+    "expected": [{"law_name": "근로기준법", "article_no": "제26조"}]
+  },
+  {
+    "id": "labor-04",
+    "category": "labor",
+    "query": "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요.",
+    "expected": [{"law_name": "근로기준법", "article_no": "제27조"}]
+  },
+  {
+    "id": "labor-05",
+    "category": "labor",
+    "query": "부당하게 잘린 것 같은데 노동위원회에 언제까지 구제를 신청할 수 있나요?",
+    "expected": [{"law_name": "근로기준법", "article_no": "제28조"}]
+  },
+  {
+    "id": "labor-06",
+    "category": "labor",
+    "query": "퇴사한 지 한 달이 지났는데 마지막 월급과 정산금을 아직 받지 못했어요.",
+    "expected": [{"law_name": "근로기준법", "article_no": "제36조"}]
+  },
+  {
+    "id": "labor-07",
+    "category": "labor",
+    "query": "사장이 임금을 제 계좌가 아니라 가족에게 대신 주겠다고 합니다.",
+    "expected": [{"law_name": "근로기준법", "article_no": "제43조"}]
+  },
+  {
+    "id": "labor-08",
+    "category": "labor",
+    "query": "회사가 매주 20시간씩 추가 근무를 시키는데 연장근로에도 한도가 있나요?",
+    "expected": [{"law_name": "근로기준법", "article_no": "제53조"}]
+  },
+  {
+    "id": "labor-09",
+    "category": "labor",
+    "query": "일 년 동안 거의 빠짐없이 일했는데 연차휴가는 며칠 받을 수 있나요?",
+    "expected": [{"law_name": "근로기준법", "article_no": "제60조"}]
+  },
+  {
+    "id": "labor-10",
+    "category": "labor",
+    "query": "상사가 계속 모욕적인 말을 하고 다른 직원들 앞에서 따돌립니다.",
+    "expected": [{"law_name": "근로기준법", "article_no": "제76조의2"}]
+  },
+  {
+    "id": "housing-01",
+    "category": "housing_lease",
+    "query": "집을 인도받고 전입신고까지 했는데 집주인이 바뀌어도 계속 살 수 있나요?",
+    "expected": [{"law_name": "주택임대차보호법", "article_no": "제3조"}]
+  },
+  {
+    "id": "housing-02",
+    "category": "housing_lease",
+    "query": "살던 집이 경매로 넘어가면 제 전세보증금을 다른 채권자보다 먼저 받을 수 있나요?",
+    "expected": [{"law_name": "주택임대차보호법", "article_no": "제3조의2"}]
+  },
+  {
+    "id": "housing-03",
+    "category": "housing_lease",
+    "query": "계약이 끝나 이사해야 하는데 집주인이 보증금을 주지 않습니다. 먼저 이사해도 권리를 지키려면 어떻게 하나요?",
+    "expected": [{"law_name": "주택임대차보호법", "article_no": "제3조의3"}]
+  },
+  {
+    "id": "housing-04",
+    "category": "housing_lease",
+    "query": "주택 임대차 계약을 1년으로 썼는데 세입자가 2년 동안 살 수 있다는 말이 맞나요?",
+    "expected": [{"law_name": "주택임대차보호법", "article_no": "제4조"}]
+  },
+  {
+    "id": "housing-05",
+    "category": "housing_lease",
+    "query": "전세 계약이 곧 끝나는데 집주인이 갱신 요구를 거절할 수 있는 사유가 무엇인가요?",
+    "expected": [{"law_name": "주택임대차보호법", "article_no": "제6조의3"}]
+  },
+  {
+    "id": "housing-06",
+    "category": "housing_lease",
+    "query": "집주인이 갑자기 월세를 크게 올리겠다고 하는데 인상할 수 있는 범위가 있나요?",
+    "expected": [{"law_name": "주택임대차보호법", "article_no": "제7조"}]
+  },
+  {
+    "id": "housing-07",
+    "category": "housing_lease",
+    "query": "소액 임차인은 집이 경매돼도 보증금 일부를 우선해서 받을 수 있나요?",
+    "expected": [{"law_name": "주택임대차보호법", "article_no": "제8조"}]
+  },
+  {
+    "id": "housing-08",
+    "category": "housing_lease",
+    "query": "세입자가 임대차 내용을 등기하고 싶은데 집주인에게 협조를 요구할 수 있나요?",
+    "expected": [{"law_name": "민법", "article_no": "제621조"}]
+  },
+  {
+    "id": "housing-09",
+    "category": "housing_lease",
+    "query": "임대주택 보일러가 고장 났는데 집주인이 수리를 거부합니다. 집주인에게 수선 의무가 있나요?",
+    "expected": [{"law_name": "민법", "article_no": "제623조"}]
+  },
+  {
+    "id": "housing-10",
+    "category": "housing_lease",
+    "query": "세입자인 제가 급해서 누수 수리비를 먼저 냈습니다. 집주인에게 돌려달라고 할 수 있나요?",
+    "expected": [{"law_name": "민법", "article_no": "제626조"}]
+  },
+  {
+    "id": "inheritance-01",
+    "category": "inheritance",
+    "query": "상속은 사람이 사망한 날부터 시작되는 건가요?",
+    "expected": [{"law_name": "민법", "article_no": "제997조"}]
+  },
+  {
+    "id": "inheritance-02",
+    "category": "inheritance",
+    "query": "부모님이 돌아가시면 자녀와 부모, 형제자매 중 누가 먼저 상속받나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1000조"}]
+  },
+  {
+    "id": "inheritance-03",
+    "category": "inheritance",
+    "query": "아버지가 할아버지보다 먼저 돌아가셨으면 손자인 제가 아버지 대신 상속받을 수 있나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1001조"}]
+  },
+  {
+    "id": "inheritance-04",
+    "category": "inheritance",
+    "query": "배우자가 사망하면 남은 배우자는 자녀와 함께 상속인이 되나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1003조"}]
+  },
+  {
+    "id": "inheritance-05",
+    "category": "inheritance",
+    "query": "상속을 받으면 돌아가신 분의 재산뿐 아니라 빚도 모두 이어받게 되나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1005조"}]
+  },
+  {
+    "id": "inheritance-06",
+    "category": "inheritance",
+    "query": "형제가 생전에 부모님에게 큰돈을 미리 받았다면 상속분을 계산할 때 반영되나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1008조"}]
+  },
+  {
+    "id": "inheritance-07",
+    "category": "inheritance",
+    "query": "제가 오랫동안 부모님을 간병하고 재산 유지에 기여했는데 상속 때 더 인정받을 수 있나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1008조의2"}]
+  },
+  {
+    "id": "inheritance-08",
+    "category": "inheritance",
+    "query": "아버지가 돌아가셨는데 빚이 더 많아요. 상속을 안 받으려면 언제까지 해야 하나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1019조"}]
+  },
+  {
+    "id": "inheritance-09",
+    "category": "inheritance",
+    "query": "상속받은 재산 범위 안에서만 빚을 갚는 한정승인을 하면 어떤 효과가 있나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1028조"}]
+  },
+  {
+    "id": "inheritance-10",
+    "category": "inheritance",
+    "query": "상속을 포기하려면 말로 가족에게 알리면 되나요, 아니면 법원에 신고해야 하나요?",
+    "expected": [{"law_name": "민법", "article_no": "제1041조"}]
+  }
+]

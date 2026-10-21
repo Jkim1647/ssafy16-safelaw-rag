@@ -20,6 +20,7 @@
 4. 국가법령정보 현행법령 API 수집기
 5. 3개 생활법률 도메인의 조문 단위 데이터셋
 6. 조문 구조 기반 청킹과 GMS 임베딩·Chroma 색인 파이프라인
+7. 자연어 검색어 확장·재정렬과 30문항 검색 평가셋
 
 ## 프로젝트 구조
 
@@ -43,12 +44,14 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ statute_sources.json        # 수집 법령·카테고리·조문 범위 설정
 │  ├─ raw/                        # 공식 원문(버전 관리 제외)
 │  ├─ processed/                  # 정규화 조문 데이터셋·생성 명세
+│  ├─ evaluation/                 # 검색 질문·정답과 Recall@5·MRR 결과
 │  └─ indexes/                    # Vector DB 지속 데이터
 ├─ scripts/
 │  ├─ build_statute_dataset.py    # API 수집·정규화·검증용 데이터 생성
 │  ├─ build_statute_chunks.py     # 조문 구조 기반 청크 생성
 │  ├─ build_statute_index.py      # GMS 임베딩·Chroma 색인
-│  └─ search_statutes.py          # 자연어 검색어 확장·법령 검색
+│  ├─ search_statutes.py          # 자연어 검색어 확장·법령 검색
+│  └─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
 
@@ -110,7 +113,7 @@ python scripts/build_statute_index.py
 
 ## 자연어 법령 검색
 
-사용자 질문은 로컬 개인정보 마스킹을 거친 후 검색어 확장 단계로 전달됩니다. 도메인 규칙과 GMS LLM이 일상 표현을 법률 용어로 바꾸고, 원문 질문·재작성 질문·법률 용어 질의를 각각 검색한 뒤 가중 Reciprocal Rank Fusion으로 결과를 합칩니다. 원문 질의를 함께 사용하므로 LLM이 부정확한 용어를 만들더라도 검색 신호가 하나로 고정되지 않습니다.
+사용자 질문은 로컬 개인정보 마스킹을 거친 후 검색어 확장 단계로 전달됩니다. 도메인 규칙과 GMS LLM이 일상 표현을 법률 용어로 바꾸고, 원문·재작성 질문은 가중 순위 결합에 사용합니다. 개별 법률 용어는 후보 조문을 넓게 수집하는 데 사용하며, 가장 강한 용어 신호와 조문 제목 일치도로 최종 순위를 보정합니다. 원문 질의를 함께 사용하므로 LLM이 부정확한 용어를 만들더라도 검색 신호가 하나로 고정되지 않습니다.
 
 ```powershell
 python scripts/search_statutes.py `
@@ -120,6 +123,23 @@ python scripts/search_statutes.py `
 ```
 
 카테고리 값은 `labor`, `housing_lease`, `inheritance` 중 하나입니다. 현재 대표 질문 검증 결과와 한계는 [`docs/search-quality.md`](docs/search-quality.md)에 기록합니다.
+
+## 검색 품질 평가
+
+도메인별 자연어 질문 10개씩, 총 30개와 기대 법령·조문을 고정 평가셋으로 관리합니다. 각 질문의 Top-5 검색 결과로 `Recall@5`와 첫 정답 순위의 역수인 `MRR`을 계산합니다.
+
+```powershell
+# .env의 GMS_KEY와 data/indexes/statutes 색인이 필요
+python scripts/evaluate_statute_retrieval.py
+```
+
+평가 산출물:
+
+- `data/evaluation/statute_retrieval_cases.json`: 질문과 기대 조문
+- `data/evaluation/statute_retrieval_results.json`: 질문별 Top-5와 최종 집계
+- `data/evaluation/statute_retrieval_baseline.json`: 개선 전 기준선
+
+현재 30문항 결과는 전체 `Recall@5 1.000`, `MRR 0.747`입니다. 이 수치는 자체 작성한 고정 평가셋에 대한 검색 성능이며, 실제 법률 판단의 정확도나 새로운 질문에 대한 일반화 성능을 뜻하지 않습니다.
 
 ## 테스트
 
