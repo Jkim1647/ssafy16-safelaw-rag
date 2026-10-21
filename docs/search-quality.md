@@ -35,6 +35,8 @@ python scripts/evaluate_statute_retrieval.py
 
 기준선 결과는 `data/evaluation/statute_retrieval_baseline.json`, 최종 결과는 `data/evaluation/statute_retrieval_results.json`에 보존한다. 개별 법률 용어의 점수를 모두 누적하면 후보 수는 늘지만 일반적인 용어가 순위를 왜곡했다. 따라서 개별 용어는 후보 수집에 사용하되 가장 강한 용어 신호만 반영하고, 조문 제목과의 정확·부분 일치를 재정렬에 사용했다.
 
+RRF·MRR의 계산 예시와 문제별 분석은 [`troubleshooting.md`](troubleshooting.md)에 기록한다.
+
 ## 대표 자연어 질문 결과
 
 | 도메인 | 질문 | 기대 근거 | 확장 검색 결과 | 판정 |
