@@ -106,6 +106,7 @@ def main() -> int:
     parser.add_argument("--cases", type=Path, default=ROOT / "data/evaluation/case_retrieval_cases.json")
     parser.add_argument("--output", type=Path, default=ROOT / "data/evaluation/case_retrieval_results.json")
     parser.add_argument("--scope", default="현재 Chroma 판례 색인")
+    parser.add_argument("--ids", help="쉼표로 구분한 평가 문항 ID만 실행")
     parser.add_argument("--no-resume", action="store_true")
     args = parser.parse_args()
     api_key = os.getenv("GMS_KEY", "").strip()
@@ -118,6 +119,11 @@ def main() -> int:
         counts[case["category"]] += 1
     if len(cases) != 30 or any(counts[x.value] != 10 for x in LegalCategory):
         raise ValueError("평가셋은 도메인별 10건, 총 30건이어야 합니다.")
+    if args.ids:
+        selected = {value.strip() for value in args.ids.split(",") if value.strip()}
+        cases = [case for case in cases if case["id"] in selected]
+        if len(cases) != len(selected):
+            raise ValueError("존재하지 않는 평가 문항 ID가 있습니다.")
     base_url = os.getenv("GMS_BASE_URL", "https://gms.ssafy.io/gmsapi/api.openai.com/v1")
     embedding_model = os.getenv("GMS_EMBEDDING_MODEL", "text-embedding-3-small")
     chat_model = os.getenv("GMS_QUERY_MODEL") or os.getenv("GMS_CHAT_MODEL", "gpt-5-nano")
@@ -125,6 +131,8 @@ def main() -> int:
         GmsEmbeddingClient(api_key, model_name=embedding_model, base_url=base_url),
         ChromaCaseVectorStore(ROOT / "data/indexes/cases"),
         LegalQueryExpander(GmsChatClient(api_key, model_name=chat_model, base_url=base_url)),
+        candidate_pool_factor=10,
+        deduplicate_metadata_key="case_number",
     )
     saved = {}
     if args.output.exists() and not args.no_resume:
@@ -147,7 +155,7 @@ def main() -> int:
         }
         write_json(args.output, report)
         first = result["relevant_ranks"][0] if result["relevant_ranks"] else "실패"
-        print(f"[{index:02d}/30] {case['id']} | 첫 정답 순위: {first}")
+        print(f"[{index:02d}/{len(cases)}] {case['id']} | 첫 정답 순위: {first}")
     print(json.dumps(aggregate(results)["overall"], ensure_ascii=False, indent=2))
     return 0
 

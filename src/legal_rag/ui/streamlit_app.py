@@ -143,6 +143,8 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
                 embedder,
                 case_store,
                 LegalQueryExpander(query_llm),
+                candidate_pool_factor=10,
+                deduplicate_metadata_key="case_number",
             )
             enricher = None
             if settings.has_law_api_key and STATIC_CASE_DATASET.exists():
