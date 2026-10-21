@@ -18,6 +18,12 @@ CATEGORY_LABELS = {
     LegalCategory.INHERITANCE: "상속",
 }
 
+PRECEDENT_AUTHORITY_BONUS = {
+    "grand_bench": 0.0015,
+    "supreme_court": 0.0008,
+    "appellate": 0.0003,
+}
+
 
 @dataclass(frozen=True, slots=True)
 class SearchPlan:
@@ -135,6 +141,8 @@ def _rule_terms(query: str, category: LegalCategory) -> tuple[str, ...]:
             terms.extend(("상속포기", "상속의 승인과 포기", "신고기간"))
         if re.search(r"유언|유산|재산", query):
             terms.extend(("상속재산", "유언", "유류분"))
+        if re.search(r"생전|미리", query) and re.search(r"증여|재산|돈|큰돈|받", query):
+            terms.extend(("특별수익", "특별수익자의 상속분", "상속분 산정"))
         if re.search(r"누가\s*먼저|순서|순위", query):
             terms.extend(("상속의 순위", "법정상속순위"))
         if re.search(r"재산.*빚|빚.*이어받|모두\s*이어받|권리.*의무", query):
@@ -273,6 +281,10 @@ class ExpandedStatuteRetriever:
                 if term in item.document:
                     document_bonus = max(document_bonus, 0.002)
             item.score += title_bonus + document_bonus
+            if item.metadata.get("document_type") == "court_case":
+                item.score += PRECEDENT_AUTHORITY_BONUS.get(
+                    str(item.metadata.get("precedent_level", "")), 0.0
+                )
 
         ranked = sorted(
             fused.values(),

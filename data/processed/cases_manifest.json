@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-10-21T05:53:35.702716+00:00",
+  "schema_version": 2,
+  "generated_at": "2026-10-21T06:27:03.407359+00:00",
   "collection_date": "2026-10-21",
   "source": "국가법령정보센터 판례 Open API(데이터출처: 대법원)",
   "source_url": "https://open.law.go.kr/LSO/openApi/guideResult.do?htmlName=precListGuide",
@@ -10,6 +10,11 @@
     "inheritance": 11,
     "labor": 12
   },
-  "dataset_sha256": "6cda6677a98c345261e02ee6bbcb6e1fffa171485fb08e28faec22dde6a41ff2",
+  "precedent_level_counts": {
+    "appellate": 7,
+    "other": 18,
+    "supreme_court": 25
+  },
+  "dataset_sha256": "427deb3734ddb6b12decd69cd5a8409a14a867b26fa8a8dbcdb28b9c2424fa33",
   "source_config": "data/case_sources.json"
 }

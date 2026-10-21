@@ -51,10 +51,15 @@ class CaseEvidence:
     sections: tuple[str, ...]
     text: str
     source_url: str
+    case_name: str = ""
+    decision_type: str = ""
+    precedent_level: str = "other"
 
     @property
     def label(self) -> str:
-        return f"{self.court} {self.decision_date} 선고 {self.case_number}"
+        badge = "[전원합의체] " if self.precedent_level == "grand_bench" else ""
+        name = f" {self.case_name}" if self.case_name else ""
+        return f"{badge}{self.court} {self.decision_date} 선고 {self.case_number}{name}"
 
 
 LegalEvidence = StatuteEvidence | CaseEvidence
@@ -156,6 +161,9 @@ def build_case_evidence(
                 "case_number": str(hit.metadata.get("case_number", "")).strip(),
                 "court": str(hit.metadata.get("court", "")).strip(),
                 "decision_date": str(hit.metadata.get("decision_date", "")).strip(),
+                "case_name": str(hit.metadata.get("case_name", "")).strip(),
+                "decision_type": str(hit.metadata.get("decision_type", "")).strip(),
+                "precedent_level": str(hit.metadata.get("precedent_level", "other")).strip(),
                 "sections": [],
                 "documents": [],
             }
@@ -179,6 +187,9 @@ def build_case_evidence(
             sections=tuple(value["sections"]),
             text="\n".join(value["documents"]),
             source_url=source_url,
+            case_name=value["case_name"],
+            decision_type=value["decision_type"],
+            precedent_level=value["precedent_level"],
         ))
     return tuple(evidence)
 

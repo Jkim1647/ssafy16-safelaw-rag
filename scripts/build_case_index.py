@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from legal_rag.adapters.gms_embeddings import GmsEmbeddingClient  # noqa: E402
 from legal_rag.adapters.vector_store import ChromaCaseVectorStore  # noqa: E402
-from legal_rag.domain.models import LegalCategory  # noqa: E402
+from legal_rag.domain.models import LegalCategory, PrecedentLevel  # noqa: E402
 from legal_rag.rag.case_chunking import CaseChunk  # noqa: E402
 from legal_rag.rag.indexing import index_chunks  # noqa: E402
 
@@ -33,6 +33,7 @@ def main() -> int:
         return 2
     payload = json.loads(args.input.read_text(encoding="utf-8"))
     chunks = [CaseChunk(**{**item, "category": LegalCategory(item["category"]),
+        "precedent_level": PrecedentLevel(item.get("precedent_level", "other")),
         "related_articles": tuple(item.get("related_articles", []))}) for item in payload]
     embedder = GmsEmbeddingClient(api_key,
         model_name=os.getenv("GMS_EMBEDDING_MODEL", "text-embedding-3-small"),

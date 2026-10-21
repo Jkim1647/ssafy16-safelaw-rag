@@ -1,7 +1,7 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "source_dataset": "data/processed/cases.json",
-  "source_dataset_sha256": "6cda6677a98c345261e02ee6bbcb6e1fffa171485fb08e28faec22dde6a41ff2",
+  "source_dataset_sha256": "427deb3734ddb6b12decd69cd5a8409a14a867b26fa8a8dbcdb28b9c2424fa33",
   "document_count": 50,
   "chunk_count": 652,
   "category_counts": {
@@ -17,5 +17,5 @@
   },
   "max_chars": 1400,
   "overlap_chars": 180,
-  "dataset_sha256": "6c836959eaad464c5b67cc1e0a78de391c0e4ff6b62c586103e3abab5a8a0044"
+  "dataset_sha256": "e4c8ffa9e8c4cbc2581d8504c801f729c7d1caba59498d42c853626dc1b79bcc"
 }
