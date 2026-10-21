@@ -14,6 +14,8 @@
 
 새 환경 검증은 2026-10-22 Python 3.12에서 `pip install -e .`, 전체 73개 테스트, `streamlit`·`chromadb`·`legal_rag` import 순서로 완료했다. API 키가 필요한 실제 외부 질의는 기존 UI 점검 결과로 검증했다.
 
+전문가 검수용 30문항 서명표는 `docs/case-evaluation-review-sheet.md`에 준비했다. 검수자 서명과 수정 의견을 받기 전에는 전문가 검수 항목을 완료 처리하지 않는다.
+
 ## 실제 UI 점검 결과
 
 2026-10-22 로컬 Streamlit에서 다음 시나리오를 확인했다.

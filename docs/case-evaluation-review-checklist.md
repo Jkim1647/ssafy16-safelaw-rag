@@ -10,3 +10,5 @@
 - 질문 또는 판례 요약이 승소 가능성을 단정하거나 사실을 추가하지 않는가
 
 검수 결과는 문항별로 `approved`, `needs_change`, `out_of_scope` 중 하나를 기록하고, 변경 이유와 검수일을 남긴다. 전체 30건이 승인되기 전에는 README와 결과 문서에 `법률 전문가 미검수` 표시를 유지한다.
+
+검수자에게는 [`case-evaluation-review-sheet.md`](case-evaluation-review-sheet.md)를 전달한다. 서명된 검수표를 근거로 JSON 라벨을 수정하고 동일한 30문항 평가를 다시 실행한다.
