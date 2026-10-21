@@ -162,6 +162,7 @@ python scripts/build_statute_index.py
 기준 색인은 법령 `386`개, 판례 `652`개 벡터입니다. 판례 컬렉션은 질문 기반 API 보강으로 새 청크가 증분 추가되므로 로컬의 현재 건수는 더 클 수 있습니다. 정확한 현재 건수는 위 조회 명령으로 확인합니다. `data/indexes/`와 동적 캐시는 재생성 가능한 산출물이므로 Git에 올리지 않습니다.
 
 역할별 채팅 모델 배치와 임베딩 모델 혼용 시 주의점은 [`docs/model-routing.md`](docs/model-routing.md)에 정리했습니다.
+Chroma를 유지하고 Pinecone은 운영 확장 시 재검토하기로 한 근거는 [`docs/vector-store-decision.md`](docs/vector-store-decision.md)에 정리했습니다.
 
 ## 판례 데이터셋과 색인
 
