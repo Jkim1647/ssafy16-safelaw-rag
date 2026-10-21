@@ -8,6 +8,8 @@ import os
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -33,6 +35,7 @@ def load_chunks(path: Path) -> list[StatuteChunk]:
 
 
 def main() -> int:
+    load_dotenv(ROOT / ".env")
     parser = argparse.ArgumentParser(description="SafeLaw 법령 Chroma 색인 생성")
     parser.add_argument("--input", type=Path, default=ROOT / "data" / "processed" / "statute_chunks.json")
     parser.add_argument("--persist-dir", type=Path, default=ROOT / "data" / "indexes" / "statutes")

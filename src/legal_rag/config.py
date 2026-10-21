@@ -8,6 +8,8 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
+from dotenv import load_dotenv
+
 
 @dataclass(frozen=True, slots=True)
 class Settings:
@@ -19,6 +21,7 @@ class Settings:
 
     @classmethod
     def from_environment(cls) -> "Settings":
+        load_dotenv()
         return cls(
             app_env=os.getenv("APP_ENV", "development"),
             gms_key=os.getenv("GMS_KEY") or None,
