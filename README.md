@@ -93,10 +93,8 @@ python scripts/build_statute_chunks.py
 # 2. 의존성 설치
 python -m pip install -e .
 
-# 3. GMS 임베딩 생성 후 Chroma에 영속 저장
-$env:GMS_KEY="발급받은-GMS-키"
+# 3. .env에 GMS_KEY를 입력한 후 임베딩·Chroma 색인 생성
 python scripts/build_statute_index.py
-Remove-Item Env:GMS_KEY
 ```
 
 현재 기본 설정은 다음과 같습니다.

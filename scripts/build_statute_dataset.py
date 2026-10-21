@@ -12,6 +12,8 @@ from dataclasses import asdict
 from datetime import date, datetime, timezone
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -46,6 +48,7 @@ def write_json(path: Path, payload: object) -> None:
 
 
 def main() -> int:
+    load_dotenv(ROOT / ".env")
     parser = argparse.ArgumentParser(description="SafeLaw 법령 조문 데이터셋 생성")
     parser.add_argument("--sources", type=Path, default=ROOT / "data" / "statute_sources.json")
     parser.add_argument("--output", type=Path, default=ROOT / "data" / "processed" / "statutes.json")
