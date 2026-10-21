@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "source_dataset": "data/processed/cases.json",
+  "source_dataset_sha256": "6cda6677a98c345261e02ee6bbcb6e1fffa171485fb08e28faec22dde6a41ff2",
+  "document_count": 50,
+  "chunk_count": 652,
+  "category_counts": {
+    "housing_lease": 281,
+    "inheritance": 103,
+    "labor": 268
+  },
+  "section_counts": {
+    "facts": 316,
+    "issues": 29,
+    "reasoning": 257,
+    "result": 50
+  },
+  "max_chars": 1400,
+  "overlap_chars": 180,
+  "dataset_sha256": "6c836959eaad464c5b67cc1e0a78de391c0e4ff6b62c586103e3abab5a8a0044"
+}

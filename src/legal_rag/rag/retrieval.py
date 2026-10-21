@@ -64,6 +64,7 @@ class RetrievedChunk:
 class RetrievalResult:
     plan: SearchPlan
     hits: tuple[RetrievedChunk, ...]
+    case_hits: tuple[RetrievedChunk, ...] = ()
 
 
 class VectorSearcher(Protocol):
@@ -278,4 +279,27 @@ class ExpandedStatuteRetriever:
             key=lambda item: (-item.score, item.distance, item.chunk_id),
         )
         return RetrievalResult(plan=plan, hits=tuple(ranked[:top_k]))
+
+
+class CombinedLegalRetriever:
+    """법령과 판례를 독립 검색하고 원 점수를 직접 비교하지 않는다."""
+
+    def __init__(self, statute_retriever: ExpandedStatuteRetriever,
+                 case_retriever: ExpandedStatuteRetriever) -> None:
+        self._statute_retriever = statute_retriever
+        self._case_retriever = case_retriever
+
+    def retrieve(self, sanitized_query: str, *, category: LegalCategory,
+                 top_k: int = 5) -> RetrievalResult:
+        statutes = self._statute_retriever.retrieve(
+            sanitized_query, category=category, top_k=top_k
+        )
+        cases = self._case_retriever.retrieve(
+            sanitized_query, category=category, top_k=top_k
+        )
+        return RetrievalResult(
+            plan=statutes.plan,
+            hits=statutes.hits,
+            case_hits=cases.hits,
+        )
 

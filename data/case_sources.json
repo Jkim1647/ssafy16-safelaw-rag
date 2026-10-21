@@ -1,0 +1,5 @@
+[
+  {"category": "labor", "queries": ["부당해고", "해고 서면통지", "임금 체불"], "limit_per_query": 15},
+  {"category": "housing_lease", "queries": ["임대차보증금 반환", "주택임대차 우선변제", "임차권등기명령"], "limit_per_query": 15},
+  {"category": "inheritance", "queries": ["상속포기", "한정승인", "상속 순위"], "limit_per_query": 15}
+]
