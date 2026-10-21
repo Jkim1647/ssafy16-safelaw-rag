@@ -11,8 +11,10 @@ from legal_rag.adapters.gms_embeddings import GmsEmbeddingClient
 from legal_rag.adapters.gms_llm import GmsChatClient
 from legal_rag.adapters.vector_store import ChromaCaseVectorStore, ChromaStatuteVectorStore
 from legal_rag.config import Settings
+from legal_rag.collectors.court_cases import CourtCaseOpenApiClient
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.pipeline import AnswerStatus, GroundedAnswer, StatuteRagPipeline
+from legal_rag.rag.case_enrichment import IncrementalCaseEnricher
 from legal_rag.rag.citations import CaseEvidence
 from legal_rag.rag.retrieval import CombinedLegalRetriever, ExpandedStatuteRetriever, LegalQueryExpander
 from legal_rag.security.redaction import PrivacyGuard
@@ -21,6 +23,8 @@ from legal_rag.security.redaction import PrivacyGuard
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 INDEX_PATH = PROJECT_ROOT / "data" / "indexes" / "statutes"
 CASE_INDEX_PATH = PROJECT_ROOT / "data" / "indexes" / "cases"
+STATIC_CASE_DATASET = PROJECT_ROOT / "data" / "processed" / "cases.json"
+CASE_CACHE_PATH = PROJECT_ROOT / "data" / "cache"
 
 CATEGORY_LABELS = {
     LegalCategory.LABOR: "근로계약·부당해고",
@@ -122,12 +126,13 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
     store = ChromaStatuteVectorStore(index_path)
     if store.count == 0:
         raise UiConfigurationError("법령 색인이 비어 있습니다. build_statute_index.py를 실행해 주세요.")
-    statute_retriever = ExpandedStatuteRetriever(
-        GmsEmbeddingClient(
+    embedder = GmsEmbeddingClient(
             settings.gms_key,
             model_name=settings.gms_embedding_model,
             base_url=settings.gms_base_url,
-        ),
+        )
+    statute_retriever = ExpandedStatuteRetriever(
+        embedder,
         store,
         LegalQueryExpander(query_llm),
     )
@@ -135,16 +140,23 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
         case_store = ChromaCaseVectorStore(CASE_INDEX_PATH)
         if case_store.count:
             case_retriever = ExpandedStatuteRetriever(
-                GmsEmbeddingClient(
-                    settings.gms_key,
-                    model_name=settings.gms_embedding_model,
-                    base_url=settings.gms_base_url,
-                ),
+                embedder,
                 case_store,
                 LegalQueryExpander(query_llm),
             )
+            enricher = None
+            if settings.has_law_api_key and STATIC_CASE_DATASET.exists():
+                assert settings.law_api_oc is not None
+                enricher = IncrementalCaseEnricher(
+                    CourtCaseOpenApiClient(settings.law_api_oc),
+                    embedder,
+                    case_store,
+                    static_dataset=STATIC_CASE_DATASET,
+                    dynamic_dataset=CASE_CACHE_PATH / "dynamic_cases.json",
+                    history_path=CASE_CACHE_PATH / "case_collection_history.json",
+                )
             return StatuteRagPipeline(
-                CombinedLegalRetriever(statute_retriever, case_retriever),
+                CombinedLegalRetriever(statute_retriever, case_retriever, enricher),
                 answer_llm,
             )
     return StatuteRagPipeline(statute_retriever, answer_llm)
@@ -203,6 +215,10 @@ def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message:
                 f"답변 생성 모델: {settings.answer_model}\n"
                 f"임베딩 모델: {settings.gms_embedding_model}",
                 language="text",
+            )
+            st.caption(
+                "판례 자동 보강: "
+                + ("활성화" if settings.has_law_api_key else "비활성화 (LAW_API_OC 미설정)")
             )
 
 
