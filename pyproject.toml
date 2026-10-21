@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "legal-rag-navigator"
+version = "0.1.0"
+description = "Privacy-first Korean legal statute and precedent RAG navigator"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
