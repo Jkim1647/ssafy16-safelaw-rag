@@ -68,6 +68,15 @@ class QueryExpansionTests(unittest.TestCase):
         self.assertIn("서면통지", plan.rewritten_query)
         self.assertEqual(len(plan.legal_terms), len(set(plan.legal_terms)))
 
+    def test_rules_translate_auction_priority_language(self):
+        plan = LegalQueryExpander().expand(
+            "집이 경매로 넘어가면 전세금을 다른 채권자보다 먼저 받을 수 있나요?",
+            LegalCategory.HOUSING_LEASE,
+        )
+
+        self.assertIn("보증금의 회수", plan.legal_terms)
+        self.assertIn("우선변제권", plan.legal_terms)
+
     def test_multi_query_fusion_promotes_expanded_match(self):
         retriever = ExpandedStatuteRetriever(
             FakeEmbedder(),

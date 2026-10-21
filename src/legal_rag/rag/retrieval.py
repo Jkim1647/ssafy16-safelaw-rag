@@ -26,18 +26,18 @@ class SearchPlan:
     legal_terms: tuple[str, ...]
     used_llm: bool
 
-    def variants(self) -> list[tuple[str, float]]:
+    def variants(self) -> list[tuple[str, float, str]]:
         candidates = [
-            (self.original_query, 0.7),
-            (self.rewritten_query, 1.5),
-            (" ".join(self.legal_terms), 1.2),
+            (self.original_query, 0.7, "primary"),
+            (self.rewritten_query, 1.3, "primary"),
+            *((term, 1.0, "term") for term in self.legal_terms),
         ]
-        result: list[tuple[str, float]] = []
+        result: list[tuple[str, float, str]] = []
         seen: set[str] = set()
-        for query, weight in candidates:
+        for query, weight, kind in candidates:
             normalized = query.strip()
             if normalized and normalized not in seen:
-                result.append((normalized, weight))
+                result.append((normalized, weight, kind))
                 seen.add(normalized)
         return result
 
@@ -98,19 +98,35 @@ def _rule_terms(query: str, category: LegalCategory) -> tuple[str, ...]:
         written = bool(re.search(r"카카오톡|카톡|문자|메신저|말로|구두|전화", query))
         if dismissal:
             terms.extend(("해고", "해고 통보"))
+        if dismissal and re.search(r"특별한\s*이유|이유도\s*설명|마음에\s*안|정당한\s*이유", query):
+            terms.extend(("정당한 이유", "해고 등의 제한"))
         if dismissal and written:
             terms.extend(("서면통지", "해고사유", "해고시기", "해고 효력"))
         if re.search(r"월급|급여|임금|수당|돈을?\s*못\s*받", query):
             terms.extend(("임금", "임금 지급", "체불"))
         if re.search(r"계약직|기간제|단시간|알바", query):
             terms.extend(("기간제근로자", "단시간근로자"))
+        if re.search(r"계약서|근로조건|월급.*근무시간|근무시간.*월급", query):
+            terms.extend(("근로조건의 명시", "근로계약서 교부"))
+        if re.search(r"퇴사|퇴직", query) and re.search(r"정산|마지막\s*월급|금품|못\s*받", query):
+            terms.extend(("금품 청산", "퇴직 후 지급기한"))
     elif category is LegalCategory.HOUSING_LEASE:
         if re.search(r"보증금|전세금|집주인.*돈|돈.*돌려", query):
             terms.extend(("임대차보증금", "보증금 반환", "보증금 회수"))
+        if re.search(r"경매|공매|채권자", query) and re.search(r"먼저|우선|배당|보증금|전세금", query):
+            terms.extend(("보증금의 회수", "우선변제권"))
         if re.search(r"이사|전입|등기|못\s*받", query):
             terms.extend(("대항력", "우선변제권", "임차권등기명령"))
         if re.search(r"갱신|연장|더\s*살", query):
             terms.extend(("계약갱신요구권", "묵시적 갱신"))
+        if re.search(r"소액", query) and re.search(r"보증금|임차", query):
+            terms.extend(("보증금 중 일정액의 보호", "소액보증금 최우선변제"))
+        if re.search(r"임대차.*등기|등기.*협조|세입자.*등기", query):
+            terms.extend(("임대차의 등기", "임대인의 등기 협력"))
+        if re.search(r"보일러|수선|수리.*거부|고장", query):
+            terms.extend(("임대인의 의무", "목적물 사용수익 상태 유지", "수선의무"))
+        if re.search(r"수리비|필요비|유익비|비용.*돌려", query):
+            terms.extend(("임차인의 상환청구권", "필요비 상환"))
     elif category is LegalCategory.INHERITANCE:
         if re.search(r"빚|채무|대출", query):
             terms.extend(("상속채무", "상속포기", "한정승인"))
@@ -118,6 +134,12 @@ def _rule_terms(query: str, category: LegalCategory) -> tuple[str, ...]:
             terms.extend(("상속포기", "상속의 승인과 포기", "신고기간"))
         if re.search(r"유언|유산|재산", query):
             terms.extend(("상속재산", "유언", "유류분"))
+        if re.search(r"누가\s*먼저|순서|순위", query):
+            terms.extend(("상속의 순위", "법정상속순위"))
+        if re.search(r"재산.*빚|빚.*이어받|모두\s*이어받|권리.*의무", query):
+            terms.extend(("상속과 포괄적 권리의무의 승계", "포괄승계"))
+        if re.search(r"한정승인", query) and re.search(r"효과|범위", query):
+            terms.extend(("한정승인의 효과", "상속재산 범위의 채무 변제"))
     return _unique_terms(terms)
 
 
@@ -201,13 +223,14 @@ class ExpandedStatuteRetriever:
             raise ValueError("top_k는 1 이상이어야 합니다.")
         plan = self._expander.expand(sanitized_query, category)
         variants = plan.variants()
-        vectors = self._embedder.embed([query for query, _ in variants])
+        vectors = self._embedder.embed([query for query, _, _ in variants])
         if len(vectors) != len(variants):
             raise ValueError("검색 질의와 임베딩 개수가 다릅니다.")
 
         fused: dict[str, RetrievedChunk] = {}
+        best_term_scores: dict[str, float] = {}
         candidate_count = max(top_k * 3, 10)
-        for (query, weight), vector in zip(variants, vectors, strict=True):
+        for (query, weight, kind), vector in zip(variants, vectors, strict=True):
             hits = self._store.search(vector, category=category, top_k=candidate_count)
             for rank, hit in enumerate(hits, start=1):
                 item = fused.get(hit.chunk_id)
@@ -219,14 +242,36 @@ class ExpandedStatuteRetriever:
                         distance=hit.distance,
                     )
                     fused[hit.chunk_id] = item
-                item.score += weight / (60 + rank)
+                variant_score = weight / (60 + rank)
+                if kind == "primary":
+                    item.score += variant_score
+                else:
+                    best_term_scores[hit.chunk_id] = max(
+                        best_term_scores.get(hit.chunk_id, 0.0),
+                        variant_score,
+                    )
                 item.distance = min(item.distance, hit.distance)
                 item.matched_queries.append(query)
 
         for item in fused.values():
+            item.score += best_term_scores.get(item.chunk_id, 0.0)
             title = str(item.metadata.get("article_title", ""))
-            item.score += sum(0.004 for term in plan.legal_terms if term in title)
-            item.score += sum(0.0005 for term in plan.legal_terms if term in item.document)
+            normalized_title = re.sub(r"[^0-9A-Za-z가-힣]", "", title)
+            title_bonus = 0.0
+            document_bonus = 0.0
+            for term in plan.legal_terms:
+                normalized_term = re.sub(r"[^0-9A-Za-z가-힣]", "", term)
+                if not normalized_term:
+                    continue
+                if normalized_term == normalized_title:
+                    title_bonus = max(title_bonus, 0.05)
+                elif len(normalized_term) >= 4 and (
+                    normalized_term in normalized_title or normalized_title in normalized_term
+                ):
+                    title_bonus = max(title_bonus, 0.02)
+                if term in item.document:
+                    document_bonus = max(document_bonus, 0.002)
+            item.score += title_bonus + document_bonus
 
         ranked = sorted(
             fused.values(),
