@@ -38,6 +38,13 @@ class StatuteDocument:
     effective_date: date
     source_url: str
     issue_tags: tuple[str, ...] = field(default_factory=tuple)
+    source_law_id: str = ""
+    law_sequence: str = ""
+    law_key: str = ""
+    article_key: str = ""
+    ministry: str = ""
+    law_type: str = ""
+    promulgation_date: date | None = None
 
     def __post_init__(self) -> None:
         for name in ("law_id", "law_name", "article_no", "article_title", "text"):

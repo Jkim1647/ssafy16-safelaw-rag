@@ -17,11 +17,13 @@
 1. 프로젝트 공통 도메인 모델
 2. LLM 호출 전 로컬 개인정보 마스킹
 3. 보안 경계를 검증하는 자동화 테스트
+4. 국가법령정보 현행법령 API 수집기
+5. 3개 생활법률 도메인의 조문 단위 데이터셋
 
 ## 프로젝트 구조
 
 ```text
-AI코어프로젝트2_SafeLaw_Gwangju_03_Kimjinyoung/
+ai-2_safelaw_gwangju_03_kimjinyoung/
 ├─ app.py                         # Streamlit 실행 진입점
 ├─ pyproject.toml                 # Python 패키지·테스트 설정
 ├─ docs/
@@ -37,19 +39,59 @@ AI코어프로젝트2_SafeLaw_Gwangju_03_Kimjinyoung/
 │  ├─ adapters/                   # Vector DB·GMS 구현체
 │  └─ ui/                         # Streamlit 화면
 ├─ data/
+│  ├─ statute_sources.json        # 수집 법령·카테고리·조문 범위 설정
 │  ├─ raw/                        # 공식 원문(버전 관리 제외)
-│  ├─ processed/                  # 정규화·청킹 결과
+│  ├─ processed/                  # 정규화 조문 데이터셋·생성 명세
 │  └─ indexes/                    # Vector DB 지속 데이터
+├─ scripts/
+│  └─ build_statute_dataset.py    # API 수집·정규화·검증용 데이터 생성
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
 
 세부 시스템 흐름은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
 
-## 실행
+## 법령 데이터셋
+
+국가법령정보센터의 현행법령 검색 API와 본문 API를 사용합니다. 인증값 `OC`는 환경변수로만 읽으며 URL, 로그, 데이터셋에는 저장하지 않습니다.
+
+현재 수집 범위는 다음과 같습니다.
+
+- 근로계약·부당해고: 근로기준법, 기간제 및 단시간근로자 보호 등에 관한 법률
+- 전세·임대차 보증금: 주택임대차보호법 전체, 민법 제303조~제318조 및 제618조~제654조
+- 상속: 민법 제997조~제1118조
+
+2026-10-21 생성본은 총 381개 조문입니다: 노동 158개, 임대차 96개, 상속 127개. 각 레코드에는 법령·조문 식별자, 시행일, 공포일, 소관부처, 원문 링크가 포함됩니다.
+
+### 데이터셋 다시 만들기
+
+PowerShell에서 발급받은 국가법령정보 공동활용 `OC`를 현재 프로세스에만 설정한 뒤 실행합니다.
+
+```powershell
+$env:LAW_API_OC="발급받은-OC"
+python scripts/build_statute_dataset.py
+Remove-Item Env:LAW_API_OC
+```
+
+결과물:
+
+- `data/processed/statutes.json`: 조문 단위 정규화 데이터
+- `data/processed/statutes_manifest.json`: 건수, 법령별 통계, 생성일, SHA-256
+
+수집 대상과 조문 범위를 바꾸려면 `data/statute_sources.json`을 수정합니다. 법령 데이터는 수시로 개정될 수 있으므로 시연·검증 전 데이터셋을 다시 생성하고 manifest의 생성일과 해시를 기록합니다.
+
+## 테스트
 
 ```powershell
 python -m unittest discover -s tests -v
 ```
+
+## 데이터 출처와 이용 시 주의사항
+
+- 출처: [국가법령정보 공동활용](https://open.law.go.kr/LSO/openApi/openApiManual.do)
+- 검색 규격: 현행법령(시행일) 목록 조회 `target=eflaw`
+- 본문 규격: 현행법령(시행일) 본문 조회 `target=eflaw`
+- 서비스 공개 전 공동활용 신청 조건과 출처 표기 의무를 다시 확인합니다.
+- 생성 데이터는 법률정보 검색 보조용이며 최신성·정확성을 보증하는 법률 자문이 아닙니다.
 
 ## 보안 원칙
 
