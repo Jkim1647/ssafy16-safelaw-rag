@@ -7,7 +7,9 @@ name = "legal-rag-navigator"
 version = "0.1.0"
 description = "Privacy-first Korean legal statute and precedent RAG navigator"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "chromadb>=1.1,<2",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
