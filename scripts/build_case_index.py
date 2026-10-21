@@ -34,6 +34,7 @@ def main() -> int:
     payload = json.loads(args.input.read_text(encoding="utf-8"))
     chunks = [CaseChunk(**{**item, "category": LegalCategory(item["category"]),
         "precedent_level": PrecedentLevel(item.get("precedent_level", "other")),
+        "cited_cases": tuple(item.get("cited_cases", [])),
         "related_articles": tuple(item.get("related_articles", []))}) for item in payload]
     embedder = GmsEmbeddingClient(api_key,
         model_name=os.getenv("GMS_EMBEDDING_MODEL", "text-embedding-3-small"),

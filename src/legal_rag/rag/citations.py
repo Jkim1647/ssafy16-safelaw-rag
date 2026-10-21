@@ -54,6 +54,8 @@ class CaseEvidence:
     case_name: str = ""
     decision_type: str = ""
     precedent_level: str = "other"
+    case_type: str = ""
+    cited_cases: tuple[str, ...] = ()
 
     @property
     def label(self) -> str:
@@ -164,6 +166,12 @@ def build_case_evidence(
                 "case_name": str(hit.metadata.get("case_name", "")).strip(),
                 "decision_type": str(hit.metadata.get("decision_type", "")).strip(),
                 "precedent_level": str(hit.metadata.get("precedent_level", "other")).strip(),
+                "case_type": str(hit.metadata.get("case_type", "")).strip(),
+                "cited_cases": tuple(
+                    item.strip()
+                    for item in str(hit.metadata.get("cited_cases", "")).split("|")
+                    if item.strip()
+                ),
                 "sections": [],
                 "documents": [],
             }
@@ -190,6 +198,8 @@ def build_case_evidence(
             case_name=value["case_name"],
             decision_type=value["decision_type"],
             precedent_level=value["precedent_level"],
+            case_type=value["case_type"],
+            cited_cases=value["cited_cases"],
         ))
     return tuple(evidence)
 
@@ -348,5 +358,12 @@ def render_grounded_answer(draft: GroundedDraft, evidence: Sequence[LegalEvidenc
             "> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.",
         )
     )
+    if any(isinstance(item, CaseEvidence) for item in cited_evidence(draft, evidence)):
+        lines.extend(
+            (
+                "",
+                "> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+            )
+        )
     return "\n".join(lines)
 

@@ -50,11 +50,12 @@ def main() -> int:
         item["precedent_level"] = document.precedent_level.value
         item["issues"] = list(document.issues)
         item["related_articles"] = list(document.related_articles)
+        item["cited_cases"] = list(document.cited_cases)
         serialized.append(item)
     write_json(args.output, serialized)
     digest = hashlib.sha256(args.output.read_bytes()).hexdigest()
     manifest = {
-        "schema_version": 2,
+        "schema_version": 3,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "collection_date": date.today().isoformat(),
         "source": "국가법령정보센터 판례 Open API(데이터출처: 대법원)",
@@ -62,6 +63,11 @@ def main() -> int:
         "document_count": len(documents),
         "category_counts": dict(sorted(Counter(item.category.value for item in documents).items())),
         "precedent_level_counts": dict(sorted(Counter(item.precedent_level.value for item in documents).items())),
+        "decision_date_range": {
+            "oldest": min(item.decision_date for item in documents).isoformat() if documents else None,
+            "latest": max(item.decision_date for item in documents).isoformat() if documents else None,
+        },
+        "review_status": "자동 수집본·법률 전문가 미검수",
         "dataset_sha256": digest,
         "source_config": args.sources.relative_to(ROOT).as_posix(),
     }

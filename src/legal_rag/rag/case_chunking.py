@@ -26,6 +26,8 @@ class CaseChunk:
     case_name: str = ""
     decision_type: str = ""
     precedent_level: PrecedentLevel = PrecedentLevel.OTHER
+    case_type: str = ""
+    cited_cases: tuple[str, ...] = field(default_factory=tuple)
 
 
 SECTION_LABELS = {
@@ -62,6 +64,7 @@ def chunk_case(document: CaseDocument, *, max_chars: int = 1400,
                 f"사건명: {document.case_name or '미상'}\n"
                 f"판례 등급: {document.precedent_level.value}\n"
                 f"판결 유형: {document.decision_type or '미상'}\n"
+                f"사건 종류: {document.case_type or '미상'}\n"
                 f"섹션: {SECTION_LABELS[section]}\n"
                 f"관련 법령: {related}\n"
                 f"내용: {content}"
@@ -82,6 +85,8 @@ def chunk_case(document: CaseDocument, *, max_chars: int = 1400,
                 case_name=document.case_name,
                 decision_type=document.decision_type,
                 precedent_level=document.precedent_level,
+                case_type=document.case_type,
+                cited_cases=document.cited_cases,
             ))
     return chunks
 

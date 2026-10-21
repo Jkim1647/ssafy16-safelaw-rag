@@ -77,6 +77,8 @@ class CaseDocument:
     case_name: str = ""
     decision_type: str = ""
     precedent_level: PrecedentLevel = PrecedentLevel.OTHER
+    case_type: str = ""
+    cited_cases: tuple[str, ...] = field(default_factory=tuple)
 
     def __post_init__(self) -> None:
         for name in ("case_id", "case_number", "court", "result", "facts", "reasoning"):

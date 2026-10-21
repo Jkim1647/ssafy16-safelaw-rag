@@ -66,7 +66,8 @@ flowchart LR
     LAW[국가법령정보 API] --> ALLOW[출처 Allowlist]
     COURT[대법원 공개·비실명 판례] --> ALLOW
     ALLOW --> NORMALIZE[내부 도메인 모델 정규화]
-    NORMALIZE --> SPLIT{문서 종류}
+    NORMALIZE --> POLICY[판결유형·법원급·선고일·참조판례 보존]
+    POLICY --> SPLIT{문서 종류}
     SPLIT -->|Law| LC[조문 구조 기반 청킹]
     SPLIT -->|Case| CC[사실관계·쟁점·판단 청킹]
     LC --> LE[임베딩 + 메타데이터]
@@ -77,7 +78,7 @@ flowchart LR
 
     classDef security fill:#fff3cd,stroke:#8a6d00,color:#111;
     classDef store fill:#e7f1ff,stroke:#225ea8,color:#111;
-    class ALLOW security;
+    class ALLOW,POLICY security;
     class LS,CS,AUDIT store;
 ```
 
@@ -92,4 +93,6 @@ flowchart LR
 | `rag` | 청킹, 색인, 검색, 근거 병합·검증 | 도메인 규칙과 저장소 계약 사용 |
 | `adapters` | Chroma·GMS 등 교체 가능한 기술 | `ports` 계약 구현 |
 | `ui` | 입력·진행 표시·근거 렌더링 | `application`만 호출 |
+
+판례 관련성·권위·시간 정보와 자동 판단 금지 항목은 [`legal-retrieval-policy.md`](legal-retrieval-policy.md)에 정리한다.
 
