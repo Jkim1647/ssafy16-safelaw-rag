@@ -25,6 +25,7 @@
 9. 질문 입력·답변 상태·공식 근거 링크를 제공하는 Streamlit UI
 10. 대법원 공개 판례 수집·정규화와 섹션 기반 청킹
 11. 법령/판례 별도 Chroma 색인 및 통합 근거 답변
+12. 데이터 출처·API 요청 규격·산출물·이용 조건 현황 문서
 
 ## 프로젝트 구조
 
@@ -37,6 +38,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ search-quality.md           # 평가셋·Recall@5·MRR 결과
 │  ├─ model-routing.md            # 단계별 모델 분리 기준
 │  ├─ legal-retrieval-policy.md   # 법령·판례 검색 정책과 검수 항목
+│  ├─ data-source-inventory.md    # 데이터 출처·API·모델·산출물 현황
 │  └─ troubleshooting.md          # 검색 문제·원인·해결 기록
 ├─ src/legal_rag/
 │  ├─ config.py                   # 환경변수·비밀값 설정
@@ -64,7 +66,8 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ build_case_index.py         # 별도 판례 Chroma 색인
 │  ├─ search_statutes.py          # 자연어 검색어 확장·법령 검색
 │  ├─ answer_statutes.py          # 근거 제한 답변 생성·검증
-│  └─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
+│  ├─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
+│  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
 
@@ -223,6 +226,8 @@ python -m unittest discover -s tests -v
 ```
 
 ## 데이터 출처와 이용 시 주의사항
+
+API별 요청 주소·파라미터·인증 환경변수, 실제 수집 범위, 현재 건수·해시, 모델, Git 제외 항목과 재현 명령은 [`docs/data-source-inventory.md`](docs/data-source-inventory.md)에 통합 정리했습니다.
 
 - 출처: [국가법령정보 공동활용](https://open.law.go.kr/LSO/openApi/openApiManual.do)
 - 검색 규격: 현행법령(시행일) 목록 조회 `target=eflaw`
