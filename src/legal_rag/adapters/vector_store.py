@@ -5,7 +5,9 @@ from __future__ import annotations
 from collections.abc import Sequence
 from pathlib import Path
 
+from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.chunking import StatuteChunk
+from legal_rag.rag.retrieval import VectorSearchHit
 
 
 class ChromaStatuteVectorStore:
@@ -61,4 +63,33 @@ class ChromaStatuteVectorStore:
     @property
     def count(self) -> int:
         return self._collection.count()
+
+    def search(
+        self,
+        query_vector: Sequence[float],
+        *,
+        category: LegalCategory,
+        top_k: int,
+    ) -> list[VectorSearchHit]:
+        result = self._collection.query(
+            query_embeddings=[list(query_vector)],
+            n_results=top_k,
+            where={"category": category.value},
+            include=["documents", "metadatas", "distances"],
+        )
+        ids = result.get("ids", [[]])[0]
+        documents = result.get("documents", [[]])[0]
+        metadatas = result.get("metadatas", [[]])[0]
+        distances = result.get("distances", [[]])[0]
+        return [
+            VectorSearchHit(
+                chunk_id=chunk_id,
+                document=document,
+                metadata=metadata,
+                distance=float(distance),
+            )
+            for chunk_id, document, metadata, distance in zip(
+                ids, documents, metadatas, distances, strict=True
+            )
+        ]
 

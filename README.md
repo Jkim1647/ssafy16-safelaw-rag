@@ -47,7 +47,8 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 ├─ scripts/
 │  ├─ build_statute_dataset.py    # API 수집·정규화·검증용 데이터 생성
 │  ├─ build_statute_chunks.py     # 조문 구조 기반 청크 생성
-│  └─ build_statute_index.py      # GMS 임베딩·Chroma 색인
+│  ├─ build_statute_index.py      # GMS 임베딩·Chroma 색인
+│  └─ search_statutes.py          # 자연어 검색어 확장·법령 검색
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
 
@@ -106,6 +107,19 @@ python scripts/build_statute_index.py
 - 법령 색인 위치: `data/indexes/statutes/` — 재생성 가능한 산출물이므로 Git 제외
 
 현재 데이터에서는 381개 조문이 386개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
+
+## 자연어 법령 검색
+
+사용자 질문은 로컬 개인정보 마스킹을 거친 후 검색어 확장 단계로 전달됩니다. 도메인 규칙과 GMS LLM이 일상 표현을 법률 용어로 바꾸고, 원문 질문·재작성 질문·법률 용어 질의를 각각 검색한 뒤 가중 Reciprocal Rank Fusion으로 결과를 합칩니다. 원문 질의를 함께 사용하므로 LLM이 부정확한 용어를 만들더라도 검색 신호가 하나로 고정되지 않습니다.
+
+```powershell
+python scripts/search_statutes.py `
+  "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요" `
+  --category labor `
+  --top-k 5
+```
+
+카테고리 값은 `labor`, `housing_lease`, `inheritance` 중 하나입니다. 현재 대표 질문 검증 결과와 한계는 [`docs/search-quality.md`](docs/search-quality.md)에 기록합니다.
 
 ## 테스트
 
