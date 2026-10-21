@@ -17,6 +17,7 @@ class Settings:
     gms_key: str | None
     gms_base_url: str
     gms_embedding_model: str
+    gms_chat_model: str
     law_api_oc: str | None
 
     @classmethod
@@ -33,6 +34,7 @@ class Settings:
                 "GMS_EMBEDDING_MODEL",
                 "text-embedding-3-small",
             ),
+            gms_chat_model=os.getenv("GMS_CHAT_MODEL", "gpt-5-nano"),
             law_api_oc=os.getenv("LAW_API_OC") or None,
         )
 
@@ -49,6 +51,7 @@ class Settings:
             "Settings("
             f"app_env={self.app_env!r}, "
             f"gms_embedding_model={self.gms_embedding_model!r}, "
+            f"gms_chat_model={self.gms_chat_model!r}, "
             f"has_gms_key={self.has_gms_key!r}, "
             f"has_law_api_key={self.has_law_api_key!r})"
         )
