@@ -23,6 +23,8 @@
 7. 자연어 검색어 확장·재정렬과 30문항 검색 평가셋
 8. 검색 법령 한정 답변 생성과 인용·원문 문구 검증
 9. 질문 입력·답변 상태·공식 근거 링크를 제공하는 Streamlit UI
+10. 대법원 공개 판례 수집·정규화와 섹션 기반 청킹
+11. 법령/판례 별도 Chroma 색인 및 통합 근거 답변
 
 ## 프로젝트 구조
 
@@ -33,6 +35,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 ├─ docs/
 │  ├─ architecture.md             # 시스템 경계와 데이터 흐름
 │  ├─ search-quality.md           # 평가셋·Recall@5·MRR 결과
+│  ├─ model-routing.md            # 단계별 모델 분리 기준
 │  └─ troubleshooting.md          # 검색 문제·원인·해결 기록
 ├─ src/legal_rag/
 │  ├─ config.py                   # 환경변수·비밀값 설정
@@ -46,6 +49,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  └─ ui/                         # Streamlit 화면
 ├─ data/
 │  ├─ statute_sources.json        # 수집 법령·카테고리·조문 범위 설정
+│  ├─ case_sources.json           # 판례 본문 검색어·수집 상한 설정
 │  ├─ raw/                        # 공식 원문(버전 관리 제외)
 │  ├─ processed/                  # 정규화 조문 데이터셋·생성 명세
 │  ├─ evaluation/                 # 검색 질문·정답과 Recall@5·MRR 결과
@@ -54,6 +58,9 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ build_statute_dataset.py    # API 수집·정규화·검증용 데이터 생성
 │  ├─ build_statute_chunks.py     # 조문 구조 기반 청크 생성
 │  ├─ build_statute_index.py      # GMS 임베딩·Chroma 색인
+│  ├─ build_case_dataset.py       # 대법원 공개 판례 수집·정규화
+│  ├─ build_case_chunks.py        # 판례 섹션 기반 청킹
+│  ├─ build_case_index.py         # 별도 판례 Chroma 색인
 │  ├─ search_statutes.py          # 자연어 검색어 확장·법령 검색
 │  ├─ answer_statutes.py          # 근거 제한 답변 생성·검증
 │  └─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
@@ -133,6 +140,24 @@ python scripts/build_statute_index.py
 
 현재 데이터에서는 381개 조문이 386개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
 
+역할별 채팅 모델 배치와 임베딩 모델 혼용 시 주의점은 [`docs/model-routing.md`](docs/model-routing.md)에 정리했습니다.
+
+## 판례 데이터셋과 색인
+
+국가법령정보 판례 목록·본문 API에서 데이터출처가 대법원인 공개 판례만 수집합니다. 판시사항·판결요지·참조조문에 설정한 핵심 검색어가 나타나는지 확인하고 동일 사건번호 중복을 제거합니다. 현재 생성본은 50건(노동 12, 임대차 27, 상속 11), 652개 청크입니다.
+
+판례는 사건번호, 법원, 선고일, 주문·결과, 판례 원문, 판결요지, 판시사항, 참조조문, 공식 원문 URL로 정규화합니다. 그 후 `법적 쟁점`, `법원의 판단`, `주문·결과`, `사실관계·판례 원문` 섹션을 분리하고 1,400자/180자 중첩 기준으로 청킹합니다.
+
+```powershell
+$env:LAW_API_OC="발급받은-OC"
+python scripts/build_case_dataset.py
+Remove-Item Env:LAW_API_OC
+python scripts/build_case_chunks.py
+python scripts/build_case_index.py
+```
+
+법령과 판례는 `data/indexes/statutes/`, `data/indexes/cases/`에 따로 저장합니다. 두 컬렉션은 독립적으로 검색하며 원시 유사도 점수를 직접 비교하지 않습니다. 최종 생성 컨텍스트에서 법령과 판례를 문서 유형으로 구분하고, 인용한 원문 문구가 실제 검색 근거에 존재할 때만 답변을 표시합니다.
+
 ## 자연어 법령 검색
 
 사용자 질문은 로컬 개인정보 마스킹을 거친 후 검색어 확장 단계로 전달됩니다. 도메인 규칙과 GMS LLM이 일상 표현을 법률 용어로 바꾸고, 원문·재작성 질문은 가중 순위 결합에 사용합니다. 개별 법률 용어는 후보 조문을 넓게 수집하는 데 사용하며, 가장 강한 용어 신호와 조문 제목 일치도로 최종 순위를 보정합니다. 원문 질의를 함께 사용하므로 LLM이 부정확한 용어를 만들더라도 검색 신호가 하나로 고정되지 않습니다.
@@ -199,6 +224,7 @@ python -m unittest discover -s tests -v
 - 본문 규격: 현행법령(시행일) 본문 조회 `target=eflaw`
 - 서비스 공개 전 공동활용 신청 조건과 출처 표기 의무를 다시 확인합니다.
 - 생성 데이터는 법률정보 검색 보조용이며 최신성·정확성을 보증하는 법률 자문이 아닙니다.
+- 판례 목록·본문 규격: `target=prec`, 목록 본문검색 `search=2`
 
 ## 보안 원칙
 

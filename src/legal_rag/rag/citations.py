@@ -41,6 +41,26 @@ class StatuteEvidence:
 
 
 @dataclass(frozen=True, slots=True)
+class CaseEvidence:
+    citation_id: int
+    chunk_id: str
+    case_id: str
+    case_number: str
+    court: str
+    decision_date: str
+    sections: tuple[str, ...]
+    text: str
+    source_url: str
+
+    @property
+    def label(self) -> str:
+        return f"{self.court} {self.decision_date} 선고 {self.case_number}"
+
+
+LegalEvidence = StatuteEvidence | CaseEvidence
+
+
+@dataclass(frozen=True, slots=True)
 class EvidenceQuote:
     citation_id: int
     quote: str
@@ -117,6 +137,52 @@ def build_statute_evidence(hits: Sequence[RetrievedChunk]) -> tuple[StatuteEvide
     return tuple(evidence)
 
 
+def build_case_evidence(
+    hits: Sequence[RetrievedChunk], *, start_id: int = 1
+) -> tuple[CaseEvidence, ...]:
+    """같은 사건의 검색된 섹션 청크를 하나의 판례 근거로 병합한다."""
+
+    grouped: dict[tuple[str, str], dict[str, Any]] = {}
+    for hit in hits:
+        case_id = str(hit.metadata.get("case_id", "")).strip()
+        source_url = str(hit.metadata.get("source_url", "")).strip()
+        document = hit.document.strip()
+        if not (case_id and document and _is_official_law_url(source_url)):
+            continue
+        key = case_id, source_url
+        if key not in grouped:
+            grouped[key] = {
+                "chunk_id": hit.chunk_id,
+                "case_number": str(hit.metadata.get("case_number", "")).strip(),
+                "court": str(hit.metadata.get("court", "")).strip(),
+                "decision_date": str(hit.metadata.get("decision_date", "")).strip(),
+                "sections": [],
+                "documents": [],
+            }
+        section = str(hit.metadata.get("section", "")).strip()
+        if section and section not in grouped[key]["sections"]:
+            grouped[key]["sections"].append(section)
+        if document not in grouped[key]["documents"]:
+            grouped[key]["documents"].append(document)
+
+    evidence: list[CaseEvidence] = []
+    for offset, ((case_id, source_url), value) in enumerate(grouped.items()):
+        if not (value["case_number"] and value["court"] and value["decision_date"]):
+            continue
+        evidence.append(CaseEvidence(
+            citation_id=start_id + offset,
+            chunk_id=value["chunk_id"],
+            case_id=case_id,
+            case_number=value["case_number"],
+            court=value["court"],
+            decision_date=value["decision_date"],
+            sections=tuple(value["sections"]),
+            text="\n".join(value["documents"]),
+            source_url=source_url,
+        ))
+    return tuple(evidence)
+
+
 def _extract_json_object(raw_response: str) -> dict[str, Any]:
     if not isinstance(raw_response, str) or not raw_response.strip():
         raise CitationValidationError("답변 생성 결과가 비어 있습니다.")
@@ -132,7 +198,7 @@ def _extract_json_object(raw_response: str) -> dict[str, Any]:
     return payload
 
 
-def _parse_claim(value: Any, evidence_by_id: dict[int, StatuteEvidence]) -> GroundedClaim:
+def _parse_claim(value: Any, evidence_by_id: dict[int, LegalEvidence]) -> GroundedClaim:
     if not isinstance(value, dict):
         raise CitationValidationError("주장은 text와 citations를 가진 객체여야 합니다.")
     text = value.get("text")
@@ -182,6 +248,7 @@ def _parse_claim(value: Any, evidence_by_id: dict[int, StatuteEvidence]) -> Grou
     cited_articles = {
         re.sub(r"\s+", "", evidence_by_id[citation_id].article_no)
         for citation_id in citation_ids
+        if isinstance(evidence_by_id[citation_id], StatuteEvidence)
     }
     normalized_mentions = {re.sub(r"\s+", "", item) for item in mentioned_articles}
     if not normalized_mentions.issubset(cited_articles):
@@ -196,7 +263,7 @@ def _parse_claim(value: Any, evidence_by_id: dict[int, StatuteEvidence]) -> Grou
 
 def parse_and_validate_draft(
     raw_response: str,
-    evidence: Sequence[StatuteEvidence],
+    evidence: Sequence[LegalEvidence],
 ) -> GroundedDraft:
     """LLM JSON을 파싱하고 모든 주장에 유효한 검색 근거가 있는지 확인한다."""
 
@@ -225,8 +292,8 @@ def parse_and_validate_draft(
 
 def cited_evidence(
     draft: GroundedDraft,
-    evidence: Sequence[StatuteEvidence],
-) -> tuple[StatuteEvidence, ...]:
+    evidence: Sequence[LegalEvidence],
+) -> tuple[LegalEvidence, ...]:
     used = {citation_id for claim in draft.claims for citation_id in claim.citation_ids}
     return tuple(item for item in evidence if item.citation_id in used)
 
@@ -235,12 +302,12 @@ def _citation_label(citation_ids: Iterable[int]) -> str:
     return " ".join(f"[근거 {citation_id}]" for citation_id in citation_ids)
 
 
-def render_grounded_answer(draft: GroundedDraft, evidence: Sequence[StatuteEvidence]) -> str:
+def render_grounded_answer(draft: GroundedDraft, evidence: Sequence[LegalEvidence]) -> str:
     if not draft.answerable or draft.summary is None:
         raise CitationValidationError("답변 불가 초안은 렌더링할 수 없습니다.")
 
     lines = [
-        "## 상황에 대한 법령 안내",
+        "## 상황에 대한 법령·판례 안내",
         "",
         f"{draft.summary.text} {_citation_label(draft.summary.citation_ids)}",
     ]
@@ -267,7 +334,7 @@ def render_grounded_answer(draft: GroundedDraft, evidence: Sequence[StatuteEvide
     lines.extend(
         (
             "",
-            "> 이 답변은 검색된 법령을 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.",
+            "> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.",
         )
     )
     return "\n".join(lines)

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-21T05:53:35.702716+00:00",
+  "collection_date": "2026-10-21",
+  "source": "국가법령정보센터 판례 Open API(데이터출처: 대법원)",
+  "source_url": "https://open.law.go.kr/LSO/openApi/guideResult.do?htmlName=precListGuide",
+  "document_count": 50,
+  "category_counts": {
+    "housing_lease": 27,
+    "inheritance": 11,
+    "labor": 12
+  },
+  "dataset_sha256": "6cda6677a98c345261e02ee6bbcb6e1fffa171485fb08e28faec22dde6a41ff2",
+  "source_config": "data/case_sources.json"
+}

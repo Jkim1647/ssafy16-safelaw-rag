@@ -9,16 +9,18 @@ from typing import Any
 
 from legal_rag.adapters.gms_embeddings import GmsEmbeddingClient
 from legal_rag.adapters.gms_llm import GmsChatClient
-from legal_rag.adapters.vector_store import ChromaStatuteVectorStore
+from legal_rag.adapters.vector_store import ChromaCaseVectorStore, ChromaStatuteVectorStore
 from legal_rag.config import Settings
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.pipeline import AnswerStatus, GroundedAnswer, StatuteRagPipeline
-from legal_rag.rag.retrieval import ExpandedStatuteRetriever, LegalQueryExpander
+from legal_rag.rag.citations import CaseEvidence
+from legal_rag.rag.retrieval import CombinedLegalRetriever, ExpandedStatuteRetriever, LegalQueryExpander
 from legal_rag.security.redaction import PrivacyGuard
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 INDEX_PATH = PROJECT_ROOT / "data" / "indexes" / "statutes"
+CASE_INDEX_PATH = PROJECT_ROOT / "data" / "indexes" / "cases"
 
 CATEGORY_LABELS = {
     LegalCategory.LABOR: "근로계약·부당해고",
@@ -33,9 +35,31 @@ CATEGORY_HELP = {
 }
 
 EXAMPLE_QUESTIONS = {
-    LegalCategory.LABOR: "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요.",
-    LegalCategory.HOUSING_LEASE: "집이 경매로 넘어가면 전세보증금을 먼저 받을 수 있나요?",
-    LegalCategory.INHERITANCE: "부모님이 돌아가셨는데 빚이 더 많으면 언제까지 상속을 포기해야 하나요?",
+    LegalCategory.LABOR: (
+        "5명 이상이 근무하는 회사에서 8개월째 일하고 있습니다. 어제 팀장이 카카오톡으로 "
+        "'내일부터 나오지 말라'고 했고, 해고 사유와 날짜가 적힌 문서는 받지 못했습니다. "
+        "이런 통보가 유효한지 알고 싶습니다.",
+        "퇴사한 지 20일이 지났는데 마지막 월급과 연차수당을 받지 못했습니다. 회사는 다음 "
+        "급여일에 주겠다고 합니다. 언제까지 지급해야 하나요?",
+        "근로계약서를 받지 못했고 월급과 근무시간도 구두로만 들었습니다. 사업주가 계약서를 "
+        "작성하거나 교부하지 않아도 되는지 궁금합니다.",
+    ),
+    LegalCategory.HOUSING_LEASE: (
+        "전입신고와 확정일자를 마친 세입자입니다. 집이 경매로 넘어갔는데 보증금 8천만 원을 "
+        "다른 채권자보다 먼저 받을 수 있는지 알고 싶습니다.",
+        "계약이 끝나 이사해야 하지만 집주인이 새 세입자가 들어와야 보증금을 준다고 합니다. "
+        "보증금을 받기 전에 이사할 경우 권리를 지키려면 어떤 조치를 해야 하나요?",
+        "입주 중 보일러가 고장 나 수리를 요청했지만 집주인이 거부해 제가 비용을 냈습니다. "
+        "이 수리비를 집주인에게 청구할 수 있나요?",
+    ),
+    LegalCategory.INHERITANCE: (
+        "부모님이 돌아가신 뒤 예금보다 대출이 더 많다는 사실을 알았습니다. 사망 사실을 안 지 "
+        "두 달 정도 됐는데 상속포기나 한정승인을 언제까지 해야 하나요?",
+        "배우자와 자녀가 있는 사람이 유언 없이 사망했습니다. 부모와 형제자매도 있을 때 "
+        "누가 먼저 상속받고 각자의 순위는 어떻게 되나요?",
+        "상속재산 일부를 이미 사용한 뒤 채무를 발견했습니다. 이런 경우에도 상속포기나 "
+        "한정승인을 할 수 있는지 궁금합니다.",
+    ),
 }
 
 
@@ -85,24 +109,45 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
     if not ready:
         raise UiConfigurationError(message)
     assert settings.gms_key is not None
-    llm = GmsChatClient(
+    query_llm = GmsChatClient(
         settings.gms_key,
-        model_name=settings.gms_chat_model,
+        model_name=settings.query_model,
+        base_url=settings.gms_base_url,
+    )
+    answer_llm = GmsChatClient(
+        settings.gms_key,
+        model_name=settings.answer_model,
         base_url=settings.gms_base_url,
     )
     store = ChromaStatuteVectorStore(index_path)
     if store.count == 0:
         raise UiConfigurationError("법령 색인이 비어 있습니다. build_statute_index.py를 실행해 주세요.")
-    retriever = ExpandedStatuteRetriever(
+    statute_retriever = ExpandedStatuteRetriever(
         GmsEmbeddingClient(
             settings.gms_key,
             model_name=settings.gms_embedding_model,
             base_url=settings.gms_base_url,
         ),
         store,
-        LegalQueryExpander(llm),
+        LegalQueryExpander(query_llm),
     )
-    return StatuteRagPipeline(retriever, llm)
+    if CASE_INDEX_PATH.exists():
+        case_store = ChromaCaseVectorStore(CASE_INDEX_PATH)
+        if case_store.count:
+            case_retriever = ExpandedStatuteRetriever(
+                GmsEmbeddingClient(
+                    settings.gms_key,
+                    model_name=settings.gms_embedding_model,
+                    base_url=settings.gms_base_url,
+                ),
+                case_store,
+                LegalQueryExpander(query_llm),
+            )
+            return StatuteRagPipeline(
+                CombinedLegalRetriever(statute_retriever, case_retriever),
+                answer_llm,
+            )
+    return StatuteRagPipeline(statute_retriever, answer_llm)
 
 
 def _inject_styles(st: Any) -> None:
@@ -154,7 +199,8 @@ def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message:
         with st.expander("실행 정보"):
             st.code(
                 f"환경: {settings.app_env}\n"
-                f"채팅 모델: {settings.gms_chat_model}\n"
+                f"검색어 변환 모델: {settings.query_model}\n"
+                f"답변 생성 모델: {settings.answer_model}\n"
                 f"임베딩 모델: {settings.gms_embedding_model}",
                 language="text",
             )
@@ -174,7 +220,19 @@ def _render_result(st: Any, answer: GroundedAnswer, redaction_count: int) -> Non
         st.markdown(answer.content)
         if answer.sources:
             with st.expander("근거 링크만 모아보기"):
-                for source in answer.sources:
+                statutes = [item for item in answer.sources if not isinstance(item, CaseEvidence)]
+                cases = [item for item in answer.sources if isinstance(item, CaseEvidence)]
+                if statutes:
+                    st.markdown("**법령 근거**")
+                for source in statutes:
+                    st.link_button(
+                        f"근거 {source.citation_id} · {source.label}",
+                        source.source_url,
+                        use_container_width=True,
+                    )
+                if cases:
+                    st.markdown("**유사 판례**")
+                for source in cases:
                     st.link_button(
                         f"근거 {source.citation_id} · {source.label}",
                         source.source_url,
@@ -204,9 +262,9 @@ def main() -> None:
     _render_sidebar(st, settings, ready, readiness_message)
 
     st.markdown('<div class="safelaw-kicker">Privacy-first legal RAG</div>', unsafe_allow_html=True)
-    st.markdown('<div class="safelaw-title">상황을 적으면 관련 법령부터 확인합니다</div>', unsafe_allow_html=True)
+    st.markdown('<div class="safelaw-title">상황을 적으면 관련 법령과 판례를 확인합니다</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="safelaw-subtitle">검색된 법령 원문으로 검증할 수 있는 내용만 안내하고, 근거가 부족하면 답변하지 않습니다.</div>',
+        '<div class="safelaw-subtitle">검색된 법령과 공개 판례 원문으로 검증할 수 있는 내용만 안내하고, 근거가 부족하면 답변하지 않습니다.</div>',
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -215,21 +273,24 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
+    category = st.selectbox(
+        "상담 분야",
+        options=[None, *list(LegalCategory)],
+        index=0,
+        format_func=lambda item: (
+            "상담 받으실 분야를 선택해 주세요"
+            if item is None
+            else CATEGORY_LABELS[item]
+        ),
+        help="현재 법령 데이터가 구축된 세 분야 중 하나를 선택하세요.",
+        key="legal_category_v3",
+    )
+    if category is not None:
+        with st.expander("질문 예시 보기", expanded=True):
+            for number, example in enumerate(EXAMPLE_QUESTIONS[category], start=1):
+                st.markdown(f"**예시 {number}.** {example}")
+
     with st.form("legal_question_form", clear_on_submit=False):
-        category = st.selectbox(
-            "상담 분야",
-            options=[None, *list(LegalCategory)],
-            index=0,
-            format_func=lambda item: (
-                "상담 받으실 분야를 선택해 주세요"
-                if item is None
-                else CATEGORY_LABELS[item]
-            ),
-            help="현재 법령 데이터가 구축된 세 분야 중 하나를 선택하세요.",
-            key="legal_category_v2",
-        )
-        if category is not None:
-            st.caption(f"예시: {EXAMPLE_QUESTIONS[category]}")
         question = st.text_area(
             "상황을 구체적으로 적어주세요",
             height=180,
@@ -247,7 +308,7 @@ def main() -> None:
             )
             st.caption("입력한 단어는 `[CUSTOM_N]`으로 바뀐 뒤 검색과 답변 생성에 사용됩니다.")
         submitted = st.form_submit_button(
-            "관련 법령 검토하기",
+            "관련 법령·판례 검토하기",
             type="primary",
             use_container_width=True,
             disabled=not ready,
@@ -274,7 +335,7 @@ def main() -> None:
         if "safelaw_pipeline" not in st.session_state:
             st.session_state.safelaw_pipeline = build_pipeline(settings, INDEX_PATH)
         pipeline = st.session_state.safelaw_pipeline
-        with st.spinner("개인정보를 가린 뒤 관련 법령과 근거 문구를 검증하고 있습니다..."):
+        with st.spinner("개인정보를 가린 뒤 관련 법령·판례와 근거 문구를 검증하고 있습니다..."):
             answer = pipeline.answer(
                 privacy.sanitized_text,
                 category=category,

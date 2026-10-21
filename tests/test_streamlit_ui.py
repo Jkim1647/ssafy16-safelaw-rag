@@ -11,6 +11,7 @@ from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.pipeline import AnswerStatus
 from legal_rag.ui.streamlit_app import (
     CATEGORY_LABELS,
+    EXAMPLE_QUESTIONS,
     STATUS_PRESENTATIONS,
     parse_sensitive_terms,
     runtime_readiness,
@@ -32,6 +33,7 @@ class StreamlitUiTests(unittest.TestCase):
     def test_every_domain_and_answer_status_has_ui_text(self):
         self.assertEqual(set(CATEGORY_LABELS), set(LegalCategory))
         self.assertEqual(set(STATUS_PRESENTATIONS), set(AnswerStatus))
+        self.assertTrue(all(len(EXAMPLE_QUESTIONS[item]) >= 3 for item in LegalCategory))
 
     def test_sensitive_terms_are_trimmed_and_deduplicated(self):
         terms = parse_sensitive_terms("홍길동, 세이프로; 홍길동\n임대인A")

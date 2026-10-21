@@ -8,6 +8,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from legal_rag.rag.citations import (
     CitationValidationError,
+    build_case_evidence,
     build_statute_evidence,
     parse_and_validate_draft,
     render_grounded_answer,
@@ -35,6 +36,26 @@ def hit(
 
 
 class CitationValidationTests(unittest.TestCase):
+    def test_case_evidence_is_grouped_and_quote_is_verified(self):
+        case_hit = RetrievedChunk(
+            chunk_id="case:labor:123:reasoning:000",
+            document="서면 통지가 없으므로 이 사건 해고는 효력이 없다.",
+            metadata={"case_id": "123", "case_number": "2024다123", "court": "대법원",
+                "decision_date": "2024-01-02", "section": "reasoning",
+                "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=123"},
+            distance=0.1,
+        )
+        evidence = build_case_evidence([case_hit])
+        raw = json.dumps({"answerable": True, "summary": {
+            "text": "유사 판례는 서면 통지 여부를 판단 요소로 보았습니다.",
+            "citations": [1], "evidence_quotes": [{"citation_id": 1,
+                "quote": "서면 통지가 없으므로 이 사건 해고는 효력이 없다"}]}}, ensure_ascii=False)
+
+        draft = parse_and_validate_draft(raw, evidence)
+
+        self.assertEqual(evidence[0].case_number, "2024다123")
+        self.assertTrue(draft.answerable)
+
     def test_build_evidence_keeps_only_official_law_sources(self):
         evidence = build_statute_evidence(
             [

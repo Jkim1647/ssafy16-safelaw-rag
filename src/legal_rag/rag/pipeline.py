@@ -10,7 +10,9 @@ from typing import Protocol
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.citations import (
     CitationValidationError,
+    LegalEvidence,
     StatuteEvidence,
+    build_case_evidence,
     build_statute_evidence,
     cited_evidence,
     parse_and_validate_draft,
@@ -54,7 +56,7 @@ SAFE_MESSAGES = {
 class GroundedAnswer:
     status: AnswerStatus
     content: str
-    sources: tuple[StatuteEvidence, ...] = ()
+    sources: tuple[LegalEvidence, ...] = ()
     retrieved_count: int = 0
 
     @property
@@ -95,7 +97,12 @@ class StatuteRagPipeline:
             category=category,
             top_k=top_k,
         )
-        evidence = build_statute_evidence(retrieval.hits)
+        statute_evidence = build_statute_evidence(retrieval.hits)
+        case_evidence = build_case_evidence(
+            retrieval.case_hits,
+            start_id=len(statute_evidence) + 1,
+        )
+        evidence: tuple[LegalEvidence, ...] = (*statute_evidence, *case_evidence)
         if not evidence:
             return self._blocked(AnswerStatus.NO_EVIDENCE, retrieved_count=len(retrieval.hits))
 

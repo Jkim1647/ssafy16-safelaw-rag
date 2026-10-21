@@ -38,9 +38,14 @@ def main() -> int:
 
     privacy = PrivacyGuard().redact(args.query)
     base_url = os.getenv("GMS_BASE_URL", "https://gms.ssafy.io/gmsapi/api.openai.com/v1")
-    llm = GmsChatClient(
+    query_llm = GmsChatClient(
         api_key,
-        model_name=os.getenv("GMS_CHAT_MODEL", "gpt-5-nano"),
+        model_name=os.getenv("GMS_QUERY_MODEL") or os.getenv("GMS_CHAT_MODEL", "gpt-5-nano"),
+        base_url=base_url,
+    )
+    answer_llm = GmsChatClient(
+        api_key,
+        model_name=os.getenv("GMS_ANSWER_MODEL") or "gpt-5.4-mini",
         base_url=base_url,
     )
     retriever = ExpandedStatuteRetriever(
@@ -50,9 +55,9 @@ def main() -> int:
             base_url=base_url,
         ),
         ChromaStatuteVectorStore(ROOT / "data" / "indexes" / "statutes"),
-        LegalQueryExpander(llm),
+        LegalQueryExpander(query_llm),
     )
-    answer = StatuteRagPipeline(retriever, llm).answer(
+    answer = StatuteRagPipeline(retriever, answer_llm).answer(
         privacy.sanitized_text,
         category=LegalCategory(args.category),
         top_k=args.top_k,
