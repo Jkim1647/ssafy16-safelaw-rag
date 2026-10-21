@@ -57,5 +57,18 @@ class EndToEndEvaluationTests(unittest.TestCase):
         self.assertTrue(answered)
         self.assertTrue(all(x["citation_audit"]["citation_valid"] for x in answered))
 
+    def test_saved_final_result_keeps_safety_and_improves_answer_success(self):
+        payload = json.loads(
+            (ROOT / "data/evaluation/end_to_end_results_final.json").read_text(encoding="utf-8")
+        )
+        results = payload["results"]
+        metrics = payload["metrics"]
+        self.assertEqual(len(results), 30)
+        self.assertGreaterEqual(metrics["answer_success_rate"], 0.75)
+        self.assertEqual(metrics["citation_accuracy"], 1.0)
+        self.assertEqual(metrics["ungrounded_claim_block_rate"], 1.0)
+        self.assertEqual(metrics["refusal_accuracy"], 1.0)
+        self.assertTrue(all(x["safe_grounding_behavior"] for x in results))
+
 
 if __name__ == "__main__": unittest.main()

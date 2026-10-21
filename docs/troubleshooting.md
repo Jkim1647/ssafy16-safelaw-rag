@@ -139,7 +139,18 @@ Chroma는 JSON 문서 모음이 아니라 SQLite와 내부 바이너리 구조�
 
 **해결**
 
-내부 파일을 직접 수정하지 않고 `scripts/search_statutes.py`로 검색 결과와 메타데이터를 확인한다. 색인이 의심되면 조문·청크 수, 임베딩 모델, 벡터 차원을 manifest 및 자동화 테스트와 비교한다.
+내부 파일을 직접 수정하지 않고 `scripts/inspect_chroma.py`로 저장 문서와 메타데이터를 조회한다. 실제 검색 순위는 `scripts/search_statutes.py`로 확인한다. 색인이 의심되면 조문·청크 수, 임베딩 모델, 벡터 차원을 manifest 및 자동화 테스트와 비교한다.
+
+```powershell
+# 법령·판례 컬렉션의 건수와 샘플 3건
+.\.venv\Scripts\python.exe scripts\inspect_chroma.py
+
+# 임대차 판례만 5건
+.\.venv\Scripts\python.exe scripts\inspect_chroma.py `
+  --collection cases --category housing_lease --limit 5
+```
+
+VS Code에서 `chroma.sqlite3`을 SQLite 확장으로 열 수는 있지만, HNSW 벡터 세그먼트까지 사람이 해석하기 어렵고 내부 스키마를 직접 수정하면 색인이 손상될 수 있다. 따라서 SQLite 화면은 구조 확인용으로만 사용하고 조회·검증은 Chroma API를 사용한다.
 
 ## 7. LLM 기반 평가 결과의 재현성 관리
 

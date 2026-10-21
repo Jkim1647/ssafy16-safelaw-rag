@@ -147,7 +147,7 @@ class StatuteRagPipelineTests(unittest.TestCase):
 
         self.assertEqual(answer.status, AnswerStatus.INSUFFICIENT_EVIDENCE)
         self.assertFalse(answer.is_answered)
-        self.assertEqual(llm.calls, 2)
+        self.assertEqual(llm.calls, 3)
 
     def test_retry_message_contains_specific_validation_failure(self):
         llm = SequenceLlm(("{invalid json", valid_response()))
@@ -155,6 +155,14 @@ class StatuteRagPipelineTests(unittest.TestCase):
         answer = pipeline.answer("해고 통지를 받았습니다", category=LegalCategory.LABOR)
         self.assertEqual(answer.generation_attempts, 2)
         self.assertEqual(answer.validation_failures, 1)
+
+    def test_third_attempt_can_repair_repeated_invalid_citations(self):
+        llm = SequenceLlm(("{invalid", "{still invalid", valid_response()))
+        pipeline = StatuteRagPipeline(FakeRetriever([evidence_hit()]), llm)
+        answer = pipeline.answer("해고 통지를 받았습니다", category=LegalCategory.LABOR)
+        self.assertEqual(answer.status, AnswerStatus.ANSWERED)
+        self.assertEqual(answer.generation_attempts, 3)
+        self.assertEqual(answer.validation_failures, 2)
 
     def test_blocks_generation_failure(self):
         llm = FakeLlm(error=RuntimeError("external failure"))
