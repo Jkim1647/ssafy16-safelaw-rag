@@ -29,7 +29,9 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 ├─ app.py                         # Streamlit 실행 진입점
 ├─ pyproject.toml                 # Python 패키지·테스트 설정
 ├─ docs/
-│  └─ architecture.md             # 시스템 경계와 데이터 흐름
+│  ├─ architecture.md             # 시스템 경계와 데이터 흐름
+│  ├─ search-quality.md           # 평가셋·Recall@5·MRR 결과
+│  └─ troubleshooting.md          # 검색 문제·원인·해결 기록
 ├─ src/legal_rag/
 │  ├─ config.py                   # 환경변수·비밀값 설정
 │  ├─ domain/                     # 순수 법률 도메인 모델
@@ -140,6 +142,8 @@ python scripts/evaluate_statute_retrieval.py
 - `data/evaluation/statute_retrieval_baseline.json`: 개선 전 기준선
 
 현재 30문항 결과는 전체 `Recall@5 1.000`, `MRR 0.747`입니다. 이 수치는 자체 작성한 고정 평가셋에 대한 검색 성능이며, 실제 법률 판단의 정확도나 새로운 질문에 대한 일반화 성능을 뜻하지 않습니다.
+
+RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과정은 [`docs/troubleshooting.md`](docs/troubleshooting.md)에 정리했습니다.
 
 ## 테스트
 
