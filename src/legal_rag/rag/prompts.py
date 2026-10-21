@@ -24,6 +24,9 @@ def build_grounded_answer_messages(
                 "case_number": item.case_number,
                 "court": item.court,
                 "decision_date": item.decision_date,
+                "case_name": item.case_name,
+                "decision_type": item.decision_type,
+                "precedent_level": item.precedent_level,
                 "sections": item.sections,
                 "text": item.text,
             })
@@ -67,7 +70,8 @@ def build_grounded_answer_messages(
                 "evidence_quotes에 넣는다. 원문 문구를 임의로 바꾸거나 만들지 않는다. "
                 "근거에 없는 법령명·조문·판례·기한·금액·절차를 만들지 않는다. "
                 "법령의 일반 규칙과 판례의 개별 판단을 구분하고, 유사 판례가 사용자 사건과 "
-                "같은 결론을 보장한다고 표현하지 않는다. "
+                "같은 결론을 보장한다고 표현하지 않는다. 판례의 권위는 precedent_level을 참고하되 "
+                "질문과 무관한 판례를 중요하다는 이유만으로 근거로 사용하지 않는다. "
                 "승소 확률이나 단정적인 법률 자문을 제공하지 않는다. "
                 "근거만으로 질문을 설명할 수 없으면 answerable을 false로 하고 나머지 필드는 생략한다. "
                 "반드시 마크다운 없이 JSON 객체 하나만 출력한다."

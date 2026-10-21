@@ -132,6 +132,9 @@ class ChromaCaseVectorStore:
                 "section_index": item.section_index,
                 "source_url": item.source_url,
                 "related_articles": " | ".join(item.related_articles),
+                "case_name": item.case_name,
+                "decision_type": item.decision_type,
+                "precedent_level": item.precedent_level.value,
             } for item in chunks],
         )
 

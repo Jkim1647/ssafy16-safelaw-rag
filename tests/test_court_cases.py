@@ -8,9 +8,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from legal_rag.collectors.court_cases import (
-    CaseSourceConfig, CourtCaseOpenApiClient, normalize_case,
+    CaseSourceConfig, CourtCaseOpenApiClient, classify_precedent, normalize_case,
 )
-from legal_rag.domain.models import LegalCategory
+from legal_rag.domain.models import LegalCategory, PrecedentLevel
 from legal_rag.rag.case_chunking import chunk_case
 
 
@@ -24,7 +24,7 @@ class CourtCaseCollectorTests(unittest.TestCase):
                 payload = {"PrecSearch": {"prec": [{
                     "판례일련번호": "123", "사건번호": "2024다123",
                     "사건명": "보증금반환", "법원명": "대법원", "선고일자": "2024.01.02",
-                    "판결유형": "판결", "데이터출처명": "대법원",
+                    "판결유형": "전원합의체 판결", "데이터출처명": "대법원",
                 }]}}
             else:
                 payload = {"PrecService": {"판례정보일련번호": "123", "사건번호": "2024다123",
@@ -39,8 +39,28 @@ class CourtCaseCollectorTests(unittest.TestCase):
 
         self.assertEqual(document.result, "상고를 기각한다.")
         self.assertEqual(document.decision_date, date(2024, 1, 2))
+        self.assertEqual(document.precedent_level, PrecedentLevel.GRAND_BENCH)
+        self.assertEqual(document.decision_type, "전원합의체 판결")
         self.assertNotIn("secret", repr(document))
         self.assertTrue(all("OC=secret" in url for url in captured))
+
+    def test_precedent_level_uses_official_court_and_decision_type(self):
+        self.assertEqual(
+            classify_precedent("대법원", "전원합의체 판결"),
+            PrecedentLevel.GRAND_BENCH,
+        )
+        self.assertEqual(
+            classify_precedent("대법원", "판결"),
+            PrecedentLevel.SUPREME_COURT,
+        )
+        self.assertEqual(
+            classify_precedent("서울고등법원", "판결"),
+            PrecedentLevel.APPELLATE,
+        )
+        self.assertEqual(
+            classify_precedent("서울중앙지방법원", "판결"),
+            PrecedentLevel.OTHER,
+        )
 
     def test_source_config_validates_queries(self):
         config = CaseSourceConfig.from_dict({"category": "labor", "queries": ["부당해고"]})
@@ -56,6 +76,7 @@ class CourtCaseCollectorTests(unittest.TestCase):
         chunks = chunk_case(normalize_case(detail, LegalCategory.INHERITANCE), max_chars=200)
         self.assertEqual({item.section for item in chunks}, {"issues", "reasoning", "result", "facts"})
         self.assertTrue(all("판례:" in item.embedding_text for item in chunks))
+        self.assertTrue(all(item.precedent_level is PrecedentLevel.SUPREME_COURT for item in chunks))
 
 
 if __name__ == "__main__":

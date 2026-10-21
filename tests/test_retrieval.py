@@ -47,6 +47,24 @@ class FakeStore:
         ]
 
 
+class FakePrecedentStore:
+    def search(self, query_vector, *, category, top_k):
+        return [
+            VectorSearchHit(
+                chunk_id="ordinary",
+                document="같은 쟁점을 다룬 판례",
+                metadata={"document_type": "court_case", "precedent_level": "other"},
+                distance=0.1,
+            ),
+            VectorSearchHit(
+                chunk_id="grand-bench",
+                document="같은 쟁점을 다룬 판례",
+                metadata={"document_type": "court_case", "precedent_level": "grand_bench"},
+                distance=0.11,
+            ),
+        ]
+
+
 class QueryExpansionTests(unittest.TestCase):
     def test_rules_translate_everyday_dismissal_language(self):
         plan = LegalQueryExpander().expand(
@@ -77,6 +95,15 @@ class QueryExpansionTests(unittest.TestCase):
         self.assertIn("보증금의 회수", plan.legal_terms)
         self.assertIn("우선변제권", plan.legal_terms)
 
+    def test_rules_translate_lifetime_gift_to_special_benefit(self):
+        plan = LegalQueryExpander().expand(
+            "형제가 생전에 부모님에게 큰돈을 미리 받았어요",
+            LegalCategory.INHERITANCE,
+        )
+
+        self.assertIn("특별수익", plan.legal_terms)
+        self.assertIn("특별수익자의 상속분", plan.legal_terms)
+
     def test_multi_query_fusion_promotes_expanded_match(self):
         retriever = ExpandedStatuteRetriever(
             FakeEmbedder(),
@@ -92,6 +119,17 @@ class QueryExpansionTests(unittest.TestCase):
 
         self.assertEqual(result.hits[0].chunk_id, "target")
         self.assertGreater(len(result.hits[0].matched_queries), 1)
+
+    def test_close_case_candidates_prefer_grand_bench_authority(self):
+        retriever = ExpandedStatuteRetriever(
+            FakeEmbedder(),
+            FakePrecedentStore(),
+            LegalQueryExpander(),
+        )
+
+        result = retriever.retrieve("같은 쟁점", category=LegalCategory.LABOR, top_k=2)
+
+        self.assertEqual(result.hits[0].chunk_id, "grand-bench")
 
     def test_gms_chat_response_and_repr_do_not_leak_key(self):
         def transport(request, timeout):

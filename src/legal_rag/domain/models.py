@@ -14,6 +14,15 @@ class LegalCategory(StrEnum):
     INHERITANCE = "inheritance"
 
 
+class PrecedentLevel(StrEnum):
+    """판례의 법원급·재판형태에 따른 객관적 권위 등급."""
+
+    GRAND_BENCH = "grand_bench"
+    SUPREME_COURT = "supreme_court"
+    APPELLATE = "appellate"
+    OTHER = "other"
+
+
 def _require_text(value: str, field_name: str) -> None:
     if not value or not value.strip():
         raise ValueError(f"{field_name}은(는) 빈 값일 수 없습니다.")
@@ -65,6 +74,9 @@ class CaseDocument:
     source_url: str
     issues: tuple[str, ...] = field(default_factory=tuple)
     related_articles: tuple[str, ...] = field(default_factory=tuple)
+    case_name: str = ""
+    decision_type: str = ""
+    precedent_level: PrecedentLevel = PrecedentLevel.OTHER
 
     def __post_init__(self) -> None:
         for name in ("case_id", "case_number", "court", "result", "facts", "reasoning"):

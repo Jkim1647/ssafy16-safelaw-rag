@@ -14,7 +14,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from legal_rag.domain.models import CaseDocument, LegalCategory
+from legal_rag.domain.models import CaseDocument, LegalCategory, PrecedentLevel
 
 JsonObject = dict[str, Any]
 Transport = Callable[[str, float], bytes]
@@ -110,6 +110,26 @@ def _extract_order(body: str) -> str:
     return re.sub(r"\s+", " ", match.group("order")).strip() if match else ""
 
 
+def classify_precedent(court: str, decision_type: str) -> PrecedentLevel:
+    """공식 메타데이터만으로 판례의 권위 등급을 분류한다."""
+
+    if "전원합의체" in decision_type:
+        return PrecedentLevel.GRAND_BENCH
+    if court.strip() == "대법원":
+        return PrecedentLevel.SUPREME_COURT
+    if "고등법원" in court or court.strip() == "특허법원":
+        return PrecedentLevel.APPELLATE
+    return PrecedentLevel.OTHER
+
+
+def _most_specific_decision_type(detail_value: Any, search_value: str) -> str:
+    detail_type = str(detail_value or "").strip()
+    search_type = search_value.strip()
+    if "전원합의체" in search_type and "전원합의체" not in detail_type:
+        return search_type
+    return detail_type or search_type
+
+
 class CourtCaseOpenApiClient:
     SEARCH_URL = "https://www.law.go.kr/DRF/lawSearch.do"
     SERVICE_URL = "https://www.law.go.kr/DRF/lawService.do"
@@ -185,11 +205,14 @@ def normalize_case(detail: JsonObject, category: LegalCategory,
     case_id = str(detail.get("판례정보일련번호") or detail.get("판례일련번호") or "").strip()
     case_number = str(detail.get("사건번호") or (search_result.case_number if search_result else "")).strip()
     court = str(detail.get("법원명") or (search_result.court if search_result else "")).strip()
+    case_name = str(detail.get("사건명") or (search_result.case_name if search_result else "")).strip()
+    decision_type = _most_specific_decision_type(
+        detail.get("판결유형"), search_result.decision_type if search_result else ""
+    )
     body = _clean_html(detail.get("판례내용"))
     reasoning = _clean_html(detail.get("판결요지")) or body
     issues = _split_numbered(str(detail.get("판시사항", "")))
     order = _extract_order(body)
-    decision_type = str(detail.get("판결유형") or (search_result.decision_type if search_result else "")).strip()
     announced = str(detail.get("선고", "")).strip()
     if announced == "선고":
         announced = ""
@@ -211,6 +234,9 @@ def normalize_case(detail: JsonObject, category: LegalCategory,
         source_url=f"https://www.law.go.kr/LSW/precInfoP.do?precSeq={case_id}",
         issues=issues,
         related_articles=_split_references(str(detail.get("참조조문", ""))),
+        case_name=case_name,
+        decision_type=decision_type,
+        precedent_level=classify_precedent(court, decision_type),
     )
 
 

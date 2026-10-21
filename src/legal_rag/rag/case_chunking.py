@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Iterable
 
-from legal_rag.domain.models import CaseDocument, LegalCategory
+from legal_rag.domain.models import CaseDocument, LegalCategory, PrecedentLevel
 from legal_rag.rag.chunking import CATEGORY_LABELS, _atomic_blocks, _pack_blocks
 
 
@@ -23,6 +23,9 @@ class CaseChunk:
     embedding_text: str
     source_url: str
     related_articles: tuple[str, ...] = field(default_factory=tuple)
+    case_name: str = ""
+    decision_type: str = ""
+    precedent_level: PrecedentLevel = PrecedentLevel.OTHER
 
 
 SECTION_LABELS = {
@@ -56,6 +59,9 @@ def chunk_case(document: CaseDocument, *, max_chars: int = 1400,
             embedding_text = (
                 f"도메인: {CATEGORY_LABELS[document.category]}\n"
                 f"판례: {document.court} {document.case_number}\n"
+                f"사건명: {document.case_name or '미상'}\n"
+                f"판례 등급: {document.precedent_level.value}\n"
+                f"판결 유형: {document.decision_type or '미상'}\n"
                 f"섹션: {SECTION_LABELS[section]}\n"
                 f"관련 법령: {related}\n"
                 f"내용: {content}"
@@ -73,6 +79,9 @@ def chunk_case(document: CaseDocument, *, max_chars: int = 1400,
                 embedding_text=embedding_text,
                 source_url=document.source_url,
                 related_articles=document.related_articles,
+                case_name=document.case_name,
+                decision_type=document.decision_type,
+                precedent_level=document.precedent_level,
             ))
     return chunks
 
