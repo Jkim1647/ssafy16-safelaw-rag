@@ -214,7 +214,7 @@ python scripts/evaluate_statute_retrieval.py
 
 현재 30문항 결과는 전체 `Recall@5 1.000`, `MRR 0.781`입니다. 이 수치는 자체 작성한 고정 평가셋에 대한 검색 성능이며, 실제 법률 판단의 정확도나 새로운 질문에 대한 일반화 성능을 뜻하지 않습니다.
 
-RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과정은 [`docs/troubleshooting.md`](docs/troubleshooting.md)에 정리했습니다. 판례 30문항의 사건번호 단위 평가, 기준 성능과 동적 API 보강 구조는 [`docs/case-retrieval-evaluation.md`](docs/case-retrieval-evaluation.md)에 기록합니다. 정답 라벨의 법률 검수 절차는 [`docs/case-evaluation-review-checklist.md`](docs/case-evaluation-review-checklist.md)를 따릅니다.
+RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과정은 [`docs/troubleshooting.md`](docs/troubleshooting.md)에 정리했습니다. 판례 30문항의 사건번호 단위 평가, 기준 성능과 동적 API 보강 구조는 [`docs/case-retrieval-evaluation.md`](docs/case-retrieval-evaluation.md)에 기록합니다. 정답 라벨의 법률 검수 절차는 [`docs/case-evaluation-review-checklist.md`](docs/case-evaluation-review-checklist.md)를 따르며, 외부 검수자는 [`docs/case-evaluation-review-sheet.md`](docs/case-evaluation-review-sheet.md)에 결과를 기록합니다.
 
 검색부터 답변 생성·인용 검증·답변 거부까지 연결한 30문항 평가는 [`docs/end-to-end-rag-evaluation.md`](docs/end-to-end-rag-evaluation.md)에 정리했습니다.
 
