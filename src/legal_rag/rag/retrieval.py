@@ -231,6 +231,18 @@ class ExpandedStatuteRetriever:
         if top_k < 1:
             raise ValueError("top_k는 1 이상이어야 합니다.")
         plan = self._expander.expand(sanitized_query, category)
+        return self.retrieve_with_plan(plan, category=category, top_k=top_k)
+
+    def retrieve_with_plan(
+        self,
+        plan: SearchPlan,
+        *,
+        category: LegalCategory,
+        top_k: int = 5,
+    ) -> RetrievalResult:
+        """이미 만든 검색 계획을 재사용해 LLM 검색어 변환 중복 호출을 막는다."""
+        if top_k < 1:
+            raise ValueError("top_k는 1 이상이어야 합니다.")
         variants = plan.variants()
         vectors = self._embedder.embed([query for query, _, _ in variants])
         if len(vectors) != len(variants):
@@ -297,21 +309,40 @@ class CombinedLegalRetriever:
     """법령과 판례를 독립 검색하고 원 점수를 직접 비교하지 않는다."""
 
     def __init__(self, statute_retriever: ExpandedStatuteRetriever,
-                 case_retriever: ExpandedStatuteRetriever) -> None:
+                 case_retriever: ExpandedStatuteRetriever,
+                 case_enricher: object | None = None) -> None:
         self._statute_retriever = statute_retriever
         self._case_retriever = case_retriever
+        self._case_enricher = case_enricher
 
     def retrieve(self, sanitized_query: str, *, category: LegalCategory,
                  top_k: int = 5) -> RetrievalResult:
         statutes = self._statute_retriever.retrieve(
             sanitized_query, category=category, top_k=top_k
         )
-        cases = self._case_retriever.retrieve(
-            sanitized_query, category=category, top_k=top_k
+        if self._case_enricher is not None:
+            try:
+                self._case_enricher.enrich(statutes.plan, category=category)  # type: ignore[attr-defined]
+            except Exception:
+                # 실시간 보강 실패가 기존 정적 판례 검색까지 중단시키지 않게 한다.
+                pass
+        cases = self._case_retriever.retrieve_with_plan(
+            statutes.plan, category=category, top_k=max(top_k * 3, 10)
         )
+        unique_cases: list[RetrievedChunk] = []
+        seen_case_numbers: set[str] = set()
+        for hit in cases.hits:
+            case_number = str(hit.metadata.get("case_number", ""))
+            key = case_number or hit.chunk_id
+            if key in seen_case_numbers:
+                continue
+            seen_case_numbers.add(key)
+            unique_cases.append(hit)
+            if len(unique_cases) == top_k:
+                break
         return RetrievalResult(
             plan=statutes.plan,
             hits=statutes.hits,
-            case_hits=cases.hits,
+            case_hits=tuple(unique_cases),
         )
 

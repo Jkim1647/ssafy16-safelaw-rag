@@ -6,4 +6,5 @@ __pycache__/
 .venv/
 data/raw/
 data/indexes/
+data/cache/
 

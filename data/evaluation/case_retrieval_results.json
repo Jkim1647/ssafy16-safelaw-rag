@@ -1,0 +1,2221 @@
+{
+  "evaluator_version": "1",
+  "generated_at": "2026-10-21T07:03:46.765788+00:00",
+  "review_status": "개발자 라벨링·법률 전문가 미검수",
+  "embedding_model": "text-embedding-3-small",
+  "chat_model": "gpt-5-nano",
+  "dataset_scope": "정적 50건 + 동적 6건, 704청크",
+  "metrics": {
+    "labor": {
+      "case_count": 10,
+      "recall_at_5": 0.9,
+      "mrr": 0.475,
+      "hit_at_5": 0.9,
+      "contamination_at_5": 0.5683333333333334
+    },
+    "housing_lease": {
+      "case_count": 10,
+      "recall_at_5": 0.7,
+      "mrr": 0.5,
+      "hit_at_5": 0.7,
+      "contamination_at_5": 0.72
+    },
+    "inheritance": {
+      "case_count": 10,
+      "recall_at_5": 1.0,
+      "mrr": 0.8699999999999999,
+      "hit_at_5": 1.0,
+      "contamination_at_5": 0.705
+    },
+    "overall": {
+      "case_count": 30,
+      "recall_at_5": 0.8666666666666667,
+      "mrr": 0.615,
+      "hit_at_5": 0.8666666666666667,
+      "contamination_at_5": 0.6644444444444445
+    }
+  },
+  "results": [
+    {
+      "id": "labor-01",
+      "category": "labor",
+      "query": "계약기간이 이미 끝난 뒤에도 노동위원회에 부당해고 구제를 신청할 실익이 있나요?",
+      "expected_case_numbers": [
+        "2025두33276"
+      ],
+      "acceptable_case_numbers": [
+        "2023누60218",
+        "2022누56601"
+      ],
+      "rewritten_query": "계약기간 만료 후 부당해고에 대한 노동위원회 구제신청의 실익 여부 해고 해고 통보 근로계약 부당해고 노동위원회 구제신청 계약기간 만료 실익",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "근로계약",
+        "부당해고",
+        "노동위원회",
+        "구제신청",
+        "계약기간 만료",
+        "실익"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2022누56601",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "reasoning",
+          "score": 0.07095151,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241399"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025두33276",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06855592,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612851"
+        },
+        {
+          "rank": 3,
+          "case_number": "2023누60218",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.06674444,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605563"
+        },
+        {
+          "rank": 4,
+          "case_number": "2021노904(분리)",
+          "case_name": "근로기준법위반",
+          "court": "서울서부지방법원",
+          "section": "reasoning",
+          "score": 0.06177278,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241141"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true,
+      "contamination_at_5": 0.25
+    },
+    {
+      "id": "labor-02",
+      "category": "labor",
+      "query": "회사가 해고한 동안 다른 직장에서 번 돈은 해고기간 임금이나 손해액에서 공제되나요?",
+      "expected_case_numbers": [
+        "2025나11545"
+      ],
+      "acceptable_case_numbers": [
+        "2023누60218",
+        "2022누56601"
+      ],
+      "rewritten_query": "해고 기간 중 타 직장에서 번 소득을 해고기간 임금이나 손해배상액에서 공제할 수 있는지에 관한 법령 검색 해고 해고 통보 임금 임금 지급 체불 해고기간 임금 공제 손해배상",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "임금",
+        "임금 지급",
+        "체불",
+        "해고기간 임금",
+        "공제",
+        "손해배상"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2022나54724",
+          "case_name": "임금",
+          "court": "서울남부지방법원",
+          "section": "facts",
+          "score": 0.06907676,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=239681"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025나11545",
+          "case_name": "징벌적손해배상",
+          "court": "수원고법",
+          "section": "facts",
+          "score": 0.06784008,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622235"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024다294156",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06712455,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618209"
+        },
+        {
+          "rank": 4,
+          "case_number": "2023나2058221",
+          "case_name": "임금",
+          "court": "서울고등법원",
+          "section": "reasoning",
+          "score": 0.06605549,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619303"
+        },
+        {
+          "rank": 5,
+          "case_number": "2022나16666",
+          "case_name": "부당이득금",
+          "court": "울산지방법원",
+          "section": "reasoning",
+          "score": 0.0619694,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618263"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "labor-03",
+      "category": "labor",
+      "query": "공익신고를 했다는 이유로 해고당했다면 징벌적 손해배상을 청구할 때 중간수입은 어떻게 계산하나요?",
+      "expected_case_numbers": [
+        "2025나11545"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "공익신고로 해고된 경우 징벌적 손해배상을 청구할 때 중간수입의 산정 방법을 법령과 판례에서 확인하기 위한 한 문장 해고 해고 통보 공익신고 징벌적 손해배상 손해배상 중간수입 임금손실 손실액 산정",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "공익신고",
+        "징벌적 손해배상",
+        "손해배상",
+        "중간수입",
+        "임금손실",
+        "손실액 산정"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2025나11545",
+          "case_name": "징벌적손해배상",
+          "court": "수원고법",
+          "section": "facts",
+          "score": 0.06998335,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622235"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024다294156",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06965964,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618209"
+        },
+        {
+          "rank": 3,
+          "case_number": "2022나16666",
+          "case_name": "부당이득금",
+          "court": "울산지방법원",
+          "section": "facts",
+          "score": 0.0631033,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618263"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다214123",
+          "case_name": "임금[재직 중 중간정산 퇴직금에 구 근로기준법 제37조 제1항에 따른 연 20%의 지연이율을 적용할 수 있는지가 문제 된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06215286,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618511"
+        },
+        {
+          "rank": 5,
+          "case_number": "2023다285438",
+          "case_name": "부당이득금[공매절차에서 배분요구를 하지 않은 임금채권자들이 후순위 채권자를 상대로 부당이득반환을 청구하는 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06084955,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=617157"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "labor-04",
+      "category": "labor",
+      "query": "노동위원회가 내린 부당해고 재심판정을 법원에서 취소해 달라고 다툰 사례를 찾고 싶어요.",
+      "expected_case_numbers": [
+        "2023누60218"
+      ],
+      "acceptable_case_numbers": [
+        "2022누56601",
+        "2025두33276"
+      ],
+      "rewritten_query": "노동위원회의 부당해고 재심판정에 대해 법원에서 취소를 구하는 행정소송 사례를 찾고 싶습니다. 해고 해고 통보 노동위원회 부당해고 재심판정 취소소송 행정소송 법원",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "노동위원회",
+        "부당해고",
+        "재심판정",
+        "취소소송",
+        "행정소송",
+        "법원"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2022누56601",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.06913062,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241399"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025두33276",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06801299,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612851"
+        },
+        {
+          "rank": 3,
+          "case_number": "2023누60218",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "reasoning",
+          "score": 0.06755589,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605563"
+        },
+        {
+          "rank": 4,
+          "case_number": "2021노904(분리)",
+          "case_name": "근로기준법위반",
+          "court": "서울서부지방법원",
+          "section": "reasoning",
+          "score": 0.06719041,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241141"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true,
+      "contamination_at_5": 0.25
+    },
+    {
+      "id": "labor-05",
+      "category": "labor",
+      "query": "회사 측이 중앙노동위원회의 부당해고 구제판정을 취소해 달라고 소송한 판례가 있나요?",
+      "expected_case_numbers": [
+        "2022누56601"
+      ],
+      "acceptable_case_numbers": [
+        "2023누60218",
+        "2025두33276"
+      ],
+      "rewritten_query": "중앙노동위원회의 부당해고 구제판정을 취소하는 소송에 관한 판례가 있는지 검색 해고 해고 통보 중앙노동위원회 부당해고 구제판정 취소소송 판례",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "중앙노동위원회",
+        "부당해고",
+        "구제판정",
+        "취소소송",
+        "판례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2023누60218",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.0705956,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605563"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025두33276",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06978744,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612851"
+        },
+        {
+          "rank": 3,
+          "case_number": "2022누56601",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.06789672,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241399"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024다294156",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06136157,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618209"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true,
+      "contamination_at_5": 0.25
+    },
+    {
+      "id": "labor-06",
+      "category": "labor",
+      "query": "여러 근로자가 회사에 월별 미지급 임금을 청구한 판례를 알려주세요.",
+      "expected_case_numbers": [
+        "2023나2058221"
+      ],
+      "acceptable_case_numbers": [
+        "2022나54724"
+      ],
+      "rewritten_query": "다수의 근로자가 [PERSON_1]의 월별 미지급 임금 청구와 관련된 판례를 검색한다. 임금 임금 지급 체불 근로계약 월별 임금 미지급 임금 임금청구 임금체불",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불",
+        "근로계약",
+        "월별 임금",
+        "미지급 임금",
+        "임금청구",
+        "임금체불"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2022나54724",
+          "case_name": "임금",
+          "court": "서울남부지방법원",
+          "section": "facts",
+          "score": 0.07118033,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=239681"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023나2058221",
+          "case_name": "임금",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.07043947,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619303"
+        },
+        {
+          "rank": 3,
+          "case_number": "2025다214123",
+          "case_name": "임금[재직 중 중간정산 퇴직금에 구 근로기준법 제37조 제1항에 따른 연 20%의 지연이율을 적용할 수 있는지가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.0600898,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618511"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true,
+      "contamination_at_5": 0.3333333333333333
+    },
+    {
+      "id": "labor-07",
+      "category": "labor",
+      "query": "건설현장에서 근로자 임금을 지급하지 않아 근로기준법 위반으로 처벌된 사례가 있나요?",
+      "expected_case_numbers": [
+        "2023고단584"
+      ],
+      "acceptable_case_numbers": [
+        "2024노2125"
+      ],
+      "rewritten_query": "건설현장에서 임금 체불로 근로기준법 위반에 해당하는 처벌 사례를 검색합니다. 근로기준법 임금 체불 임금 지급 의무 임금 지급 미이행 건설현장 처벌 사례",
+      "legal_terms": [
+        "근로기준법",
+        "임금 체불",
+        "임금 지급 의무",
+        "임금 지급 미이행",
+        "건설현장",
+        "처벌",
+        "사례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2025다214123",
+          "case_name": "임금[재직 중 중간정산 퇴직금에 구 근로기준법 제37조 제1항에 따른 연 20%의 지연이율을 적용할 수 있는지가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06717862,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618511"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023나2058221",
+          "case_name": "임금",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.06677387,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619303"
+        },
+        {
+          "rank": 3,
+          "case_number": "2021노904(분리)",
+          "case_name": "근로기준법위반",
+          "court": "서울서부지방법원",
+          "section": "reasoning",
+          "score": 0.06668248,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241141"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다215010",
+          "case_name": "임금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06089975,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622983"
+        },
+        {
+          "rank": 5,
+          "case_number": "2025다219757, 219758",
+          "case_name": "임금·임금등청구[노사 간에 실제의 근로시간에 관계없이 일정 시간을 연장근로시간 및 야간근로시간으로 간주하기로 하는 합의가 있었는데, 근로자들의 실제 근로시간이 합의한 시간에 미달하는 경우, 연장근로수당 및 야간근로수당을 산정하는 방법이 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.05811236,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=620425"
+        }
+      ],
+      "relevant_ranks": [],
+      "recall_at_5": 0.0,
+      "reciprocal_rank": 0.0,
+      "hit_at_5": false,
+      "contamination_at_5": 1.0
+    },
+    {
+      "id": "labor-08",
+      "category": "labor",
+      "query": "근로기준법 위반 사건의 항소심에서 원심 형을 파기한 판례를 찾고 있어요.",
+      "expected_case_numbers": [
+        "2024노2125"
+      ],
+      "acceptable_case_numbers": [
+        "2023고단584",
+        "2021노904(분리)"
+      ],
+      "rewritten_query": "근로기준법 위반 사건의 항소심에서 원심 형을 파기한 판례를 찾고 있습니다. 근로기준법 위반 항소심 원심 형 파기 판례",
+      "legal_terms": [
+        "근로기준법",
+        "위반",
+        "항소심",
+        "원심",
+        "형",
+        "파기",
+        "판례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2020도6492",
+          "case_name": "의료법위반·특정경제범죄가중처벌등에관한법률위반(사기)[비의료인이 개설자격을 위반하여 의료법인 명의 의료기관을 개설·운영하였는지 여부가 문제된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.07093947,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=236477"
+        },
+        {
+          "rank": 2,
+          "case_number": "2021노904(분리)",
+          "case_name": "근로기준법위반",
+          "court": "서울서부지방법원",
+          "section": "reasoning",
+          "score": 0.07041189,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241141"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024다294156",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06872803,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618209"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024노2125",
+          "case_name": "근로기준법위반",
+          "court": "의정부지방법원",
+          "section": "facts",
+          "score": 0.06733451,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615825"
+        },
+        {
+          "rank": 5,
+          "case_number": "2023누60218",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "reasoning",
+          "score": 0.06247079,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605563"
+        }
+      ],
+      "relevant_ranks": [
+        4
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.25,
+      "hit_at_5": true,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "labor-09",
+      "category": "labor",
+      "query": "임금 미지급 혐의로 유죄를 받았지만 항소심에서 무죄가 선고된 근로기준법 판례가 있나요?",
+      "expected_case_numbers": [
+        "2021노904(분리)"
+      ],
+      "acceptable_case_numbers": [
+        "2024노2125"
+      ],
+      "rewritten_query": "임금 미지급 혐의로 유죄 선고를 받고 항소심에서 무죄 판결이 내려진 근로기준법 관련 판례가 있는지 검색 임금 임금 지급 체불 임금 미지급 임금체불 유죄 항소심 무죄",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불",
+        "임금 미지급",
+        "임금체불",
+        "유죄",
+        "항소심",
+        "무죄"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2021노904(분리)",
+          "case_name": "근로기준법위반",
+          "court": "서울서부지방법원",
+          "section": "reasoning",
+          "score": 0.07118033,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241141"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024다294156",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06798624,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618209"
+        },
+        {
+          "rank": 3,
+          "case_number": "2023나2058221",
+          "case_name": "임금",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.06447651,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619303"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025나11545",
+          "case_name": "징벌적손해배상",
+          "court": "수원고법",
+          "section": "facts",
+          "score": 0.06349881,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622235"
+        },
+        {
+          "rank": 5,
+          "case_number": "2023누60218",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "section": "reasoning",
+          "score": 0.06054734,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605563"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "labor-10",
+      "category": "labor",
+      "query": "퇴직 후 받지 못한 임금과 지연손해금을 청구한 민사 판례를 알려주세요.",
+      "expected_case_numbers": [
+        "2022나54724"
+      ],
+      "acceptable_case_numbers": [
+        "2023나2058221"
+      ],
+      "rewritten_query": "퇴직 후 임금 체불과 지연손해금을 청구한 민사 판례를 찾기 위한 검색용 문장 임금 임금 지급 체불 퇴직 임금 체불 미지급 임금 지연손해금 민사 판례",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불",
+        "퇴직",
+        "임금 체불",
+        "미지급 임금",
+        "지연손해금",
+        "민사 판례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2023나2058221",
+          "case_name": "임금",
+          "court": "서울고등법원",
+          "section": "facts",
+          "score": 0.07011705,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619303"
+        },
+        {
+          "rank": 2,
+          "case_number": "2022나16666",
+          "case_name": "부당이득금",
+          "court": "울산지방법원",
+          "section": "facts",
+          "score": 0.06772921,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618263"
+        },
+        {
+          "rank": 3,
+          "case_number": "2022나54724",
+          "case_name": "임금",
+          "court": "서울남부지방법원",
+          "section": "facts",
+          "score": 0.06632473,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=239681"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다215010",
+          "case_name": "임금",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06262456,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622983"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024다294156",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06141424,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618209"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "housing-01",
+      "category": "housing_lease",
+      "query": "전세보증보험에 가입했는데 집을 돌려주기 전에도 보증금과 지연손해금을 받을 수 있나요?",
+      "expected_case_numbers": [
+        "2026다201978"
+      ],
+      "acceptable_case_numbers": [
+        "2025다207128"
+      ],
+      "rewritten_query": "전세보증보험에 가입한 임차인이 임대차 계약 종료 전에도 보증금과 지연손해금을 청구할 수 있는지 법령 검색용 한 문장 임대차보증금 보증금 반환 보증금 회수 전세보증보험 보증금 지연손해금 임차인 임대차계약",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "전세보증보험",
+        "보증금",
+        "지연손해금",
+        "임차인",
+        "임대차계약"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2025다213466",
+          "case_name": "보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.07071694,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023나14222",
+          "case_name": "건물인도",
+          "court": "서울중앙지방법원",
+          "section": "reasoning",
+          "score": 0.06999904,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619531"
+        },
+        {
+          "rank": 3,
+          "case_number": "2025다207128",
+          "case_name": "보험금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06340057,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618187"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025두34604",
+          "case_name": "증여세부과처분취소",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06311636,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=616581"
+        },
+        {
+          "rank": 5,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "result",
+          "score": 0.06254825,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        }
+      ],
+      "relevant_ranks": [],
+      "recall_at_5": 0.0,
+      "reciprocal_rank": 0.0,
+      "hit_at_5": false,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "housing-02",
+      "category": "housing_lease",
+      "query": "임대인이 사망한 뒤 상속인들과 임대차를 연장하면 보증금 반환 책임과 단순승인은 어떻게 되나요?",
+      "expected_case_numbers": [
+        "2025다220329"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "임대인이 [PERSON_1]의 상속인들과 임대차를 연장하는 경우 보증금 반환 책임과 단순승인은 어떻게 적용되나요? 임대차보증금 보증금 반환 보증금 회수 계약갱신요구권 묵시적 갱신 임대인 임대차 상속인",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "계약갱신요구권",
+        "묵시적 갱신",
+        "임대인",
+        "임대차",
+        "상속인"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024마8598",
+          "case_name": "주택임차권등기",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06912952,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612117"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023다307116",
+          "case_name": "건물인도[상가건물 임차인이 임대차계약 기간만료 후 임차건물을 양수한 양수인을 상대로 임대차보증금 반환을 구할 수 있는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06873513,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619451"
+        },
+        {
+          "rank": 3,
+          "case_number": "2026다201978",
+          "case_name": "보증금반환",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06857649,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622971"
+        },
+        {
+          "rank": 4,
+          "case_number": "2023나14222",
+          "case_name": "건물인도",
+          "court": "서울중앙지방법원",
+          "section": "reasoning",
+          "score": 0.06757093,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619531"
+        },
+        {
+          "rank": 5,
+          "case_number": "2025다213466",
+          "case_name": "보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06612152,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        }
+      ],
+      "relevant_ranks": [],
+      "recall_at_5": 0.0,
+      "reciprocal_rank": 0.0,
+      "hit_at_5": false,
+      "contamination_at_5": 1.0
+    },
+    {
+      "id": "housing-03",
+      "category": "housing_lease",
+      "query": "상가 임대차가 끝난 뒤 건물 주인이 바뀌어도 새 주인에게 보증금을 청구할 수 있나요?",
+      "expected_case_numbers": [
+        "2023다307116"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "상가 임대차 계약 종료 시 건물주가 바뀌어도 새 주인에게 임대차 보증금을 청구할 수 있는지에 관한 법령 검색용 한 문장 임대차보증금 보증금 반환 보증금 회수 상가건물 임대차보호법 임대차계약의 승계 건물주 변경 양수인 양도인",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "상가건물 임대차보호법",
+        "임대차계약의 승계",
+        "건물주 변경",
+        "양수인",
+        "양도인"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2023나14222",
+          "case_name": "건물인도",
+          "court": "서울중앙지방법원",
+          "section": "reasoning",
+          "score": 0.06918033,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619531"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023다307116",
+          "case_name": "건물인도[상가건물 임차인이 임대차계약 기간만료 후 임차건물을 양수한 양수인을 상대로 임대차보증금 반환을 구할 수 있는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06781838,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619451"
+        },
+        {
+          "rank": 3,
+          "case_number": "2026다201978",
+          "case_name": "보증금반환",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06572237,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622971"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024마8598",
+          "case_name": "주택임차권등기",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06471978,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612117"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024다326398",
+          "case_name": "임대차보증금반환[주택 임차인의 점유 상실 후 마쳐진 임차권등기의 대항력이 문제된 사건]",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06457278,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605771"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "housing-04",
+      "category": "housing_lease",
+      "query": "임차인이 주민등록을 잘못했다면 주택임대차 대항력이 인정되는지 궁금합니다.",
+      "expected_case_numbers": [
+        "2025다213466"
+      ],
+      "acceptable_case_numbers": [
+        "2025다210305"
+      ],
+      "rewritten_query": "임차인의 행위와 주택임대차 대항력의 인정 여부 간의 관련성을 다루는 법령 및 판례 검색용 한 문장 주택임대차 대항력 임차인 전세 임대차 보증금 대항력 인정 여부",
+      "legal_terms": [
+        "주택임대차 대항력",
+        "임차인",
+        "전세",
+        "임대차 보증금",
+        "대항력 인정 여부"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2025다210305",
+          "case_name": "배당이의[주택임대차보호법 제3조 제2항에서 정한 법인인 임차인이 대항력과 우선변제권을 상실하였다는 이유로 해당 주택에 관한 근저당권자가 배당이의를 한 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.07085428,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618185"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024다326398",
+          "case_name": "임대차보증금반환[주택 임차인의 점유 상실 후 마쳐진 임차권등기의 대항력이 문제된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.07061705,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605771"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024다268508",
+          "case_name": "임대차보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06992159,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615697"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다213466",
+          "case_name": "보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06698459,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024다305087",
+          "case_name": "공제금등청구의소",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06595686,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=613167"
+        }
+      ],
+      "relevant_ranks": [
+        4
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.25,
+      "hit_at_5": true,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "housing-05",
+      "category": "housing_lease",
+      "query": "법인 직원이 임차주택에 살다가 퇴거하면 법인 임차인의 대항력과 우선변제권이 없어지나요?",
+      "expected_case_numbers": [
+        "2025다210305"
+      ],
+      "acceptable_case_numbers": [
+        "2025다213466"
+      ],
+      "rewritten_query": "법인 임차인이 임차주택을 퇴거할 때 대항력과 우선변제권의 소멸 여부를 판단하기 위한 법령 검색 대항력 우선변제권 임차주택 임차인 법인 임차인 퇴거 전세 임대차 보증금",
+      "legal_terms": [
+        "대항력",
+        "우선변제권",
+        "임차주택",
+        "임차인",
+        "법인 임차인",
+        "퇴거",
+        "전세",
+        "임대차 보증금"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2025다210305",
+          "case_name": "배당이의[주택임대차보호법 제3조 제2항에서 정한 법인인 임차인이 대항력과 우선변제권을 상실하였다는 이유로 해당 주택에 관한 근저당권자가 배당이의를 한 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.07145151,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618185"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024다326398",
+          "case_name": "임대차보증금반환[주택 임차인의 점유 상실 후 마쳐진 임차권등기의 대항력이 문제된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.0710956,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605771"
+        },
+        {
+          "rank": 3,
+          "case_number": "2025다213466",
+          "case_name": "보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06819161,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024다268508",
+          "case_name": "임대차보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06683379,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615697"
+        },
+        {
+          "rank": 5,
+          "case_number": "2022다247378",
+          "case_name": "구상금등[개인파산절차에서 면책결정의 효력이 우선변제권 있는 임대차보증금반환청구권에 미치는지 문제된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06218485,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=606789"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "housing-06",
+      "category": "housing_lease",
+      "query": "공인중개사가 전세보증금을 돌려받기 어려운 위험을 설명하지 않은 경우 배상받을 수 있나요?",
+      "expected_case_numbers": [
+        "2024다305087"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "공인중개사가 전세보증금 관련 위험을 설명하지 않은 경우 손해배상 청구 가능 여부와 법적 근거를 찾기 위한 검색 문장 임대차보증금 보증금 반환 보증금 회수 공인중개사 전세보증금 설명의무 손해배상 배상",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "공인중개사",
+        "전세보증금",
+        "설명의무",
+        "손해배상",
+        "배상"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024다305087",
+          "case_name": "공제금등청구의소",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.07043442,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=613167"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025다213466",
+          "case_name": "보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.0695635,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        },
+        {
+          "rank": 3,
+          "case_number": "2025두34604",
+          "case_name": "증여세부과처분취소",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06729573,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=616581"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024나2043004",
+          "case_name": "보증금반환",
+          "court": "서울고등법원",
+          "section": "reasoning",
+          "score": 0.06202157,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623979"
+        },
+        {
+          "rank": 5,
+          "case_number": "2023나14222",
+          "case_name": "건물인도",
+          "court": "서울중앙지방법원",
+          "section": "facts",
+          "score": 0.06134161,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619531"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "housing-07",
+      "category": "housing_lease",
+      "query": "임대차가 끝난 뒤 보증금을 받을 때까지 계약이 계속되는 것으로 볼 수 있는 보험금 판례가 있나요?",
+      "expected_case_numbers": [
+        "2025다207128"
+      ],
+      "acceptable_case_numbers": [
+        "2026다201978",
+        "2023다307116"
+      ],
+      "rewritten_query": "임대차 종료 후 보증금을 받을 때까지 계약이 계속된다고 보는 보험금 관련 판례가 있는지 확인하기 위한 검색용 한 문장 임대차보증금 보증금 반환 보증금 회수 임대차 전세 보증금 보험금 판례",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "임대차",
+        "전세",
+        "보증금",
+        "보험금",
+        "판례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2023나14222",
+          "case_name": "건물인도",
+          "court": "서울중앙지방법원",
+          "section": "reasoning",
+          "score": 0.07118033,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619531"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023다307116",
+          "case_name": "건물인도[상가건물 임차인이 임대차계약 기간만료 후 임차건물을 양수한 양수인을 상대로 임대차보증금 반환을 구할 수 있는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.0690783,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619451"
+        },
+        {
+          "rank": 3,
+          "case_number": "2023나321431",
+          "case_name": "부당이득금",
+          "court": "대구지방법원",
+          "section": "facts",
+          "score": 0.06655071,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=600393"
+        },
+        {
+          "rank": 4,
+          "case_number": "2026다201978",
+          "case_name": "보증금반환",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06603487,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622971"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024마8598",
+          "case_name": "주택임차권등기",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.0657798,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612117"
+        }
+      ],
+      "relevant_ranks": [],
+      "recall_at_5": 0.0,
+      "reciprocal_rank": 0.0,
+      "hit_at_5": false,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "housing-08",
+      "category": "housing_lease",
+      "query": "우선변제를 받으려고 실제로 살지 않으면서 임대차 모양만 만든 경우 대항력이 있나요?",
+      "expected_case_numbers": [
+        "2024다268508"
+      ],
+      "acceptable_case_numbers": [
+        "2022도3103"
+      ],
+      "rewritten_query": "실제로 거주하지 않으면서 임대차 형태만 만든 경우 주택임차권의 대항력 성립 여부와 임차권등기/확정일자 요건의 적용 범위는 무엇인가요? 대항력 임차권등기 확정일자 주택임차권 우선변제권 전세보증금",
+      "legal_terms": [
+        "대항력",
+        "임차권등기",
+        "확정일자",
+        "주택임차권",
+        "우선변제권",
+        "전세보증금"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024다326398",
+          "case_name": "임대차보증금반환[주택 임차인의 점유 상실 후 마쳐진 임차권등기의 대항력이 문제된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.07171592,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605771"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025다210305",
+          "case_name": "배당이의[주택임대차보호법 제3조 제2항에서 정한 법인인 임차인이 대항력과 우선변제권을 상실하였다는 이유로 해당 주택에 관한 근저당권자가 배당이의를 한 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.07111869,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618185"
+        },
+        {
+          "rank": 3,
+          "case_number": "2025다213466",
+          "case_name": "보증금",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06727329,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024다268508",
+          "case_name": "임대차보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06648056,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615697"
+        },
+        {
+          "rank": 5,
+          "case_number": "2025두34604",
+          "case_name": "증여세부과처분취소",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06538874,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=616581"
+        }
+      ],
+      "relevant_ranks": [
+        4
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.25,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "housing-09",
+      "category": "housing_lease",
+      "query": "이사해서 점유를 잃은 뒤 임차권등기를 하면 다시 대항력이 생기나요?",
+      "expected_case_numbers": [
+        "2024다326398"
+      ],
+      "acceptable_case_numbers": [
+        "2024마8598",
+        "2024다221455"
+      ],
+      "rewritten_query": "이사로 점유를 잃은 뒤 임차권등기를 하면 대항력이 다시 생기는지에 대한 법적 요건과 해석 대항력 우선변제권 임차권등기명령 임차권등기 점유상실 점유 임대차계약 전세권",
+      "legal_terms": [
+        "대항력",
+        "우선변제권",
+        "임차권등기명령",
+        "임차권등기",
+        "점유상실",
+        "점유",
+        "임대차계약",
+        "전세권"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024다326398",
+          "case_name": "임대차보증금반환[주택 임차인의 점유 상실 후 마쳐진 임차권등기의 대항력이 문제된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.0709715,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605771"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024다268508",
+          "case_name": "임대차보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06950673,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615697"
+        },
+        {
+          "rank": 3,
+          "case_number": "2025다210305",
+          "case_name": "배당이의[주택임대차보호법 제3조 제2항에서 정한 법인인 임차인이 대항력과 우선변제권을 상실하였다는 이유로 해당 주택에 관한 근저당권자가 배당이의를 한 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06918453,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618185"
+        },
+        {
+          "rank": 4,
+          "case_number": "2023다307116",
+          "case_name": "건물인도[상가건물 임차인이 임대차계약 기간만료 후 임차건물을 양수한 양수인을 상대로 임대차보증금 반환을 구할 수 있는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06486767,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619451"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024다305087",
+          "case_name": "공제금등청구의소",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06462337,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=613167"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "housing-10",
+      "category": "housing_lease",
+      "query": "보증금을 못 받은 채 이미 이사했어도 주택임차권등기명령을 신청할 수 있나요?",
+      "expected_case_numbers": [
+        "2024마8598"
+      ],
+      "acceptable_case_numbers": [
+        "2024다326398",
+        "2024다221455"
+      ],
+      "rewritten_query": "전세 보증금을 받지 못하고 이사한 경우 주택임차권등기명령을 신청할 수 있는 요건은 무엇인가? 임대차보증금 보증금 반환 보증금 회수 대항력 우선변제권 임차권등기명령 주택임차권등기명령 임차권",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "대항력",
+        "우선변제권",
+        "임차권등기명령",
+        "주택임차권등기명령",
+        "임차권"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024마8598",
+          "case_name": "주택임차권등기",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.0710268,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612117"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025다213466",
+          "case_name": "보증금",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06805424,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024다326398",
+          "case_name": "임대차보증금반환[주택 임차인의 점유 상실 후 마쳐진 임차권등기의 대항력이 문제된 사건]",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06773552,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605771"
+        },
+        {
+          "rank": 4,
+          "case_number": "2023나14222",
+          "case_name": "건물인도",
+          "court": "서울중앙지방법원",
+          "section": "reasoning",
+          "score": 0.06639344,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619531"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024다221455",
+          "case_name": "건물인도[주택임대차보호법에 따른 임차인의 임차권등기 관련비용 상환채권의 행사 방법이 문제된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06368908,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605931"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.4
+    },
+    {
+      "id": "inheritance-01",
+      "category": "inheritance",
+      "query": "부모가 남긴 임대차계약을 상속인들이 연장하면 상속재산 처분으로 보아 단순승인이 되나요?",
+      "expected_case_numbers": [
+        "2025다220329"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "부모가 남긴 임대차계약을 상속인들이 연장할 때 상속재산 처분으로 보아 단순승인에 해당하는지에 관한 법령 검색용 문장 상속재산 유언 유류분 상속 상속재산 처분 임대차계약 연장 단순승인",
+      "legal_terms": [
+        "상속재산",
+        "유언",
+        "유류분",
+        "상속",
+        "상속재산 처분",
+        "임대차계약",
+        "연장",
+        "단순승인"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.07163659,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06775624,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024그834",
+          "case_name": "승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06539275,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467"
+        },
+        {
+          "rank": 4,
+          "case_number": "2023다267355",
+          "case_name": "손해배상(기)[한정승인자가 가등기권자에게 본등기의무를 이행한 것이 부당변제에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06342658,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618665"
+        },
+        {
+          "rank": 5,
+          "case_number": "2023구단73901",
+          "case_name": "부당이득징수결정처분취소",
+          "court": "서울행법",
+          "section": "facts",
+          "score": 0.06331376,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=242119"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "inheritance-02",
+      "category": "inheritance",
+      "query": "소송 도중 상속포기가 수리된 자녀를 망인의 소송수계인으로 삼아도 되나요?",
+      "expected_case_numbers": [
+        "2025다220458"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "소송 도중 상속포기한 자를 망인의 소송수계인으로 삼을 수 있는지 여부 상속포기 상속의 승인과 포기 신고기간 상속 망인 소송수계인",
+      "legal_terms": [
+        "상속포기",
+        "상속의 승인과 포기",
+        "신고기간",
+        "상속",
+        "망인",
+        "소송수계인"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2025다220458",
+          "case_name": "소유권이전등기절차이행등의소[원심이 망인의 자녀를 적법한 소송수계인으로 인정하여 판결을 선고하였는데, 원심 계속 중 자녀가 상속포기 신고를 하여 그 신고가 수리되었던 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.07111869,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=620419"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025나20009",
+          "case_name": "청구이의",
+          "court": "광주고등법원",
+          "section": "facts",
+          "score": 0.0699553,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619483"
+        },
+        {
+          "rank": 3,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06670846,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06365748,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.75
+    },
+    {
+      "id": "inheritance-03",
+      "category": "inheritance",
+      "query": "채무자가 파산한 뒤 사망하면 상속인이 자동으로 한정승인한 것으로 볼 수 있나요?",
+      "expected_case_numbers": [
+        "2024그834"
+      ],
+      "acceptable_case_numbers": [
+        "2024그775"
+      ],
+      "rewritten_query": "파산한 채무자가 사망한 경우 상속인이 자동으로 한정승인으로 간주되는지 여부를 법령 검색용으로 확인하려고 합니다. 상속채무 상속포기 한정승인 파산 채무자 사망 상속인 상속",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인",
+        "파산",
+        "채무자",
+        "사망",
+        "상속인",
+        "상속"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024그834",
+          "case_name": "승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.07153083,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06933817,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        },
+        {
+          "rank": 3,
+          "case_number": "2023다267355",
+          "case_name": "손해배상(기)[한정승인자가 가등기권자에게 본등기의무를 이행한 것이 부당변제에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06611582,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618665"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06561134,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024두39189",
+          "case_name": "부당이득징수결정취소[산업재해보상보험법상 미지급 장해급여의 수급권자인 선순위 유족이 사망한 경우, 그 수급권이 위 유족의 민법상 상속인에게 상속되는지가 문제 된 사건]",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.06460073,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618535"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "inheritance-04",
+      "category": "inheritance",
+      "query": "한정승인자가 가등기권자에게 본등기를 해준 것이 다른 상속채권자에 대한 부당변제인가요?",
+      "expected_case_numbers": [
+        "2023다267355"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "한정승인자가 가등기권자에게 본등기를 해준 행위가 다른 상속채권자에 대한 부당변제에 해당하는지 여부를 알아보기 위한 법령 검색용 질의 한정승인 가등기권자 본등기 상속채권자 부당변제",
+      "legal_terms": [
+        "한정승인",
+        "가등기권자",
+        "본등기",
+        "상속채권자",
+        "부당변제"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2023다267355",
+          "case_name": "손해배상(기)[한정승인자가 가등기권자에게 본등기의무를 이행한 것이 부당변제에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.07198033,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618665"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024그834",
+          "case_name": "승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06887276,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06772347,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024가단116437",
+          "case_name": "배당이의",
+          "court": "서울북부지법",
+          "section": "facts",
+          "score": 0.06719742,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=242115"
+        },
+        {
+          "rank": 5,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06465831,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "inheritance-05",
+      "category": "inheritance",
+      "query": "상속받은 재산이 전혀 없는데도 돌아가신 분의 국세와 지방세를 납부해야 하나요?",
+      "expected_case_numbers": [
+        "2024그775"
+      ],
+      "acceptable_case_numbers": [
+        "2024그834"
+      ],
+      "rewritten_query": "사망자의 국세 및 지방세 납부 의무가 상속인에게 어떤 범위로 전가되며 상속인의 책임 한도는 어떻게 규정되어 있는지 법령 검색을 위해 확인합니다. 상속재산 유언 유류분 상속 피상속인 상속인 상속채무 한정승계",
+      "legal_terms": [
+        "상속재산",
+        "유언",
+        "유류분",
+        "상속",
+        "피상속인",
+        "상속인",
+        "상속채무",
+        "한정승계"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "issues",
+          "score": 0.07100789,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06582111,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024그834",
+          "case_name": "승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06571161,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467"
+        },
+        {
+          "rank": 4,
+          "case_number": "2023다267355",
+          "case_name": "손해배상(기)[한정승인자가 가등기권자에게 본등기의무를 이행한 것이 부당변제에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06384669,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618665"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024두39189",
+          "case_name": "부당이득징수결정취소[산업재해보상보험법상 미지급 장해급여의 수급권자인 선순위 유족이 사망한 경우, 그 수급권이 위 유족의 민법상 상속인에게 상속되는지가 문제 된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06360419,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618535"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "inheritance-06",
+      "category": "inheritance",
+      "query": "산재 장해급여를 받을 유족도 사망했다면 그 미지급 급여가 다시 상속인에게 상속되나요?",
+      "expected_case_numbers": [
+        "2024두39189"
+      ],
+      "acceptable_case_numbers": [
+        "2023구단73901"
+      ],
+      "rewritten_query": "산재장해급여를 수령하던 유족이 사망한 경우, 미지급 급여의 귀속이 상속인에게 승계되는지 산재보험법상 근거를 검색하고 싶다. 산재장해급여 유족 사망 미지급 급여 귀속 상속인 승계 산재보험법",
+      "legal_terms": [
+        "산재장해급여",
+        "유족",
+        "사망",
+        "미지급 급여",
+        "귀속",
+        "상속인",
+        "승계",
+        "산재보험법"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024두39189",
+          "case_name": "부당이득징수결정취소[산업재해보상보험법상 미지급 장해급여의 수급권자인 선순위 유족이 사망한 경우, 그 수급권이 위 유족의 민법상 상속인에게 상속되는지가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.0714599,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618535"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023구단73901",
+          "case_name": "부당이득징수결정처분취소",
+          "court": "서울행법",
+          "section": "facts",
+          "score": 0.06878877,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=242119"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024그834",
+          "case_name": "승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.06406795,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467"
+        },
+        {
+          "rank": 4,
+          "case_number": "2023구단62970",
+          "case_name": "취득세등부과처분취소",
+          "court": "서울행정법원",
+          "section": "facts",
+          "score": 0.06349492,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612935"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.5
+    },
+    {
+      "id": "inheritance-07",
+      "category": "inheritance",
+      "query": "상속포기를 했는데 오래된 판결을 근거로 채권자가 강제집행하려는 경우 막을 수 있나요?",
+      "expected_case_numbers": [
+        "2025나20009"
+      ],
+      "acceptable_case_numbers": [
+        "2025다220458"
+      ],
+      "rewritten_query": "상속포기 후 채권자가 오래된 판결을 근거로 강제집행하려 할 때 이를 막을 수 있는 법적 근거를 검색한다 상속포기 상속의 승인과 포기 신고기간 상속 채권자 강제집행 판결 오래된 판결",
+      "legal_terms": [
+        "상속포기",
+        "상속의 승인과 포기",
+        "신고기간",
+        "상속",
+        "채권자",
+        "강제집행",
+        "판결",
+        "오래된 판결"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2023다267355",
+          "case_name": "손해배상(기)[한정승인자가 가등기권자에게 본등기의무를 이행한 것이 부당변제에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "reasoning",
+          "score": 0.07137218,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618665"
+        },
+        {
+          "rank": 2,
+          "case_number": "2025다220458",
+          "case_name": "소유권이전등기절차이행등의소[원심이 망인의 자녀를 적법한 소송수계인으로 인정하여 판결을 선고하였는데, 원심 계속 중 자녀가 상속포기 신고를 하여 그 신고가 수리되었던 사건]",
+          "court": "대법원",
+          "section": "result",
+          "score": 0.07111869,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=620419"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.07026532,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "result",
+          "score": 0.06914513,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        },
+        {
+          "rank": 5,
+          "case_number": "2025나20009",
+          "case_name": "청구이의",
+          "court": "광주고등법원",
+          "section": "facts",
+          "score": 0.06727812,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619483"
+        }
+      ],
+      "relevant_ranks": [
+        5
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.2,
+      "hit_at_5": true,
+      "contamination_at_5": 0.6
+    },
+    {
+      "id": "inheritance-08",
+      "category": "inheritance",
+      "query": "상속받았다는 이유로 이전된 부동산 등기를 말소해 달라는 소송 판례를 찾고 싶어요.",
+      "expected_case_numbers": [
+        "2022가단67571"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "상속으로 이전된 부동산 등기의 말소를 구하는 소송에 관한 판례를 찾고 싶습니다. 상속 부동산 등기 말소 말소청구 소송 판례",
+      "legal_terms": [
+        "상속",
+        "부동산 등기",
+        "말소",
+        "말소청구",
+        "소송",
+        "판례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024가단116437",
+          "case_name": "배당이의",
+          "court": "서울북부지법",
+          "section": "facts",
+          "score": 0.06870943,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=242115"
+        },
+        {
+          "rank": 2,
+          "case_number": "2022가단67571",
+          "case_name": "소유권이전등기말소등",
+          "court": "제주지방법원",
+          "section": "facts",
+          "score": 0.06857346,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619231"
+        },
+        {
+          "rank": 3,
+          "case_number": "2023구단62970",
+          "case_name": "취득세등부과처분취소",
+          "court": "서울행정법원",
+          "section": "reasoning",
+          "score": 0.068418,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612935"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다220458",
+          "case_name": "소유권이전등기절차이행등의소[원심이 망인의 자녀를 적법한 소송수계인으로 인정하여 판결을 선고하였는데, 원심 계속 중 자녀가 상속포기 신고를 하여 그 신고가 수리되었던 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06773003,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=620419"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06558979,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "inheritance-09",
+      "category": "inheritance",
+      "query": "신탁된 부동산을 상속받은 경우 취득세 부과가 적법한지 다룬 판례가 있나요?",
+      "expected_case_numbers": [
+        "2023구단62970"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "신탁된 부동산의 상속 시 취득세 과세의 적법성에 관한 판례를 검색 신탁 부동산 상속 취득세 과세 적법성 판례",
+      "legal_terms": [
+        "신탁",
+        "부동산",
+        "상속",
+        "취득세",
+        "과세",
+        "적법성",
+        "판례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2023구단62970",
+          "case_name": "취득세등부과처분취소",
+          "court": "서울행정법원",
+          "section": "facts",
+          "score": 0.05013947,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612935"
+        },
+        {
+          "rank": 2,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.0459836,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        },
+        {
+          "rank": 3,
+          "case_number": "2024가단116437",
+          "case_name": "배당이의",
+          "court": "서울북부지법",
+          "section": "facts",
+          "score": 0.04506011,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=242115"
+        },
+        {
+          "rank": 4,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.0443042,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        },
+        {
+          "rank": 5,
+          "case_number": "2024그834",
+          "case_name": "승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.04337656,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    },
+    {
+      "id": "inheritance-10",
+      "category": "inheritance",
+      "query": "공동담보 부동산 일부를 상속한 뒤 경매 배당에 이의를 제기한 사례가 있나요?",
+      "expected_case_numbers": [
+        "2024가단116437"
+      ],
+      "acceptable_case_numbers": [],
+      "rewritten_query": "공동담보로 설정된 부동산의 일부를 상속받은 경우 경매 배당에 이의를 제기한 사례에 대한 법령 및 판례를 검색하기 위한 쿼리 상속 공동담보 담보부 부동산 경매 배당 배당이의 이의 제기 판례",
+      "legal_terms": [
+        "상속",
+        "공동담보",
+        "담보부 부동산",
+        "경매",
+        "배당",
+        "배당이의",
+        "이의 제기",
+        "판례"
+      ],
+      "top_k": [
+        {
+          "rank": 1,
+          "case_number": "2024가단116437",
+          "case_name": "배당이의",
+          "court": "서울북부지법",
+          "section": "facts",
+          "score": 0.07064242,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=242115"
+        },
+        {
+          "rank": 2,
+          "case_number": "2023구단73901",
+          "case_name": "부당이득징수결정처분취소",
+          "court": "서울행법",
+          "section": "facts",
+          "score": 0.06691691,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=242119"
+        },
+        {
+          "rank": 3,
+          "case_number": "2023구단62970",
+          "case_name": "취득세등부과처분취소",
+          "court": "서울행정법원",
+          "section": "facts",
+          "score": 0.06516694,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612935"
+        },
+        {
+          "rank": 4,
+          "case_number": "2024그775",
+          "case_name": "상속재산파산신청",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06369938,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        },
+        {
+          "rank": 5,
+          "case_number": "2025다220329",
+          "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "section": "facts",
+          "score": 0.06306732,
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=621911"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true,
+      "contamination_at_5": 0.8
+    }
+  ]
+}
