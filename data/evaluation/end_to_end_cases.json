@@ -1,0 +1,290 @@
+[
+  {
+    "id": "e2e-labor-01",
+    "category": "labor",
+    "query": "계약기간이 이미 끝난 뒤에도 노동위원회에 부당해고 구제를 신청할 실익이 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025두33276"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-02",
+    "category": "labor",
+    "query": "회사가 해고한 동안 다른 직장에서 번 돈은 해고기간 임금이나 손해액에서 공제되나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025나11545"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-03",
+    "category": "labor",
+    "query": "공익신고를 했다는 이유로 해고당했다면 징벌적 손해배상을 청구할 때 중간수입은 어떻게 계산하나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025나11545"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-04",
+    "category": "labor",
+    "query": "노동위원회가 내린 부당해고 재심판정을 법원에서 취소해 달라고 다툰 사례를 찾고 싶어요.",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2023누60218"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-05",
+    "category": "labor",
+    "query": "회사 측이 중앙노동위원회의 부당해고 구제판정을 취소해 달라고 소송한 판례가 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2022누56601"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-06",
+    "category": "labor",
+    "query": "여러 근로자가 회사에 월별 미지급 임금을 청구한 판례를 알려주세요.",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2023나2058221"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-07",
+    "category": "labor",
+    "query": "건설현장에서 근로자 임금을 지급하지 않아 근로기준법 위반으로 처벌된 사례가 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2023고단584"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-08",
+    "category": "labor",
+    "query": "근로기준법 위반 사건의 항소심에서 원심 형을 파기한 판례를 찾고 있어요.",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2024노2125"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-r01",
+    "category": "labor",
+    "query": "이번 주 회사 회식 메뉴로 삼겹살과 회 중 무엇이 더 좋은지 법률 근거로 정해주세요.",
+    "expected_answerable": false,
+    "expected_case_numbers": [],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-labor-r02",
+    "category": "labor",
+    "query": "해고 사건에서 제가 이길 확률을 정확히 몇 퍼센트인지 계산해주세요.",
+    "expected_answerable": false,
+    "expected_case_numbers": [],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-01",
+    "category": "housing_lease",
+    "query": "전세보증보험에 가입했는데 집을 돌려주기 전에도 보증금과 지연손해금을 받을 수 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2026다201978"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-02",
+    "category": "housing_lease",
+    "query": "임대인이 사망한 뒤 상속인들과 임대차를 연장하면 보증금 반환 책임과 단순승인은 어떻게 되나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025다220329"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-03",
+    "category": "housing_lease",
+    "query": "상가 임대차가 끝난 뒤 건물 주인이 바뀌어도 새 주인에게 보증금을 청구할 수 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2023다307116"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-04",
+    "category": "housing_lease",
+    "query": "임차인이 주민등록을 잘못했다면 주택임대차 대항력이 인정되는지 궁금합니다.",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025다213466"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-05",
+    "category": "housing_lease",
+    "query": "법인 직원이 임차주택에 살다가 퇴거하면 법인 임차인의 대항력과 우선변제권이 없어지나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025다210305"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-06",
+    "category": "housing_lease",
+    "query": "공인중개사가 전세보증금을 돌려받기 어려운 위험을 설명하지 않은 경우 배상받을 수 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2024다305087"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-07",
+    "category": "housing_lease",
+    "query": "임대차가 끝난 뒤 보증금을 받을 때까지 계약이 계속되는 것으로 볼 수 있는 보험금 판례가 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025다207128"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-08",
+    "category": "housing_lease",
+    "query": "우선변제를 받으려고 실제로 살지 않으면서 임대차 모양만 만든 경우 대항력이 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2024다268508"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-r01",
+    "category": "housing_lease",
+    "query": "새로 이사할 집의 거실 벽지는 파란색과 베이지색 중 무엇이 더 예쁜가요?",
+    "expected_answerable": false,
+    "expected_case_numbers": [],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-housing-r02",
+    "category": "housing_lease",
+    "query": "전세보증금 소송에서 제가 승소할 확률을 정확히 90퍼센트처럼 숫자로 답해주세요.",
+    "expected_answerable": false,
+    "expected_case_numbers": [],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-01",
+    "category": "inheritance",
+    "query": "부모가 남긴 임대차계약을 상속인들이 연장하면 상속재산 처분으로 보아 단순승인이 되나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025다220329"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-02",
+    "category": "inheritance",
+    "query": "소송 도중 상속포기가 수리된 자녀를 망인의 소송수계인으로 삼아도 되나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025다220458"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-03",
+    "category": "inheritance",
+    "query": "채무자가 파산한 뒤 사망하면 상속인이 자동으로 한정승인한 것으로 볼 수 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2024그834"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-04",
+    "category": "inheritance",
+    "query": "한정승인자가 가등기권자에게 본등기를 해준 것이 다른 상속채권자에 대한 부당변제인가요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2023다267355"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-05",
+    "category": "inheritance",
+    "query": "상속받은 재산이 전혀 없는데도 돌아가신 분의 국세와 지방세를 납부해야 하나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2024그775"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-06",
+    "category": "inheritance",
+    "query": "산재 장해급여를 받을 유족도 사망했다면 그 미지급 급여가 다시 상속인에게 상속되나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2024두39189"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-07",
+    "category": "inheritance",
+    "query": "상속포기를 했는데 오래된 판결을 근거로 채권자가 강제집행하려는 경우 막을 수 있나요?",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2025나20009"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-08",
+    "category": "inheritance",
+    "query": "상속받았다는 이유로 이전된 부동산 등기를 말소해 달라는 소송 판례를 찾고 싶어요.",
+    "expected_answerable": true,
+    "expected_case_numbers": [
+      "2022가단67571"
+    ],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-r01",
+    "category": "inheritance",
+    "query": "제사상에 과일과 전을 어떤 순서로 놓으면 보기 좋은지 알려주세요.",
+    "expected_answerable": false,
+    "expected_case_numbers": [],
+    "review_status": "developer_labeled"
+  },
+  {
+    "id": "e2e-inheritance-r02",
+    "category": "inheritance",
+    "query": "형제와 상속소송을 하면 제가 이길 확률을 정확한 퍼센트로 예측해주세요.",
+    "expected_answerable": false,
+    "expected_case_numbers": [],
+    "review_status": "developer_labeled"
+  }
+]

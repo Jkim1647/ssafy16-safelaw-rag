@@ -198,6 +198,8 @@ python scripts/evaluate_statute_retrieval.py
 
 RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과정은 [`docs/troubleshooting.md`](docs/troubleshooting.md)에 정리했습니다. 판례 30문항의 사건번호 단위 평가, 기준 성능과 동적 API 보강 구조는 [`docs/case-retrieval-evaluation.md`](docs/case-retrieval-evaluation.md)에 기록합니다. 정답 라벨의 법률 검수 절차는 [`docs/case-evaluation-review-checklist.md`](docs/case-evaluation-review-checklist.md)를 따릅니다.
 
+검색부터 답변 생성·인용 검증·답변 거부까지 연결한 30문항 평가는 [`docs/end-to-end-rag-evaluation.md`](docs/end-to-end-rag-evaluation.md)에 정리했습니다.
+
 ## 근거 제한 답변 생성
 
 검색된 법령을 CONTEXT로 전달하고 모든 주장에 근거 번호와 법령 원문의 인용문을 요구합니다. 생성 결과는 바로 표시하지 않고 다음 조건을 모두 검사합니다.
