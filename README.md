@@ -19,6 +19,7 @@
 3. 보안 경계를 검증하는 자동화 테스트
 4. 국가법령정보 현행법령 API 수집기
 5. 3개 생활법률 도메인의 조문 단위 데이터셋
+6. 조문 구조 기반 청킹과 GMS 임베딩·Chroma 색인 파이프라인
 
 ## 프로젝트 구조
 
@@ -44,7 +45,9 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ processed/                  # 정규화 조문 데이터셋·생성 명세
 │  └─ indexes/                    # Vector DB 지속 데이터
 ├─ scripts/
-│  └─ build_statute_dataset.py    # API 수집·정규화·검증용 데이터 생성
+│  ├─ build_statute_dataset.py    # API 수집·정규화·검증용 데이터 생성
+│  ├─ build_statute_chunks.py     # 조문 구조 기반 청크 생성
+│  └─ build_statute_index.py      # GMS 임베딩·Chroma 색인
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
 
@@ -78,6 +81,33 @@ Remove-Item Env:LAW_API_OC
 - `data/processed/statutes_manifest.json`: 건수, 법령별 통계, 생성일, SHA-256
 
 수집 대상과 조문 범위를 바꾸려면 `data/statute_sources.json`을 수정합니다. 법령 데이터는 수시로 개정될 수 있으므로 시연·검증 전 데이터셋을 다시 생성하고 manifest의 생성일과 해시를 기록합니다.
+
+## 청킹과 임베딩
+
+법령은 문맥이 조문·항·호·목 단위로 구성되므로 무조건 같은 글자 수로 자르지 않습니다. 먼저 API에서 보존한 줄 단위 구조를 묶고, 1,200자를 넘는 긴 조문만 최대 150자의 문맥 중첩을 두어 나눕니다. 임베딩 입력에는 본문과 함께 도메인, 법령명, 조문 번호·제목, 쟁점 태그를 넣습니다.
+
+```powershell
+# 1. 381개 조문을 청크 데이터셋으로 변환
+python scripts/build_statute_chunks.py
+
+# 2. 의존성 설치
+python -m pip install -e .
+
+# 3. GMS 임베딩 생성 후 Chroma에 영속 저장
+$env:GMS_KEY="발급받은-GMS-키"
+python scripts/build_statute_index.py
+Remove-Item Env:GMS_KEY
+```
+
+현재 기본 설정은 다음과 같습니다.
+
+- 청크 최대 길이: 1,200자
+- 청크 중첩: 최대 150자
+- 임베딩 모델: `text-embedding-3-small`
+- Vector Store: Chroma, cosine 거리
+- 법령 색인 위치: `data/indexes/statutes/` — 재생성 가능한 산출물이므로 Git 제외
+
+현재 데이터에서는 381개 조문이 386개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
 
 ## 테스트
 

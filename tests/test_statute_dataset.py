@@ -9,6 +9,8 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 DATASET = ROOT / "data" / "processed" / "statutes.json"
 MANIFEST = ROOT / "data" / "processed" / "statutes_manifest.json"
+CHUNKS = ROOT / "data" / "processed" / "statute_chunks.json"
+CHUNK_MANIFEST = ROOT / "data" / "processed" / "statute_chunks_manifest.json"
 
 
 class StatuteDatasetTests(unittest.TestCase):
@@ -55,6 +57,33 @@ class StatuteDatasetTests(unittest.TestCase):
         serialized = DATASET.read_text(encoding="utf-8")
         self.assertNotIn('"OC"', serialized)
         self.assertNotIn("LAW_API_OC", serialized)
+
+
+class StatuteChunkDatasetTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.chunks = json.loads(CHUNKS.read_text(encoding="utf-8"))
+        cls.manifest = json.loads(CHUNK_MANIFEST.read_text(encoding="utf-8"))
+
+    def test_chunk_manifest_matches_artifacts(self):
+        self.assertEqual(self.manifest["chunk_count"], len(self.chunks))
+        self.assertEqual(
+            self.manifest["dataset_sha256"],
+            hashlib.sha256(CHUNKS.read_bytes()).hexdigest(),
+        )
+        self.assertEqual(
+            self.manifest["source_dataset_sha256"],
+            hashlib.sha256(DATASET.read_bytes()).hexdigest(),
+        )
+
+    def test_chunks_fit_limit_and_keep_citations(self):
+        identifiers = {item["chunk_id"] for item in self.chunks}
+        self.assertEqual(len(identifiers), len(self.chunks))
+        self.assertTrue(
+            all(len(item["content"]) <= self.manifest["max_chars"] for item in self.chunks)
+        )
+        self.assertTrue(all(item["source_url"] and item["article_no"] for item in self.chunks))
+        self.assertTrue(all("법령:" in item["embedding_text"] for item in self.chunks))
 
 
 if __name__ == "__main__":
