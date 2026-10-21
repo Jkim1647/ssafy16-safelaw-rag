@@ -58,6 +58,8 @@ class GroundedAnswer:
     content: str
     sources: tuple[LegalEvidence, ...] = ()
     retrieved_count: int = 0
+    generation_attempts: int = 0
+    validation_failures: int = 0
 
     @property
     def is_answered(self) -> bool:
@@ -107,6 +109,8 @@ class StatuteRagPipeline:
             return self._blocked(AnswerStatus.NO_EVIDENCE, retrieved_count=len(retrieval.hits))
 
         messages = build_grounded_answer_messages(sanitized_question.strip(), category, evidence)
+        validation_failures = 0
+        retry_reason = ""
         for attempt in range(1, self._max_generation_attempts + 1):
             attempt_messages = list(messages)
             if attempt > 1:
@@ -114,8 +118,10 @@ class StatuteRagPipeline:
                     {
                         "role": "user",
                         "content": (
-                            "직전 응답은 JSON 형식 또는 근거 검증을 통과하지 못해 폐기됐다. "
-                            "CONTEXT를 다시 사용하여 지정된 JSON 형식만 정확히 출력하라."
+                            "직전 응답은 폐기됐다. 실패 이유: " + retry_reason + " "
+                            "CONTEXT를 다시 사용하여 지정된 JSON 형식만 정확히 출력하라. "
+                            "각 evidence_quotes.quote는 CONTEXT에서 공백을 제외하고도 연속으로 일치하는 "
+                            "8자 이상의 원문을 그대로 복사하라. 근거가 부족하면 억지로 답하지 말라."
                         ),
                     }
                 )
@@ -125,16 +131,28 @@ class StatuteRagPipeline:
                 return self._blocked(
                     AnswerStatus.GENERATION_FAILED,
                     retrieved_count=len(evidence),
+                    generation_attempts=attempt,
+                    validation_failures=validation_failures,
                 )
 
             try:
                 draft = parse_and_validate_draft(raw_response, evidence)
-            except CitationValidationError:
+            except CitationValidationError as exc:
+                validation_failures += 1
+                retry_reason = str(exc)
                 continue
             if not draft.answerable:
+                if attempt < self._max_generation_attempts:
+                    retry_reason = (
+                        "answerable=false로 판단했다. 질문과 직접 관련된 CONTEXT가 실제로 있는지 "
+                        "한 번 더 확인하되, 직접 근거가 없으면 다시 answerable=false로 답하라."
+                    )
+                    continue
                 return self._blocked(
                     AnswerStatus.INSUFFICIENT_EVIDENCE,
                     retrieved_count=len(evidence),
+                    generation_attempts=attempt,
+                    validation_failures=validation_failures,
                 )
             content = render_grounded_answer(draft, evidence)
             return GroundedAnswer(
@@ -142,18 +160,25 @@ class StatuteRagPipeline:
                 content=content,
                 sources=cited_evidence(draft, evidence),
                 retrieved_count=len(evidence),
+                generation_attempts=attempt,
+                validation_failures=validation_failures,
             )
 
         return self._blocked(
             AnswerStatus.INVALID_CITATIONS,
             retrieved_count=len(evidence),
+            generation_attempts=self._max_generation_attempts,
+            validation_failures=validation_failures,
         )
 
     @staticmethod
-    def _blocked(status: AnswerStatus, *, retrieved_count: int) -> GroundedAnswer:
+    def _blocked(status: AnswerStatus, *, retrieved_count: int,
+                 generation_attempts: int = 0, validation_failures: int = 0) -> GroundedAnswer:
         return GroundedAnswer(
             status=status,
             content=SAFE_MESSAGES[status],
             retrieved_count=retrieved_count,
+            generation_attempts=generation_attempts,
+            validation_failures=validation_failures,
         )
 
