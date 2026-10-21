@@ -135,6 +135,8 @@ class ChromaCaseVectorStore:
                 "case_name": item.case_name,
                 "decision_type": item.decision_type,
                 "precedent_level": item.precedent_level.value,
+                "case_type": item.case_type,
+                "cited_cases": " | ".join(item.cited_cases),
             } for item in chunks],
         )
 

@@ -29,6 +29,7 @@ class CourtCaseCollectorTests(unittest.TestCase):
             else:
                 payload = {"PrecService": {"판례정보일련번호": "123", "사건번호": "2024다123",
                     "법원명": "대법원", "선고일자": "20240102", "판결유형": "판결",
+                    "사건종류명": "민사", "참조판례": "대법원 2020다100 판결; 대법원 2021다200 판결",
                     "판시사항": "[1] 보증금 반환 쟁점", "판결요지": "임차인을 보호한다.",
                     "참조조문": "주택임대차보호법 제3조", "판례내용": "【주 문】<br/>상고를 기각한다.<br/>【이 유】<br/>판단한다."}}
             return json.dumps(payload, ensure_ascii=False).encode()
@@ -41,6 +42,8 @@ class CourtCaseCollectorTests(unittest.TestCase):
         self.assertEqual(document.decision_date, date(2024, 1, 2))
         self.assertEqual(document.precedent_level, PrecedentLevel.GRAND_BENCH)
         self.assertEqual(document.decision_type, "전원합의체 판결")
+        self.assertEqual(document.case_type, "민사")
+        self.assertEqual(len(document.cited_cases), 2)
         self.assertNotIn("secret", repr(document))
         self.assertTrue(all("OC=secret" in url for url in captured))
 

@@ -206,6 +206,7 @@ def normalize_case(detail: JsonObject, category: LegalCategory,
     case_number = str(detail.get("사건번호") or (search_result.case_number if search_result else "")).strip()
     court = str(detail.get("법원명") or (search_result.court if search_result else "")).strip()
     case_name = str(detail.get("사건명") or (search_result.case_name if search_result else "")).strip()
+    case_type = str(detail.get("사건종류명", "")).strip()
     decision_type = _most_specific_decision_type(
         detail.get("판결유형"), search_result.decision_type if search_result else ""
     )
@@ -237,6 +238,8 @@ def normalize_case(detail: JsonObject, category: LegalCategory,
         case_name=case_name,
         decision_type=decision_type,
         precedent_level=classify_precedent(court, decision_type),
+        case_type=case_type,
+        cited_cases=_split_references(str(detail.get("참조판례", ""))),
     )
 
 

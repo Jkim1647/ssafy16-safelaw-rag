@@ -56,6 +56,9 @@ class CitationValidationTests(unittest.TestCase):
         self.assertEqual(evidence[0].case_number, "2024다123")
         self.assertTrue(draft.answerable)
 
+        rendered = render_grounded_answer(draft, evidence)
+        self.assertIn("법리가 변경·제한되었을 수 있습니다", rendered)
+
     def test_build_evidence_keeps_only_official_law_sources(self):
         evidence = build_statute_evidence(
             [

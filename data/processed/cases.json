@@ -17,7 +17,9 @@
     ],
     "case_name": "징벌적손해배상",
     "decision_type": "판결 : 확정",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "612851",
@@ -37,7 +39,11 @@
     ],
     "case_name": "부당해고구제재심판정취소",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "일반행정",
+    "cited_cases": [
+      "대법원 2022. 7. 14. 선고 2020두54852 판결(공2022하, 1681)"
+    ]
   },
   {
     "case_id": "618209",
@@ -60,7 +66,11 @@
     ],
     "case_name": "손해배상(기)",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 1989. 6. 27. 선고 87다카2478 판결(공1989, 1139), 대법원 1993. 6. 25. 선고 92다33008 판결(공1993하, 2100), 대법원 2004. 3. 26. 선고 2002다45178 판결 / [2] 대법원 1993. 12. 21. 선고 92다46226 전원합의체 판결(공1994상, 484), 대법원 1999. 3. 9. 선고 97다58194 판결(공1999상, 626) / [4] 대법원 2025. 5. 15. 선고 2023다306014 판결(공2025하, 1043)"
+    ]
   },
   {
     "case_id": "605563",
@@ -76,7 +86,9 @@
     "related_articles": [],
     "case_name": "부당해고구제재심판정취소",
     "decision_type": "판결",
-    "precedent_level": "appellate"
+    "precedent_level": "appellate",
+    "case_type": "일반행정",
+    "cited_cases": []
   },
   {
     "case_id": "241399",
@@ -92,7 +104,9 @@
     "related_articles": [],
     "case_name": "부당해고구제재심판정취소",
     "decision_type": "판결",
-    "precedent_level": "appellate"
+    "precedent_level": "appellate",
+    "case_type": "일반행정",
+    "cited_cases": []
   },
   {
     "case_id": "619303",
@@ -108,7 +122,9 @@
     "related_articles": [],
     "case_name": "임금",
     "decision_type": "판결",
-    "precedent_level": "appellate"
+    "precedent_level": "appellate",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "615825",
@@ -124,7 +140,9 @@
     "related_articles": [],
     "case_name": "근로기준법위반",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "형사",
+    "cited_cases": []
   },
   {
     "case_id": "615823",
@@ -140,7 +158,9 @@
     "related_articles": [],
     "case_name": "근로기준법위반",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "형사",
+    "cited_cases": []
   },
   {
     "case_id": "241141",
@@ -156,7 +176,9 @@
     "related_articles": [],
     "case_name": "근로기준법위반",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "형사",
+    "cited_cases": []
   },
   {
     "case_id": "618263",
@@ -172,7 +194,9 @@
     "related_articles": [],
     "case_name": "부당이득금",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "236477",
@@ -193,7 +217,11 @@
     ],
     "case_name": "의료법위반·특정경제범죄가중처벌등에관한법률위반(사기)[비의료인이 개설자격을 위반하여 의료법인 명의 의료기관을 개설·운영하였는지 여부가 문제된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "형사",
+    "cited_cases": [
+      "[1] 대법원 2023. 7. 17. 선고 2017도1807 전원합의체 판결(공2023하, 1568)"
+    ]
   },
   {
     "case_id": "239681",
@@ -209,7 +237,9 @@
     "related_articles": [],
     "case_name": "임금",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "622971",
@@ -229,7 +259,9 @@
     ],
     "case_name": "보증금반환",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "621911",
@@ -251,7 +283,11 @@
     ],
     "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 2004. 3. 12. 선고 2003다63586 판결(공2004상, 622), 대법원 2012. 4. 16. 자 2011스191, 192 결정, 대법원 2015. 6. 23. 선고 2014다50913 판결, 대법원 2016. 12. 29. 선고 2013다73520 판결(공2017상, 209), 대법원 2023. 12. 28. 선고 2023다269399 판결 / [2] 대법원 2018. 12. 27. 선고 2015다73098 판결(공2019상, 349)"
+    ]
   },
   {
     "case_id": "619451",
@@ -273,7 +309,11 @@
     ],
     "case_name": "건물인도[상가건물 임차인이 임대차계약 기간만료 후 임차건물을 양수한 양수인을 상대로 임대차보증금 반환을 구할 수 있는지 여부가 문제 된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 2020. 7. 9. 선고 2016다244224, 244231 판결(공2020하, 1563), 대법원 2023. 11. 9. 선고 2023다257600 판결(공2024상, 15) / [2] 대법원 2017. 3. 22. 선고 2016다218874 판결(공2017상, 841), 대법원 2021. 1. 28. 선고 2015다59801 판결(공2021상, 453)"
+    ]
   },
   {
     "case_id": "616581",
@@ -295,7 +335,11 @@
     ],
     "case_name": "증여세부과처분취소",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "세무",
+    "cited_cases": [
+      "[1] 대법원 2003. 5. 13. 선고 2002두12458 판결(공2003상, 1353)"
+    ]
   },
   {
     "case_id": "622957",
@@ -311,7 +355,9 @@
     "related_articles": [],
     "case_name": "상속회복 등 청구의 소",
     "decision_type": "판결",
-    "precedent_level": "appellate"
+    "precedent_level": "appellate",
+    "case_type": "가사",
+    "cited_cases": []
   },
   {
     "case_id": "616251",
@@ -331,7 +377,9 @@
     ],
     "case_name": "배당이의",
     "decision_type": "판결 : 확정",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "623979",
@@ -347,7 +395,9 @@
     "related_articles": [],
     "case_name": "보증금반환",
     "decision_type": "판결",
-    "precedent_level": "appellate"
+    "precedent_level": "appellate",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "624487",
@@ -363,7 +413,9 @@
     "related_articles": [],
     "case_name": "건물인도·손해배상(기)",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "615767",
@@ -385,7 +437,11 @@
     ],
     "case_name": "보증금",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 1999. 4. 23. 선고 98다32939 판결(공1999상, 993), 대법원 2000. 2. 11. 선고 99다59306 판결(공2000상, 688) / [2] 대법원 1998. 1. 23. 선고 97다43468 판결(공1998상, 609), 대법원 2025. 4. 15. 선고 2024다326398 판결(공2025상, 821)"
+    ]
   },
   {
     "case_id": "621921",
@@ -405,7 +461,9 @@
     ],
     "case_name": "사기·업무상배임·민간임대주택에관한특별법위반·사문서위조·위조사문서행사·공인중개사법위반·자격모용사문서작성·자격모용작성사문서행사·횡령·사기방조",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "형사",
+    "cited_cases": []
   },
   {
     "case_id": "622353",
@@ -421,7 +479,9 @@
     "related_articles": [],
     "case_name": "유익비",
     "decision_type": "판결",
-    "precedent_level": "appellate"
+    "precedent_level": "appellate",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "618185",
@@ -441,7 +501,11 @@
     ],
     "case_name": "배당이의[주택임대차보호법 제3조 제2항에서 정한 법인인 임차인이 대항력과 우선변제권을 상실하였다는 이유로 해당 주택에 관한 근저당권자가 배당이의를 한 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "대법원 1998. 1. 23. 선고 97다43468 판결(공1998상, 609), 대법원 1999. 4. 23. 선고 98다32939 판결(공1999상, 993), 대법원 2000. 2. 11. 선고 99다59306 판결(공2000상, 688), 대법원 2025. 4. 15. 선고 2024다326398 판결(공2025상, 821)"
+    ]
   },
   {
     "case_id": "613167",
@@ -464,7 +528,11 @@
     ],
     "case_name": "공제금등청구의소",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1][3] 대법원 2012. 1. 26. 선고 2011다63857 판결(공2012상, 308) / [2] 대법원 2003. 9. 5. 선고 2001다66291 판결(공2003하, 2004), 대법원 2017. 12. 21. 선고 2013다16992 전원합의체 판결(공2018상, 171), 대법원 2024. 6. 13. 선고 2020다258893 판결(공2024하, 1077) / [3] 대법원 2023. 11. 30. 선고 2023다259743 판결(공2024상, 104)"
+    ]
   },
   {
     "case_id": "618187",
@@ -484,7 +552,9 @@
     ],
     "case_name": "보험금",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "615697",
@@ -506,7 +576,11 @@
     ],
     "case_name": "임대차보증금",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 2001. 5. 8. 선고 2001다14733 판결(공2001하, 1362), 대법원 2003. 7. 22. 선고 2003다21445 판결(공2003하, 1777) / [2] 대법원 1999. 4. 23. 선고 98다32939 판결(공1999상, 993), 대법원 2000. 2. 11. 선고 99다59306 판결(공2000상, 688)"
+    ]
   },
   {
     "case_id": "606789",
@@ -526,7 +600,9 @@
     ],
     "case_name": "구상금등[개인파산절차에서 면책결정의 효력이 우선변제권 있는 임대차보증금반환청구권에 미치는지 문제된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "605765",
@@ -548,7 +624,11 @@
     ],
     "case_name": "사해행위취소[전세목적물의 일부 지분에 관한 양도계약 체결 후 합의해제에 대한 사해행위취소 및 원상회복청구에서 가액배상의 범위가 문제된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 2006. 5. 11. 선고 2006다6072 판결(공2006상, 1016) / [2] 대법원 1998. 12. 8. 선고 98다43137 판결(공1999상, 106), 대법원 2021. 1. 28. 선고 2015다59801 판결(공2021상, 453), 대법원 2024. 8. 1. 선고 2023다318857 판결(공2024하, 1561) / [3] 대법원 2017. 5. 30. 선고 2017다205073 판결(공2017하, 1369), 대법원 2024. 12. 12. 선고 2024다239401 판결"
+    ]
   },
   {
     "case_id": "600289",
@@ -570,7 +650,11 @@
     ],
     "case_name": "경매방해·사기미수[부동산경매절차에서 허위의 임차권에 기하여 권리신고 및 배당요구를 한 경우 경매방해죄 성립 여부가 문제된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "형사",
+    "cited_cases": [
+      "[1] 대법원 2006. 6. 9. 선고 2005도8498 판결(공2006하, 1302)"
+    ]
   },
   {
     "case_id": "612919",
@@ -586,7 +670,9 @@
     "related_articles": [],
     "case_name": "부동산실권리자명의등기에관한법률위반·전자금융거래법위반·사기·업무방해·범죄수익은닉의규제및처벌등에관한법률위반",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "형사",
+    "cited_cases": []
   },
   {
     "case_id": "600393",
@@ -602,7 +688,9 @@
     "related_articles": [],
     "case_name": "부당이득금",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "605931",
@@ -622,7 +710,9 @@
     ],
     "case_name": "건물인도[주택임대차보호법에 따른 임차인의 임차권등기 관련비용 상환채권의 행사 방법이 문제된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "605771",
@@ -644,7 +734,11 @@
     ],
     "case_name": "임대차보증금반환[주택 임차인의 점유 상실 후 마쳐진 임차권등기의 대항력이 문제된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 1998. 1. 23. 선고 97다43468 판결(공1998상, 609), 대법원 2002. 8. 13. 선고 2000다61466 판결(공2002하, 2167) / [2] 대법원 2000. 2. 11. 선고 99다59306 판결(공2000상, 688)"
+    ]
   },
   {
     "case_id": "612117",
@@ -664,7 +758,11 @@
     ],
     "case_name": "주택임차권등기",
     "decision_type": "결정",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "대법원 2004. 10. 28. 선고 2003다62255, 62262 판결"
+    ]
   },
   {
     "case_id": "606045",
@@ -680,7 +778,9 @@
     "related_articles": [],
     "case_name": "임대차보증금반환",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "606119",
@@ -696,7 +796,9 @@
     "related_articles": [],
     "case_name": "임대차보증금반환",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "619531",
@@ -712,7 +814,9 @@
     "related_articles": [],
     "case_name": "건물인도",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "241149",
@@ -728,7 +832,9 @@
     "related_articles": [],
     "case_name": "임대차보증금",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "621911",
@@ -750,7 +856,11 @@
     ],
     "case_name": "임대차보증금[임대인 사망 후 공동상속인 전원이 임차인과 기존 임대차계약을 연장하는 내용의 임대차계약을 체결한 행위가 민법 제1026조 제1호의 법정단순승인사유에 해당하는지 여부가 문제 된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 2004. 3. 12. 선고 2003다63586 판결(공2004상, 622), 대법원 2012. 4. 16. 자 2011스191, 192 결정, 대법원 2015. 6. 23. 선고 2014다50913 판결, 대법원 2016. 12. 29. 선고 2013다73520 판결(공2017상, 209), 대법원 2023. 12. 28. 선고 2023다269399 판결 / [2] 대법원 2018. 12. 27. 선고 2015다73098 판결(공2019상, 349)"
+    ]
   },
   {
     "case_id": "620419",
@@ -771,7 +881,11 @@
     ],
     "case_name": "소유권이전등기절차이행등의소[원심이 망인의 자녀를 적법한 소송수계인으로 인정하여 판결을 선고하였는데, 원심 계속 중 자녀가 상속포기 신고를 하여 그 신고가 수리되었던 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 2019. 4. 25. 선고 2018다270951, 270968 판결, 대법원 2025. 7. 16. 선고 2025다211054 판결"
+    ]
   },
   {
     "case_id": "619467",
@@ -792,7 +906,11 @@
     ],
     "case_name": "승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
     "decision_type": "결정",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 2024. 8. 1. 선고 2024다204696 판결(공2024하, 1567) / [2] 대법원 2024. 1. 4. 선고 2022다285097 판결(공2024상, 345)"
+    ]
   },
   {
     "case_id": "618665",
@@ -812,7 +930,9 @@
     ],
     "case_name": "손해배상(기)[한정승인자가 가등기권자에게 본등기의무를 이행한 것이 부당변제에 해당하는지 여부가 문제 된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "623027",
@@ -833,7 +953,11 @@
     ],
     "case_name": "상속재산파산신청",
     "decision_type": "결정",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "민사",
+    "cited_cases": [
+      "[1] 대법원 1982. 8. 24. 선고 81누162 판결(공1982, 913), 대법원 1991. 4. 23. 선고 90누7395 판결(공1991, 1534), 대법원 2022. 6. 30. 선고 2018다268576 판결(공2022하, 1432) / [2] 대법원 2024. 1. 4. 선고 2022다285097 판결(공2024상, 345), 대법원 2026. 4. 10. 자 2024그834 결정(공2026상, 1127)"
+    ]
   },
   {
     "case_id": "618535",
@@ -853,7 +977,11 @@
     ],
     "case_name": "부당이득징수결정취소[산업재해보상보험법상 미지급 장해급여의 수급권자인 선순위 유족이 사망한 경우, 그 수급권이 위 유족의 민법상 상속인에게 상속되는지가 문제 된 사건]",
     "decision_type": "판결",
-    "precedent_level": "supreme_court"
+    "precedent_level": "supreme_court",
+    "case_type": "일반행정",
+    "cited_cases": [
+      "헌법재판소 2023. 10. 26. 선고 2020헌바310 전원재판부 결정(헌공325호, 1638)"
+    ]
   },
   {
     "case_id": "619483",
@@ -869,7 +997,9 @@
     "related_articles": [],
     "case_name": "청구이의",
     "decision_type": "판결",
-    "precedent_level": "appellate"
+    "precedent_level": "appellate",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "619231",
@@ -885,7 +1015,9 @@
     "related_articles": [],
     "case_name": "소유권이전등기말소등",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "612935",
@@ -901,7 +1033,9 @@
     "related_articles": [],
     "case_name": "취득세등부과처분취소",
     "decision_type": "판결",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "세무",
+    "cited_cases": []
   },
   {
     "case_id": "242115",
@@ -921,7 +1055,9 @@
     ],
     "case_name": "배당이의",
     "decision_type": "판결 : 항소",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "민사",
+    "cited_cases": []
   },
   {
     "case_id": "242119",
@@ -941,6 +1077,8 @@
     ],
     "case_name": "부당이득징수결정처분취소",
     "decision_type": "판결 : 항소",
-    "precedent_level": "other"
+    "precedent_level": "other",
+    "case_type": "일반행정",
+    "cited_cases": []
   }
 ]
