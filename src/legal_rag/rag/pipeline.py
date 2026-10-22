@@ -21,7 +21,7 @@ from legal_rag.rag.citations import (
     render_grounded_answer,
 )
 from legal_rag.rag.prompts import build_grounded_answer_messages
-from legal_rag.rag.retrieval import RetrievalResult
+from legal_rag.rag.retrieval import RetrievalResult, RetrievedChunk
 
 
 class LanguageModel(Protocol):
@@ -72,6 +72,7 @@ class RagState(TypedDict, total=False):
     question: str
     category: LegalCategory
     top_k: int
+    pinned_hits: tuple[RetrievedChunk, ...]
     retrieved_count: int
     evidence: tuple[LegalEvidence, ...]
     answer: GroundedAnswer
@@ -111,14 +112,22 @@ class StatuteRagPipeline:
         *,
         category: LegalCategory,
         top_k: int = 5,
+        pinned_hits: Sequence[RetrievedChunk] = (),
     ) -> GroundedAnswer:
+        """pinned_hits는 사용자가 선택한 항목(조문)으로, 검색 순위와 무관하게 근거 맨 앞에 둔다."""
+
         if not sanitized_question or not sanitized_question.strip():
             raise ValueError("마스킹된 질문이 필요합니다.")
         if top_k < 1:
             raise ValueError("top_k는 1 이상이어야 합니다.")
 
         state = self._graph.invoke(
-            {"question": sanitized_question, "category": category, "top_k": top_k}
+            {
+                "question": sanitized_question,
+                "category": category,
+                "top_k": top_k,
+                "pinned_hits": tuple(pinned_hits),
+            }
         )
         return state["answer"]
 
@@ -137,13 +146,16 @@ class StatuteRagPipeline:
             category=state["category"],
             top_k=state["top_k"],
         )
-        statute_evidence = build_statute_evidence(retrieval.hits)
+        pinned = tuple(state.get("pinned_hits", ()))
+        pinned_ids = {hit.chunk_id for hit in pinned}
+        statute_hits = (*pinned, *(hit for hit in retrieval.hits if hit.chunk_id not in pinned_ids))
+        statute_evidence = build_statute_evidence(statute_hits)
         case_evidence = build_case_evidence(
             retrieval.case_hits,
             start_id=len(statute_evidence) + 1,
         )
         return {
-            "retrieved_count": len(retrieval.hits),
+            "retrieved_count": len(statute_hits),
             "evidence": (*statute_evidence, *case_evidence),
         }
 

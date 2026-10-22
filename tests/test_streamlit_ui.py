@@ -13,6 +13,8 @@ from legal_rag.ui.streamlit_app import (
     CATEGORY_LABELS,
     EXAMPLE_QUESTIONS,
     STATUS_PRESENTATIONS,
+    article_question,
+    chat_history,
     parse_sensitive_terms,
     runtime_readiness,
 )
@@ -49,6 +51,22 @@ class StreamlitUiTests(unittest.TestCase):
 
         self.assertFalse(ready_without_key)
         self.assertTrue(ready_with_key)
+
+    def test_chat_history_is_kept_separately_per_article(self):
+        state = {}
+
+        chat_history(state, "labor:A").append({"role": "user", "content": "A 질문"})
+        chat_history(state, "labor:B").append({"role": "user", "content": "B 질문"})
+        chat_history(state, "labor:A").append({"role": "assistant", "content": "A 답변"})
+
+        self.assertEqual([m["content"] for m in chat_history(state, "labor:A")], ["A 질문", "A 답변"])
+        self.assertEqual([m["content"] for m in chat_history(state, "labor:B")], ["B 질문"])
+
+    def test_article_question_names_the_selected_article(self):
+        question = article_question("근로기준법 제27조 (해고사유 등의 서면통지)", "[PERSON_1]이 카톡으로 해고했어요")
+
+        self.assertTrue(question.startswith("[선택 조문: 근로기준법 제27조 (해고사유 등의 서면통지)]"))
+        self.assertIn("[PERSON_1]이 카톡으로 해고했어요", question)
 
 
 if __name__ == "__main__":

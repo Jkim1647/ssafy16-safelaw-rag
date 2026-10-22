@@ -183,6 +183,35 @@ class StatuteRagPipelineTests(unittest.TestCase):
             {("__start__", "retrieve"), ("retrieve", "generate"), ("generate", "__end__")},
         )
 
+    def test_pinned_article_is_always_first_evidence(self):
+        pinned = evidence_hit()
+        pipeline = StatuteRagPipeline(FakeRetriever([]), FakeLlm(valid_response()))
+
+        state = pipeline.graph.invoke(
+            {
+                "question": "서면통지 조문 질문",
+                "category": LegalCategory.LABOR,
+                "top_k": 5,
+                "pinned_hits": (pinned,),
+            }
+        )
+
+        self.assertEqual(state["evidence"][0].article_no, "제27조")
+        self.assertEqual(state["answer"].status, AnswerStatus.ANSWERED)
+
+    def test_pinned_article_is_not_duplicated_when_also_retrieved(self):
+        llm = FakeLlm(valid_response())
+        pipeline = StatuteRagPipeline(FakeRetriever([evidence_hit()]), llm)
+
+        answer = pipeline.answer(
+            "해고 통지를 받았습니다",
+            category=LegalCategory.LABOR,
+            pinned_hits=(evidence_hit(),),
+        )
+
+        self.assertEqual(answer.status, AnswerStatus.ANSWERED)
+        self.assertEqual(answer.retrieved_count, 1)
+
     def test_generate_node_receives_evidence_from_retrieve_node(self):
         retriever = FakeRetriever([evidence_hit()])
         llm = FakeLlm(valid_response())

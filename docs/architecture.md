@@ -65,7 +65,7 @@ flowchart LR
 
 | 노드 | 입력 상태 | 출력 상태 | 책임 |
 |---|---|---|---|
-| `retrieve` | `question`, `category`, `top_k` | `evidence`, `retrieved_count` | 마스킹된 질문으로 법령·판례 컬렉션을 검색하고 `[근거 N]` 번호를 붙인 근거 목록을 만든다 |
+| `retrieve` | `question`, `category`, `top_k`, `pinned_hits` | `evidence`, `retrieved_count` | 마스킹된 질문으로 법령·판례 컬렉션을 검색하고, 선택 조문이 있으면 맨 앞에 고정한 뒤 `[근거 N]` 번호를 붙인 근거 목록을 만든다 |
 | `generate` | `question`, `category`, `evidence` | `answer` | 근거가 없으면 `no_evidence`로 차단하고, 있으면 근거 제한 생성·인용 검증·최대 3회 교정을 수행한다 |
 
 근거 없음도 `generate`에서 처리해 조건 분기 없이 두 노드의 직선 흐름을 유지한다. 그래프 구조는 다음 명령으로 출력한다. 키와 색인이 없어도 실행된다.
@@ -73,6 +73,16 @@ flowchart LR
 ```powershell
 .\.venv\Scripts\python.exe scripts\show_rag_graph.py
 ```
+
+### 조문 항목 탐색과 조문별 상담
+
+법령 조문 하나를 서비스 항목으로 다룬다. `StatuteCatalog`는 `data/processed/statute_chunks.json`을 조문 단위로 묶고, 각 청크를 Chroma 메타데이터와 같은 형태로 보관한다.
+
+1. 사용자가 자연어 조건을 입력하면 로컬 마스킹 후 법령 색인에서 후보 10개를 검색한다.
+2. 조문 선별 프롬프트가 후보를 `C1`~`Cn` 번호와 280자 요약으로만 보고 조건에 직접 해당하는 번호와 이유를 JSON으로 반환한다. 번호 밖의 값과 중복은 버리고, 응답을 해석할 수 없으면 결과를 표시하지 않는다.
+3. 사용자가 카드나 전체 목록에서 조문을 고르면 그 조문 전용 채팅이 열린다.
+4. 질문마다 선택 조문의 청크를 `pinned_hits`로 `retrieve` 노드에 넘긴다. `retrieve`는 고정 청크를 검색 결과보다 앞에 두고 같은 청크는 한 번만 사용하므로 선택 조문은 항상 `[근거 1]`이 된다.
+5. 대화 기록은 `st.session_state`에 조문 ID별로 분리해 저장하고, 마스킹된 문장만 남긴다.
 
 ### 근거 제한 생성과 차단
 
