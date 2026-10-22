@@ -224,7 +224,14 @@ def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message:
             )
 
 
-def _render_result(st: Any, answer: GroundedAnswer, redaction_count: int) -> None:
+def _render_result(
+    st: Any,
+    answer: GroundedAnswer,
+    *,
+    original_text: str,
+    sanitized_text: str,
+    redaction_count: int,
+) -> None:
     presentation = STATUS_PRESENTATIONS[answer.status]
     st.subheader("검토 결과")
     message = f"{presentation.icon} {presentation.title}"
@@ -233,6 +240,24 @@ def _render_result(st: Any, answer: GroundedAnswer, redaction_count: int) -> Non
         f"개인정보 마스킹 {redaction_count}건 · 검색 근거 {answer.retrieved_count}건 · "
         f"상태 코드 `{answer.status.value}`"
     )
+
+    if redaction_count:
+        st.markdown("#### 개인정보 마스킹 비교")
+        original_column, sanitized_column = st.columns(2)
+        with original_column:
+            with st.container(border=True):
+                st.markdown("**입력 원문**")
+                st.caption("현재 브라우저·로컬 앱에서만 확인")
+                st.write(original_text)
+        with sanitized_column:
+            with st.container(border=True):
+                st.markdown("**외부 모델 전달문**")
+                st.caption("검색·임베딩·LLM에 사용")
+                st.write(sanitized_text)
+        st.caption(
+            "원문과 치환 매핑은 현재 요청을 처리하는 메모리에만 유지하며 "
+            "파일·로그·Vector DB에 저장하지 않습니다."
+        )
 
     if answer.is_answered:
         st.markdown(answer.content)
@@ -367,5 +392,11 @@ def main() -> None:
         return
 
     st.divider()
-    _render_result(st, answer, privacy.redaction_count)
+    _render_result(
+        st,
+        answer,
+        original_text=question,
+        sanitized_text=privacy.sanitized_text,
+        redaction_count=privacy.redaction_count,
+    )
 
