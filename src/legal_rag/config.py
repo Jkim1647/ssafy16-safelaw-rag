@@ -84,7 +84,8 @@ class Settings:
             ),
             gms_chat_model=chat_model,
             law_api_oc=os.getenv("LAW_API_OC") or None,
-            gms_query_model=os.getenv("GMS_QUERY_MODEL") or chat_model,
+            # gpt-5-nano는 짧은 검색어 JSON에도 26~34초가 걸려 응답 시간의 대부분을 차지했다.
+            gms_query_model=os.getenv("GMS_QUERY_MODEL") or "gpt-5.4-mini",
             gms_answer_model=os.getenv("GMS_ANSWER_MODEL") or "gpt-5.4-mini",
             statute_chunk_size=statute_chunk_size,
             statute_chunk_overlap=_int_env(
@@ -120,7 +121,7 @@ class Settings:
 
     @property
     def query_model(self) -> str:
-        """검색어 변환용 모델. 미설정 시 기존 채팅 모델을 사용한다."""
+        """검색어 변환용 모델. 미설정 시 gpt-5.4-mini를 사용한다."""
 
         return self.gms_query_model or self.gms_chat_model
 

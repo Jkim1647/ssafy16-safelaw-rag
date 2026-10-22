@@ -46,7 +46,7 @@ def main() -> int:
     )
     llm = GmsChatClient(
         api_key,
-        model_name=os.getenv("GMS_QUERY_MODEL") or os.getenv("GMS_CHAT_MODEL", "gpt-5-nano"),
+        model_name=Settings.from_environment().query_model,
         base_url=base_url,
     )
     store = ChromaStatuteVectorStore(ROOT / "data" / "indexes" / "statutes")

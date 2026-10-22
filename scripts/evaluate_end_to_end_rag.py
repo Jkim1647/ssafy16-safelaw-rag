@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from legal_rag.adapters.gms_embeddings import GmsEmbeddingClient  # noqa: E402
 from legal_rag.adapters.gms_llm import GmsChatClient  # noqa: E402
 from legal_rag.adapters.vector_store import ChromaCaseVectorStore, ChromaStatuteVectorStore  # noqa: E402
+from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import LegalCategory  # noqa: E402
 from legal_rag.rag.citations import CaseEvidence  # noqa: E402
 from legal_rag.rag.pipeline import AnswerStatus, GroundedAnswer, StatuteRagPipeline  # noqa: E402
@@ -197,7 +198,7 @@ def main() -> int:
             raise ValueError("존재하지 않는 평가 문항 ID가 있습니다.")
     base_url = os.getenv("GMS_BASE_URL", "https://gms.ssafy.io/gmsapi/api.openai.com/v1")
     embedding_model = os.getenv("GMS_EMBEDDING_MODEL", "text-embedding-3-small")
-    query_model = os.getenv("GMS_QUERY_MODEL") or os.getenv("GMS_CHAT_MODEL", "gpt-5-nano")
+    query_model = Settings.from_environment().query_model
     answer_model = os.getenv("GMS_ANSWER_MODEL") or "gpt-5.4-mini"
     pipeline = build_pipeline(api_key, base_url, embedding_model, query_model, answer_model)
     saved = {}

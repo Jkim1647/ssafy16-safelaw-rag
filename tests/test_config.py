@@ -51,6 +51,18 @@ class RagSettingsTests(unittest.TestCase):
         self.assertEqual((settings.case_chunk_size, settings.case_chunk_overlap), (900, 0))
         self.assertEqual(settings.rag_top_k, 3)
 
+    def test_query_model_defaults_to_fast_answer_model_and_can_be_overridden(self):
+        environment = {key: value for key, value in os.environ.items()
+                       if key not in ("GMS_QUERY_MODEL", "GMS_CHAT_MODEL", "GMS_ANSWER_MODEL")}
+        with mock.patch.dict(os.environ, environment, clear=True), mock.patch("legal_rag.config.load_dotenv"):
+            default = Settings.from_environment()
+        with mock.patch.dict(os.environ, {**environment, "GMS_QUERY_MODEL": "gpt-5-nano"}, clear=True), \
+                mock.patch("legal_rag.config.load_dotenv"):
+            override = Settings.from_environment()
+
+        self.assertEqual(default.query_model, "gpt-5.4-mini")
+        self.assertEqual(override.query_model, "gpt-5-nano")
+
     def test_search_mode_settings(self):
         defaults = load()
         mmr = load(RAG_SEARCH_MODE="MMR", RAG_MMR_FETCH_K="20", RAG_MMR_LAMBDA="0.7")
