@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from legal_rag.adapters.gms_embeddings import GmsEmbeddingClient  # noqa: E402
 from legal_rag.adapters.gms_llm import GmsChatClient  # noqa: E402
 from legal_rag.adapters.vector_store import ChromaStatuteVectorStore  # noqa: E402
+from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import LegalCategory  # noqa: E402
 from legal_rag.rag.retrieval import ExpandedStatuteRetriever, LegalQueryExpander  # noqa: E402
 from legal_rag.security.redaction import PrivacyGuard  # noqa: E402
@@ -124,7 +125,7 @@ def main() -> int:
 
     base_url = os.getenv("GMS_BASE_URL", "https://gms.ssafy.io/gmsapi/api.openai.com/v1")
     embedding_model = os.getenv("GMS_EMBEDDING_MODEL", "text-embedding-3-small")
-    chat_model = os.getenv("GMS_CHAT_MODEL", "gpt-5-nano")
+    chat_model = Settings.from_environment().query_model
     embedder = GmsEmbeddingClient(api_key, model_name=embedding_model, base_url=base_url)
     llm = GmsChatClient(api_key, model_name=chat_model, base_url=base_url)
     store = ChromaStatuteVectorStore(ROOT / "data" / "indexes" / "statutes")
