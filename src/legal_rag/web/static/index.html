@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SafeLaw | 근거 기반 생활법률 안내</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="brand">SafeLaw</p>
+      <p id="readiness" class="readiness" role="status">시스템 상태 확인 중…</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="kicker">Privacy-first legal RAG</p>
+    <h1>상황을 적으면 관련 법령과 판례를 확인합니다</h1>
+    <p class="lead">검색된 법령과 공개 판례 원문으로 검증할 수 있는 내용만 안내하고, 근거가 부족하면 답변하지 않습니다.</p>
+    <p class="privacy">🔒 입력한 개인정보는 외부 호출 전에 서버에서 마스킹됩니다. 정확한 이름·전화번호·상세 주소는 가능하면 입력하지 마세요.</p>
+
+    <form id="review-form" class="panel" novalidate>
+      <label for="category">상담 분야</label>
+      <select id="category" name="category" required>
+        <option value="">상담 받으실 분야를 선택해 주세요</option>
+      </select>
+
+      <details id="examples" class="examples" hidden>
+        <summary>질문 예시 보기</summary>
+        <ul id="example-list"></ul>
+      </details>
+
+      <label for="question">상황을 구체적으로 적어주세요</label>
+      <textarea id="question" name="question" rows="7" maxlength="2000" required
+        placeholder="이름·전화번호·상세 주소 등 개인정보는 입력하지 않는 것을 권장합니다. 입력된 식별정보는 외부 호출 전에 마스킹됩니다."></textarea>
+      <p class="counter"><span id="question-count">0</span> / 2,000자</p>
+
+      <label for="extra-terms">추가로 가릴 이름·회사명 (선택, 쉼표로 구분)</label>
+      <input id="extra-terms" name="extra_terms" type="text" placeholder="홍길동, 세이프로 주식회사">
+
+      <label class="check">
+        <input id="include-checklist" type="checkbox" checked>
+        내 상황 쟁점 체크리스트도 함께 만들기
+      </label>
+
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+      <button id="submit" type="submit" disabled>관련 법령·판례 검토하기</button>
+    </form>
+
+    <p id="progress" class="progress" role="status" aria-live="polite" hidden>
+      <span class="spinner" aria-hidden="true"></span>
+      개인정보를 가린 뒤 관련 법령·판례와 근거 문구를 검증하고 있습니다… (30초 이상 걸릴 수 있습니다)
+    </p>
+
+    <section id="result" class="result" aria-labelledby="result-title" hidden>
+      <h2 id="result-title">검토 결과</h2>
+      <p id="status-badge" class="badge"></p>
+      <p id="result-meta" class="meta"></p>
+      <details id="masked" class="masked" hidden>
+        <summary>외부 모델에 전달된 마스킹 문장 보기</summary>
+        <p id="masked-text"></p>
+      </details>
+      <article id="answer" class="answer"></article>
+      <div id="sources" class="sources"></div>
+    </section>
+
+    <section id="checklist" class="checklist" aria-labelledby="checklist-title" hidden>
+      <h2 id="checklist-title">내 상황 쟁점 체크리스트</h2>
+      <p class="meta">검색된 법령·판례가 요구하는 판단 요소마다 입력한 상황에 그 사실이 나와 있는지만 표시합니다. 요건 충족이나 결과를 판단한 것이 아니며, 확인한 항목은 직접 체크해 보세요.</p>
+      <p id="checklist-message" class="notice" hidden></p>
+      <ol id="checklist-items" class="checklist-items"></ol>
+      <div id="checklist-progress" class="checklist-progress" hidden>
+        <progress id="checklist-bar" max="1" value="0"></progress>
+        <span id="checklist-count"></span>
+      </div>
+      <p id="checklist-dropped" class="meta" hidden></p>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    SafeLaw는 법률정보 검색 보조 도구입니다. 변호사의 법률 자문을 대체하거나 승소 가능성을 예측하지 않습니다.
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

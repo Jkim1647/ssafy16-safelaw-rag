@@ -316,16 +316,56 @@ def _run_article_scenario(client: CdpClient, url: str, output_dir: Path) -> None
     _screenshot(client, output_dir / "safelaw-article-chat.png")
 
 
+def _run_web_scenario(client: CdpClient, web_url: str, output_dir: Path) -> None:
+    """심화 F2013 HTML·CSS·JS 화면에서 질문을 제출하고 결과를 캡처한다."""
+    client.call("Page.navigate", {"url": web_url})
+    _wait_until(
+        lambda: bool(client.evaluate(
+            "Boolean(document.getElementById('submit')) && !document.getElementById('submit').disabled"
+        )),
+        timeout=30,
+        message="웹 화면이 준비되지 않았습니다. uvicorn 서버와 GMS_KEY를 확인해 주세요.",
+    )
+    question = json.dumps(
+        "팀장이 카카오톡으로 내일부터 나오지 말라고 했어요. 연락처는 010-0000-0000입니다. "
+        "해고 사유와 날짜가 적힌 문서는 받지 못했습니다.",
+        ensure_ascii=False,
+    )
+    client.evaluate(
+        f"""
+        (() => {{
+          const category = document.getElementById('category');
+          category.value = 'labor';
+          category.dispatchEvent(new Event('change', {{bubbles: true}}));
+          document.getElementById('question').value = {question};
+          document.getElementById('submit').click();
+        }})()
+        """
+    )
+    _wait_until(
+        lambda: bool(client.evaluate(
+            "document.getElementById('status-badge').textContent.length > 0"
+            " || document.getElementById('form-error').textContent.length > 0"
+        )),
+        timeout=180,
+        message="웹 화면 검토 결과를 확인하지 못했습니다.",
+    )
+    time.sleep(1)
+    _scroll_to(client, "document.getElementById('result')")
+    _screenshot(client, output_dir / "safelaw-web-frontend.png")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="SafeLaw README용 Streamlit 화면 캡처")
     parser.add_argument("--url", default="http://localhost:8501")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "docs" / "assets")
     parser.add_argument(
         "--scenario",
-        choices=("all", "grounded", "privacy", "refusal", "article"),
+        choices=("all", "grounded", "privacy", "refusal", "article", "web"),
         default="all",
         help="캡처할 화면. 기본값은 전체입니다.",
     )
+    parser.add_argument("--web-url", default="http://localhost:8000", help="F2013 웹 화면 주소 (web 장면 전용)")
     args = parser.parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -409,6 +449,9 @@ def main() -> None:
 
         if args.scenario in ("all", "article"):
             _run_article_scenario(client, args.url, args.output_dir)
+
+        if args.scenario == "web":
+            _run_web_scenario(client, args.web_url, args.output_dir)
 
         for path in sorted(args.output_dir.glob("safelaw-*.png")):
             print(f"{path.relative_to(ROOT)}: {path.stat().st_size:,} bytes")
