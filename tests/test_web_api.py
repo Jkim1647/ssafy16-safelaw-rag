@@ -120,8 +120,13 @@ class WebApiTests(unittest.TestCase):
         invalid = client().post("/api/review", json={"category": "tax", "question": ""})
         not_ready = client(ready=False).post("/api/review", json={"category": "labor", "question": "해고"})
 
+        too_long_term = client().post(
+            "/api/review", json={"category": "labor", "question": "해고", "extra_terms": ["가" * 51]}
+        )
+
         self.assertEqual(invalid.status_code, 422)
         self.assertEqual(set(invalid.json()), {"error"})
+        self.assertEqual(too_long_term.status_code, 422)
         self.assertEqual(not_ready.status_code, 503)
         self.assertEqual(not_ready.json()["error"], ".env에 GMS_KEY를 설정해 주세요.")
 

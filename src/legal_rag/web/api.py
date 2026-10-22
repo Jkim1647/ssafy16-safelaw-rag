@@ -14,7 +14,7 @@ import threading
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -47,7 +47,7 @@ logger = logging.getLogger(__name__)
 class ReviewRequest(BaseModel):
     category: LegalCategory
     question: str = Field(min_length=1, max_length=2000)
-    extra_terms: list[str] = Field(default_factory=list, max_length=20)
+    extra_terms: list[Annotated[str, Field(max_length=50)]] = Field(default_factory=list, max_length=20)
     include_checklist: bool = True
 
 

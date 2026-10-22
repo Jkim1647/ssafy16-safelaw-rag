@@ -110,9 +110,19 @@ class PrivacyGuard:
             sanitized = rule.pattern.sub(replace, sanitized)
 
         terms = sorted({term.strip() for term in extra_terms if term and term.strip()}, key=len, reverse=True)
-        for term in terms:
-            placeholder = placeholder_for("CUSTOM", term)
-            sanitized = sanitized.replace(term, placeholder)
+        if terms:
+            # 한 번의 패스로 치환하고 이미 넣은 자리표시자는 그대로 둔다. 단어별로 차례로 바꾸면
+            # "C", "1" 같은 짧은 단어가 앞서 넣은 자리표시자를 다시 바꿔 결과가 기하급수로 커진다.
+            term_set = set(terms)
+            pattern = re.compile(
+                r"\[[A-Z]+_\d+\]|" + "|".join(re.escape(term) for term in terms)
+            )
+
+            def replace_term(match: re.Match[str]) -> str:
+                value = match.group(0)
+                return placeholder_for("CUSTOM", value) if value in term_set else value
+
+            sanitized = pattern.sub(replace_term, sanitized)
 
         return RedactionResult(sanitized_text=sanitized, entities=tuple(entities))
 
