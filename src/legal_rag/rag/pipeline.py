@@ -1,11 +1,13 @@
-"""법령 검색, 근거 제한 생성, 인용 검증을 연결한다."""
+"""법령 검색, 근거 제한 생성, 인용 검증을 LangGraph retrieve/generate 노드로 연결한다."""
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import Protocol
+from typing import Any, Protocol, TypedDict
+
+from langgraph.graph import END, START, StateGraph
 
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.citations import (
@@ -66,8 +68,22 @@ class GroundedAnswer:
         return self.status is AnswerStatus.ANSWERED
 
 
+class RagState(TypedDict, total=False):
+    question: str
+    category: LegalCategory
+    top_k: int
+    retrieved_count: int
+    evidence: tuple[LegalEvidence, ...]
+    answer: GroundedAnswer
+
+
 class StatuteRagPipeline:
-    """마스킹된 질문만 받아 검증을 통과한 답변만 반환한다."""
+    """마스킹된 질문만 받아 검증을 통과한 답변만 반환한다.
+
+    retrieve 노드는 법령·판례 근거를 모으고, generate 노드는 그 근거만으로
+    답변을 생성·검증한다. 근거가 없을 때의 차단도 generate가 맡아 그래프를
+    두 노드의 직선 흐름으로 유지한다.
+    """
 
     def __init__(
         self,
@@ -81,6 +97,13 @@ class StatuteRagPipeline:
         self._retriever = retriever
         self._answer_llm = answer_llm
         self._max_generation_attempts = max_generation_attempts
+        self._graph = self._build_graph()
+
+    @property
+    def graph(self) -> Any:
+        """컴파일된 LangGraph. 구조 출력과 노드 단위 검증에 사용한다."""
+
+        return self._graph
 
     def answer(
         self,
@@ -94,21 +117,49 @@ class StatuteRagPipeline:
         if top_k < 1:
             raise ValueError("top_k는 1 이상이어야 합니다.")
 
+        state = self._graph.invoke(
+            {"question": sanitized_question, "category": category, "top_k": top_k}
+        )
+        return state["answer"]
+
+    def _build_graph(self) -> Any:
+        builder = StateGraph(RagState)
+        builder.add_node("retrieve", self._retrieve_node)
+        builder.add_node("generate", self._generate_node)
+        builder.add_edge(START, "retrieve")
+        builder.add_edge("retrieve", "generate")
+        builder.add_edge("generate", END)
+        return builder.compile()
+
+    def _retrieve_node(self, state: RagState) -> RagState:
         retrieval = self._retriever.retrieve(
-            sanitized_question.strip(),
-            category=category,
-            top_k=top_k,
+            state["question"].strip(),
+            category=state["category"],
+            top_k=state["top_k"],
         )
         statute_evidence = build_statute_evidence(retrieval.hits)
         case_evidence = build_case_evidence(
             retrieval.case_hits,
             start_id=len(statute_evidence) + 1,
         )
-        evidence: tuple[LegalEvidence, ...] = (*statute_evidence, *case_evidence)
-        if not evidence:
-            return self._blocked(AnswerStatus.NO_EVIDENCE, retrieved_count=len(retrieval.hits))
+        return {
+            "retrieved_count": len(retrieval.hits),
+            "evidence": (*statute_evidence, *case_evidence),
+        }
 
-        messages = build_grounded_answer_messages(sanitized_question.strip(), category, evidence)
+    def _generate_node(self, state: RagState) -> RagState:
+        evidence = state["evidence"]
+        if not evidence:
+            return {"answer": self._blocked(AnswerStatus.NO_EVIDENCE, retrieved_count=state["retrieved_count"])}
+        return {"answer": self._generate_answer(state["question"].strip(), state["category"], evidence)}
+
+    def _generate_answer(
+        self,
+        sanitized_question: str,
+        category: LegalCategory,
+        evidence: tuple[LegalEvidence, ...],
+    ) -> GroundedAnswer:
+        messages = build_grounded_answer_messages(sanitized_question, category, evidence)
         validation_failures = 0
         retry_reason = ""
         for attempt in range(1, self._max_generation_attempts + 1):

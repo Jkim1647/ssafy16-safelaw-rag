@@ -172,6 +172,31 @@ class StatuteRagPipelineTests(unittest.TestCase):
 
         self.assertEqual(answer.status, AnswerStatus.GENERATION_FAILED)
 
+    def test_graph_has_only_retrieve_and_generate_nodes(self):
+        pipeline = StatuteRagPipeline(FakeRetriever([evidence_hit()]), FakeLlm(valid_response()))
+
+        graph = pipeline.graph.get_graph()
+
+        self.assertEqual(set(graph.nodes) - {"__start__", "__end__"}, {"retrieve", "generate"})
+        self.assertEqual(
+            {(edge.source, edge.target) for edge in graph.edges},
+            {("__start__", "retrieve"), ("retrieve", "generate"), ("generate", "__end__")},
+        )
+
+    def test_generate_node_receives_evidence_from_retrieve_node(self):
+        retriever = FakeRetriever([evidence_hit()])
+        llm = FakeLlm(valid_response())
+        pipeline = StatuteRagPipeline(retriever, llm)
+
+        state = pipeline.graph.invoke(
+            {"question": "  해고 통지를 받았습니다  ", "category": LegalCategory.LABOR, "top_k": 5}
+        )
+
+        self.assertEqual(retriever.received_query, "해고 통지를 받았습니다")
+        self.assertEqual(len(state["evidence"]), 1)
+        self.assertIn("제27조", llm.messages[-1]["content"])
+        self.assertEqual(state["answer"].status, AnswerStatus.ANSWERED)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -9,6 +9,7 @@ description = "Privacy-first Korean legal statute and precedent RAG navigator"
 requires-python = ">=3.12"
 dependencies = [
     "chromadb>=1.1,<2",
+    "langgraph>=1.2.10,<2",
     "python-dotenv>=1.0,<2",
     "streamlit>=1.40,<2",
     "websocket-client>=1.8,<2",
