@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import LegalCategory, StatuteDocument  # noqa: E402
 from legal_rag.rag.chunking import chunk_statutes  # noqa: E402
 
@@ -48,8 +49,11 @@ def main() -> int:
     parser.add_argument("--input", type=Path, default=ROOT / "data" / "processed" / "statutes.json")
     parser.add_argument("--output", type=Path, default=ROOT / "data" / "processed" / "statute_chunks.json")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "processed" / "statute_chunks_manifest.json")
-    parser.add_argument("--max-chars", type=int, default=1200)
-    parser.add_argument("--overlap-chars", type=int, default=150)
+    settings = Settings.from_environment()
+    parser.add_argument("--max-chars", type=int, default=settings.statute_chunk_size,
+                        help="기본값: .env의 STATUTE_CHUNK_SIZE")
+    parser.add_argument("--overlap-chars", type=int, default=settings.statute_chunk_overlap,
+                        help="기본값: .env의 STATUTE_CHUNK_OVERLAP")
     args = parser.parse_args()
 
     documents = load_documents(args.input)

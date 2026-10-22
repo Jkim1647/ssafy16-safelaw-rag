@@ -212,6 +212,22 @@ class StatuteRagPipelineTests(unittest.TestCase):
         self.assertEqual(answer.status, AnswerStatus.ANSWERED)
         self.assertEqual(answer.retrieved_count, 1)
 
+    def test_retrieve_evidence_respects_top_k(self):
+        second = RetrievedChunk(
+            chunk_id="labor-26",
+            document="사용자는 근로자를 해고하려면 적어도 30일 전에 예고를 하여야 한다.",
+            metadata={**evidence_hit().metadata, "article_no": "제26조", "article_title": "해고의 예고",
+                      "source_url": "https://www.law.go.kr/법령/근로기준법/제26조"},
+            distance=0.2,
+        )
+        pipeline = StatuteRagPipeline(FakeRetriever([evidence_hit(), second]), FakeLlm(valid_response()))
+
+        one = pipeline.retrieve_evidence("해고 통지", category=LegalCategory.LABOR, top_k=1)
+        two = pipeline.retrieve_evidence("해고 통지", category=LegalCategory.LABOR, top_k=2)
+
+        self.assertEqual([item.article_no for item in one], ["제27조"])
+        self.assertEqual([item.article_no for item in two], ["제27조", "제26조"])
+
     def test_generate_node_receives_evidence_from_retrieve_node(self):
         retriever = FakeRetriever([evidence_hit()])
         llm = FakeLlm(valid_response())

@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from legal_rag.adapters.gms_embeddings import GmsEmbeddingClient  # noqa: E402
 from legal_rag.adapters.gms_llm import GmsChatClient  # noqa: E402
 from legal_rag.adapters.vector_store import ChromaStatuteVectorStore  # noqa: E402
+from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import LegalCategory  # noqa: E402
 from legal_rag.rag.retrieval import ExpandedStatuteRetriever, LegalQueryExpander  # noqa: E402
 from legal_rag.security.redaction import PrivacyGuard  # noqa: E402
@@ -27,7 +28,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="SafeLaw 법령 의미 검색")
     parser.add_argument("query", help="검색할 자연어 질문")
     parser.add_argument("--category", choices=[item.value for item in LegalCategory], required=True)
-    parser.add_argument("--top-k", type=int, default=5)
+    parser.add_argument("--top-k", type=int, default=Settings.from_environment().rag_top_k,
+                        help="기본값: .env의 RAG_TOP_K")
     args = parser.parse_args()
 
     api_key = os.getenv("GMS_KEY", "").strip()

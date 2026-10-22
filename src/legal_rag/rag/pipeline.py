@@ -140,13 +140,28 @@ class StatuteRagPipeline:
         builder.add_edge("generate", END)
         return builder.compile()
 
-    def _retrieve_node(self, state: RagState) -> RagState:
-        retrieval = self._retriever.retrieve(
-            state["question"].strip(),
-            category=state["category"],
-            top_k=state["top_k"],
-        )
-        pinned = tuple(state.get("pinned_hits", ()))
+    def retrieve_evidence(
+        self,
+        sanitized_question: str,
+        *,
+        category: LegalCategory,
+        top_k: int = 5,
+        pinned_hits: Sequence[RetrievedChunk] = (),
+    ) -> tuple[LegalEvidence, ...]:
+        """retrieve 노드와 같은 방식으로 근거 목록만 만든다. Top-k별 근거 비교에 사용한다."""
+
+        if top_k < 1:
+            raise ValueError("top_k는 1 이상이어야 합니다.")
+        return self._collect_evidence(sanitized_question, category, top_k, tuple(pinned_hits))[1]
+
+    def _collect_evidence(
+        self,
+        question: str,
+        category: LegalCategory,
+        top_k: int,
+        pinned: tuple[RetrievedChunk, ...],
+    ) -> tuple[int, tuple[LegalEvidence, ...]]:
+        retrieval = self._retriever.retrieve(question.strip(), category=category, top_k=top_k)
         pinned_ids = {hit.chunk_id for hit in pinned}
         statute_hits = (*pinned, *(hit for hit in retrieval.hits if hit.chunk_id not in pinned_ids))
         statute_evidence = build_statute_evidence(statute_hits)
@@ -154,10 +169,16 @@ class StatuteRagPipeline:
             retrieval.case_hits,
             start_id=len(statute_evidence) + 1,
         )
-        return {
-            "retrieved_count": len(statute_hits),
-            "evidence": (*statute_evidence, *case_evidence),
-        }
+        return len(statute_hits), (*statute_evidence, *case_evidence)
+
+    def _retrieve_node(self, state: RagState) -> RagState:
+        retrieved_count, evidence = self._collect_evidence(
+            state["question"],
+            state["category"],
+            state["top_k"],
+            tuple(state.get("pinned_hits", ())),
+        )
+        return {"retrieved_count": retrieved_count, "evidence": evidence}
 
     def _generate_node(self, state: RagState) -> RagState:
         evidence = state["evidence"]

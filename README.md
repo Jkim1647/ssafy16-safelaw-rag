@@ -80,6 +80,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ audit_case_evaluation_labels.py # 판례 평가 라벨·원문 링크 일관성 검사
 │  ├─ inspect_chroma.py           # Chroma 문서·메타데이터 조회
 │  ├─ show_rag_graph.py           # LangGraph retrieve/generate 구조 출력
+│  ├─ show_evidence.py            # Top-k별 근거 목록 비교
 │  ├─ capture_ui_screenshots.py   # README 제출용 UI 캡처 자동 생성
 │  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
 └─ tests/                          # 보안·도메인·RAG 검증
@@ -189,6 +190,41 @@ python scripts/build_statute_index.py
 - 법령 색인 위치: `data/indexes/statutes/` — 재생성 가능한 산출물이므로 Git 제외
 
 현재 데이터에서는 381개 조문이 386개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
+
+### 청크·근거 수 설정
+
+청크 크기, 중복 길이, 근거 수(Top-k)는 코드가 아니라 `.env`에서 바꿉니다. 값을 비우면 아래 기본값을 사용하고, 범위를 벗어나면 시작 시 오류를 냅니다.
+
+| 환경변수 | 기본값 | 사용 위치 |
+|---|---:|---|
+| `STATUTE_CHUNK_SIZE` / `STATUTE_CHUNK_OVERLAP` | 1200 / 150 | `build_statute_chunks.py` |
+| `CASE_CHUNK_SIZE` / `CASE_CHUNK_OVERLAP` | 1400 / 180 | `build_case_chunks.py`, 질문 시 판례 증분 색인 |
+| `RAG_TOP_K` | 5 | Streamlit 두 탭, `answer_statutes.py`, `search_statutes.py`, `show_evidence.py` |
+
+청크 설정을 바꾸면 청크 생성과 색인 스크립트를 다시 실행해야 검색에 반영됩니다. 스크립트의 `--max-chars`, `--overlap-chars`, `--top-k` 옵션은 `.env`보다 우선합니다. 평가 스크립트는 기준선 재현을 위해 기존 고정값을 유지합니다.
+
+2026-10-22 같은 데이터셋으로 값만 바꿔 측정한 청크 수입니다.
+
+| 문서 | 크기 / 중복 | 청크 수 |
+|---|---|---:|
+| 법령 381조문 | **1200 / 150 (기본)** | **386** |
+| 법령 381조문 | 800 / 150 | 401 |
+| 법령 381조문 | 500 / 100 | 436 |
+| 법령 381조문 | 300 / 50 | 531 |
+| 판례 50건 | **1400 / 180 (기본)** | **652** |
+| 판례 50건 | 1400 / 0 | 630 |
+| 판례 50건 | 1000 / 200 | 912 |
+| 판례 50건 | 700 / 100 | 1265 |
+
+법령은 대부분 조문이 1,200자보다 짧아 크기를 줄여도 청크 수가 완만하게 늘고, 판례는 본문이 길어 크기와 중복에 민감합니다. 조문 하나가 한 청크에 온전히 남는 1,200자를 법령 기본값으로 유지했습니다.
+
+Top-k별 근거 목록은 답변을 생성하지 않고 확인할 수 있습니다. 판례 실시간 보강은 끈 상태로 실행합니다.
+
+```powershell
+python scripts/show_evidence.py "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요" --category labor --top-k 1 3 5 8
+```
+
+같은 질문에서 Top-k 1은 법령 1건·판례 1건, 3은 3·3건, 5는 5·5건, 8은 법령 8건·판례 7건(중복 사건번호 제거)으로 근거가 늘었습니다. 해고 서면통지 조문(제27조)은 Top-k 3부터 근거에 들어왔고, Top-k 8에서는 제35조·제59조·제104조처럼 질문과 관련이 약한 조문도 함께 들어왔습니다. 검색어 변환 LLM의 출력이 실행마다 조금씩 달라 같은 Top-k에서도 순서는 바뀔 수 있습니다. 근거가 너무 적으면 핵심 조문을 놓치고, 너무 많으면 생성 모델에 관련 없는 근거가 섞이므로 기본값 5를 유지합니다.
 
 ### Chroma DB 내용 확인
 

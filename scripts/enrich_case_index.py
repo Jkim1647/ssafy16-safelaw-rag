@@ -11,6 +11,7 @@ from legal_rag.adapters.gms_embeddings import GmsEmbeddingClient  # noqa: E402
 from legal_rag.adapters.gms_llm import GmsChatClient  # noqa: E402
 from legal_rag.adapters.vector_store import ChromaCaseVectorStore  # noqa: E402
 from legal_rag.collectors.court_cases import CourtCaseOpenApiClient  # noqa: E402
+from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import LegalCategory  # noqa: E402
 from legal_rag.rag.case_enrichment import IncrementalCaseEnricher  # noqa: E402
 from legal_rag.rag.case_selection import CaseCandidateSelector  # noqa: E402
@@ -32,6 +33,7 @@ def main() -> int:
     query_model = os.getenv("GMS_QUERY_MODEL") or os.getenv("GMS_CHAT_MODEL", "gpt-5-nano")
     answer_model = os.getenv("GMS_ANSWER_MODEL") or "gpt-5.4-mini"
     category = LegalCategory(args.category)
+    settings = Settings.from_environment()
     sanitized = PrivacyGuard().redact(args.query).sanitized_text
     plan = LegalQueryExpander(GmsChatClient(gms_key, model_name=query_model, base_url=base_url)).expand(sanitized, category)
     result = IncrementalCaseEnricher(
@@ -42,6 +44,7 @@ def main() -> int:
         dynamic_dataset=ROOT / "data/cache/dynamic_cases.json",
         history_path=ROOT / "data/cache/case_collection_history.json",
         selector=CaseCandidateSelector(GmsChatClient(gms_key, model_name=answer_model, base_url=base_url)),
+        chunk_max_chars=settings.case_chunk_size, chunk_overlap_chars=settings.case_chunk_overlap,
     ).enrich(plan, category=category)
     print(json.dumps({"cache_hit": result.cache_hit, "candidate_count": result.candidate_count,
         "new_case_count": result.new_case_count, "new_chunk_count": result.new_chunk_count,
