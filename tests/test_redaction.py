@@ -39,6 +39,21 @@ class PrivacyGuardTests(unittest.TestCase):
         self.assertNotIn("테헤란로 123", result.sanitized_text)
         self.assertIn("[ADDRESS_1]", result.sanitized_text)
 
+    def test_submission_example_has_stable_masking_preview(self):
+        original = (
+            "이름: 홍길동, 주민번호 991332-1234567, 전화 010-0000-0000, "
+            "메일 gildong@example.com, 주소 서울특별시 강남구 테헤란로 000입니다."
+        )
+
+        result = self.guard.redact(original)
+
+        self.assertEqual(
+            result.sanitized_text,
+            "이름: [PERSON_1], 주민번호 [RRN_1], 전화 [PHONE_1], "
+            "메일 [EMAIL_1], 주소 [ADDRESS_1]입니다.",
+        )
+        self.assertEqual(result.redaction_count, 5)
+
     def test_repr_does_not_include_original_secret(self):
         result = self.guard.redact("전화번호는 010-9999-8888입니다.")
         self.assertNotIn("010-9999-8888", repr(result))

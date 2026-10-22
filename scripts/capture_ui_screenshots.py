@@ -206,6 +206,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="SafeLaw README용 Streamlit 화면 캡처")
     parser.add_argument("--url", default="http://localhost:8501")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "docs" / "assets")
+    parser.add_argument(
+        "--scenario",
+        choices=("all", "grounded", "privacy", "refusal"),
+        default="all",
+        help="캡처할 화면. 기본값은 전체입니다.",
+    )
     args = parser.parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -236,38 +242,43 @@ def main() -> None:
             {"width": 900, "height": 1200, "deviceScaleFactor": 1, "mobile": False},
         )
 
-        _load_fresh(client, args.url)
-        _submit(
-            client,
-            category="근로계약·부당해고",
-            query=(
-                "회사에서 카카오톡으로 내일부터 나오지 말라고 했습니다. "
-                "해고 사유와 시기를 적은 서면 통지를 받지 못했는데 해고 효력은 어떻게 되나요?"
-            ),
-        )
-        _wait_for_text(client, "근거 검증 완료")
-        _capture(client, args.output_dir / "safelaw-grounded-answer.png", anchor_text="검토 결과")
+        if args.scenario in ("all", "grounded"):
+            _load_fresh(client, args.url)
+            _submit(
+                client,
+                category="근로계약·부당해고",
+                query=(
+                    "회사에서 카카오톡으로 내일부터 나오지 말라고 했습니다. "
+                    "해고 사유와 시기를 적은 서면 통지를 받지 못했는데 해고 효력은 어떻게 되나요?"
+                ),
+            )
+            _wait_for_text(client, "근거 검증 완료")
+            _capture(client, args.output_dir / "safelaw-grounded-answer.png", anchor_text="검토 결과")
 
-        _load_fresh(client, args.url)
-        _submit(
-            client,
-            category="전세·임대차 보증금",
-            query=(
-                "홍길동입니다. 전화번호는 010-1234-5678이고 서울시 강남구 테헤란로 123에 살고 있습니다. "
-                "전입신고와 확정일자를 마친 세입자인데 집이 경매로 넘어갔습니다."
-            ),
-        )
-        _wait_for_text(client, "개인정보 마스킹 1건")
-        _capture(client, args.output_dir / "safelaw-privacy-mask.png", anchor_text="검토 결과")
+        if args.scenario in ("all", "privacy"):
+            _load_fresh(client, args.url)
+            _submit(
+                client,
+                category="전세·임대차 보증금",
+                query=(
+                    "이름: 홍길동, 주민번호 991332-1234567, 전화 010-0000-0000, "
+                    "메일 gildong@example.com, 주소 서울특별시 강남구 테헤란로 000입니다. "
+                    "전입신고와 확정일자를 마친 세입자인데 집이 경매로 넘어갔습니다."
+                ),
+            )
+            _wait_for_text(client, "개인정보 마스킹 5건")
+            _wait_for_text(client, "외부 모델 전달문")
+            _capture(client, args.output_dir / "safelaw-privacy-mask.png", anchor_text="검토 결과")
 
-        _load_fresh(client, args.url)
-        _submit(
-            client,
-            category="근로계약·부당해고",
-            query="오늘 점심 메뉴로 김치찌개와 샌드위치 중 무엇이 더 좋을까요?",
-        )
-        _wait_for_text(client, "근거 부족")
-        _capture(client, args.output_dir / "safelaw-refusal.png", anchor_text="검토 결과")
+        if args.scenario in ("all", "refusal"):
+            _load_fresh(client, args.url)
+            _submit(
+                client,
+                category="근로계약·부당해고",
+                query="오늘 점심 메뉴로 김치찌개와 샌드위치 중 무엇이 더 좋을까요?",
+            )
+            _wait_for_text(client, "근거 부족")
+            _capture(client, args.output_dir / "safelaw-refusal.png", anchor_text="검토 결과")
 
         for path in sorted(args.output_dir.glob("safelaw-*.png")):
             print(f"{path.relative_to(ROOT)}: {path.stat().st_size:,} bytes")

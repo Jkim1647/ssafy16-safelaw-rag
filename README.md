@@ -99,11 +99,11 @@ streamlit run app.py
 
 ![해고 서면통지 질문에 대한 검증된 법령·판례 답변](docs/assets/safelaw-grounded-answer.png)
 
-### 외부 호출 전 개인정보 마스킹 및 인용 실패 차단
+### 외부 호출 전 개인정보 마스킹 비교
 
-아래 입력의 이름·전화번호·주소는 화면 검증을 위해 만든 가상 정보입니다. 사용자 입력은 화면에는 그대로 보이지만 외부 모델 호출 전에 로컬에서 마스킹되며, 생성 인용문을 검증할 수 없으면 모델 답변을 표시하지 않습니다.
+아래 화면은 가상의 이름·주민등록번호·전화번호·이메일·주소가 각각 플레이스홀더로 치환된 결과를 한 장에서 비교합니다. 왼쪽 원문은 현재 브라우저와 로컬 Streamlit 세션 안에서만 보이고, 오른쪽 마스킹 문장만 검색·임베딩·LLM으로 전달됩니다. 원문과 치환 매핑은 파일·로그·Vector DB에 저장하지 않습니다.
 
-![가상 개인정보 마스킹 및 인용 검증 실패 차단](docs/assets/safelaw-privacy-mask.png)
+![가상 개인정보 원문과 외부 모델 전달문 비교](docs/assets/safelaw-privacy-mask.png)
 
 ### 법률과 무관한 질문의 안전한 답변 거부
 
@@ -113,6 +113,8 @@ streamlit run app.py
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\capture_ui_screenshots.py
+# 마스킹 비교 화면만 다시 생성
+.\.venv\Scripts\python.exe scripts\capture_ui_screenshots.py --scenario privacy
 ```
 
 ## 법령 데이터셋
