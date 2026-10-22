@@ -191,21 +191,21 @@
 <text x="70.0" y="830.0" font-size="13" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="1.2">OPERATIONS, STORAGE &amp; QUALITY LOOP / 운영·저장·품질 피드백</text>
 <text x="70.0" y="866.0" font-size="17" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Live Case Enrichment / 판례 증분 보강</text>
 <rect x="70.0" y="884.0" width="143.5" height="52.0" rx="9" fill="#e8f1fb" stroke="#cfd6dd" stroke-width="1.2"/>
-<text x="141.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Case API</text>
-<text x="141.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">목록 검색</text>
+<text x="141.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">질문 캐시 확인</text>
+<text x="141.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">같은 질문은 재사용</text>
 <path d="M216.5,910.0 L232.5,910.0" fill="none" stroke="#4b5563" stroke-width="1.6" marker-end="url(#arrow)"/>
 <rect x="235.5" y="884.0" width="143.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
-<text x="307.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">LLM 후보 선별</text>
-<text x="307.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">선택·탈락 기록</text>
+<text x="307.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Case API</text>
+<text x="307.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">용어 3개 · 있는 판례 제외</text>
 <path d="M382.0,910.0 L398.0,910.0" fill="none" stroke="#4b5563" stroke-width="1.6" marker-end="url(#arrow)"/>
 <rect x="401.0" y="884.0" width="143.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
-<text x="472.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Cache + Dedup</text>
-<text x="472.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">사건번호 중복 제거</text>
+<text x="472.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">LLM 후보 선별</text>
+<text x="472.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">선택·탈락 기록</text>
 <path d="M547.5,910.0 L563.5,910.0" fill="none" stroke="#4b5563" stroke-width="1.6" marker-end="url(#arrow)"/>
 <rect x="566.5" y="884.0" width="143.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
 <text x="638.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Incremental Upsert</text>
-<text x="638.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">판례 컬렉션</text>
-<text x="70.0" y="964.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">질문 검색어로 부족한 판례만 수집 · LAW_API_OC가 있을 때 동작</text>
+<text x="638.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">없는 판례만 색인</text>
+<text x="70.0" y="964.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">새 질문마다 retrieve 검색 전에 실행 · LAW_API_OC 필요 · 실패해도 기존 판례로 검색</text>
 <text x="744.0" y="866.0" font-size="17" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Local Security &amp; Persistence / 로컬 보안·저장</text>
 <rect x="744.0" y="884.0" width="132.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
 <text x="810.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">.env · Git 제외</text>
