@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from legal_rag.domain.models import LegalCategory
-from legal_rag.rag.pipeline import AnswerStatus, StatuteRagPipeline
+from legal_rag.rag.pipeline import AnswerStatus, StatuteRagPipeline, contextual_question
 from legal_rag.rag.retrieval import RetrievalResult, RetrievedChunk, SearchPlan
 
 
@@ -211,6 +211,42 @@ class StatuteRagPipelineTests(unittest.TestCase):
 
         self.assertEqual(answer.status, AnswerStatus.ANSWERED)
         self.assertEqual(answer.retrieved_count, 1)
+
+    def test_conversation_thread_carries_previous_questions(self):
+        retriever = FakeRetriever([evidence_hit()])
+        pipeline = StatuteRagPipeline(retriever, FakeLlm(valid_response()))
+
+        pipeline.converse("카톡으로 해고 통보를 받았어요", thread_id="t1", category=LegalCategory.LABOR)
+        first_query = retriever.received_query
+        answer, evidence = pipeline.converse("서면으로 받았다면 달라지나요?", thread_id="t1",
+                                             category=LegalCategory.LABOR)
+
+        self.assertEqual(first_query, "카톡으로 해고 통보를 받았어요")
+        self.assertIn("카톡으로 해고 통보를 받았어요", retriever.received_query)
+        self.assertTrue(retriever.received_query.endswith("현재 질문: 서면으로 받았다면 달라지나요?"))
+        self.assertEqual(answer.status, AnswerStatus.ANSWERED)
+        self.assertEqual(pipeline.conversation_history("t1"),
+                         ["카톡으로 해고 통보를 받았어요", "서면으로 받았다면 달라지나요?"])
+
+    def test_conversation_threads_are_isolated_and_single_answers_have_no_history(self):
+        retriever = FakeRetriever([evidence_hit()])
+        pipeline = StatuteRagPipeline(retriever, FakeLlm(valid_response()))
+
+        pipeline.converse("상담 A", thread_id="a", category=LegalCategory.LABOR)
+        pipeline.converse("상담 B", thread_id="b", category=LegalCategory.LABOR)
+        self.assertEqual(retriever.received_query, "상담 B")
+        pipeline.answer("단발 질문", category=LegalCategory.LABOR)
+
+        self.assertEqual(retriever.received_query, "단발 질문")
+        self.assertEqual(pipeline.conversation_history("a"), ["상담 A"])
+        self.assertEqual(pipeline.conversation_history("unknown"), [])
+
+    def test_contextual_question_keeps_only_recent_turns(self):
+        question = contextual_question(["1번", "2번", "3번", "4번"], "5번")
+
+        self.assertNotIn("1번", question)
+        self.assertIn("- 2번\n- 3번\n- 4번", question)
+        self.assertEqual(contextual_question([], "첫 질문"), "첫 질문")
 
     def test_answer_with_evidence_returns_the_evidence_used(self):
         pipeline = StatuteRagPipeline(FakeRetriever([evidence_hit()]), FakeLlm(valid_response()))

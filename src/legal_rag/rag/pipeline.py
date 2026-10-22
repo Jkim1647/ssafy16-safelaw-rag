@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import operator
 from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import Any, Protocol, TypedDict
+from typing import Annotated, Any, Protocol, TypedDict
 
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 from langgraph.graph import END, START, StateGraph
 
 from legal_rag.domain.models import LegalCategory
@@ -76,6 +79,32 @@ class RagState(TypedDict, total=False):
     retrieved_count: int
     evidence: tuple[LegalEvidence, ...]
     answer: GroundedAnswer
+    # 상담 스레드에 쌓이는 이전 마스킹 질문. 체크포인터가 있는 대화 그래프에서만 턴을 넘어 유지된다.
+    history: Annotated[list[str], operator.add]
+    contextual_question: str
+
+
+MAX_CONTEXT_TURNS = 3
+
+# 체크포인터가 상태를 저장·복원할 때 허용할 SafeLaw 타입.
+_CHECKPOINT_TYPES = [
+    ("legal_rag.rag.pipeline", "GroundedAnswer"),
+    ("legal_rag.rag.pipeline", "AnswerStatus"),
+    ("legal_rag.rag.citations", "StatuteEvidence"),
+    ("legal_rag.rag.citations", "CaseEvidence"),
+    ("legal_rag.domain.models", "LegalCategory"),
+    ("legal_rag.rag.retrieval", "RetrievedChunk"),
+]
+
+
+def contextual_question(history: Sequence[str], question: str) -> str:
+    """이어지는 질문이 앞선 상담 맥락을 잃지 않도록 최근 질문을 함께 붙인다."""
+
+    previous = [item for item in history[-MAX_CONTEXT_TURNS:] if item.strip()]
+    if not previous:
+        return question
+    lines = "\n".join(f"- {item}" for item in previous)
+    return f"이전 상담 내용:\n{lines}\n현재 질문: {question}"
 
 
 def evidence_from_retrieval(
@@ -115,6 +144,10 @@ class StatuteRagPipeline:
         self._answer_llm = answer_llm
         self._max_generation_attempts = max_generation_attempts
         self._graph = self._build_graph()
+        # 상담 화면용 그래프. thread_id별로 질문 기록이 쌓이며 현재 프로세스 메모리에만 남는다.
+        self._chat_graph = self._build_graph(
+            InMemorySaver(serde=JsonPlusSerializer(allowed_msgpack_modules=_CHECKPOINT_TYPES))
+        )
 
     @property
     def graph(self) -> Any:
@@ -167,14 +200,40 @@ class StatuteRagPipeline:
         )
         return state["answer"], tuple(state.get("evidence", ()))
 
-    def _build_graph(self) -> Any:
+    def converse(
+        self,
+        sanitized_question: str,
+        *,
+        thread_id: str,
+        category: LegalCategory,
+        top_k: int = 5,
+    ) -> tuple[GroundedAnswer, tuple[LegalEvidence, ...]]:
+        """같은 thread_id의 앞선 질문을 맥락으로 붙여 답한다. 상담실 채팅에서 사용한다."""
+
+        if not sanitized_question or not sanitized_question.strip():
+            raise ValueError("마스킹된 질문이 필요합니다.")
+        if not thread_id:
+            raise ValueError("상담 스레드 ID가 필요합니다.")
+        if top_k < 1:
+            raise ValueError("top_k는 1 이상이어야 합니다.")
+        state = self._chat_graph.invoke(
+            {"question": sanitized_question, "category": category, "top_k": top_k, "pinned_hits": ()},
+            {"configurable": {"thread_id": thread_id}},
+        )
+        return state["answer"], tuple(state.get("evidence", ()))
+
+    def conversation_history(self, thread_id: str) -> list[str]:
+        snapshot = self._chat_graph.get_state({"configurable": {"thread_id": thread_id}})
+        return list(snapshot.values.get("history", []))
+
+    def _build_graph(self, checkpointer: Any | None = None) -> Any:
         builder = StateGraph(RagState)
         builder.add_node("retrieve", self._retrieve_node)
         builder.add_node("generate", self._generate_node)
         builder.add_edge(START, "retrieve")
         builder.add_edge("retrieve", "generate")
         builder.add_edge("generate", END)
-        return builder.compile()
+        return builder.compile(checkpointer=checkpointer)
 
     def retrieve_evidence(
         self,
@@ -201,19 +260,22 @@ class StatuteRagPipeline:
         return evidence_from_retrieval(retrieval, pinned)
 
     def _retrieve_node(self, state: RagState) -> RagState:
+        question = contextual_question(state.get("history", []), state["question"].strip())
         retrieved_count, evidence = self._collect_evidence(
-            state["question"],
+            question,
             state["category"],
             state["top_k"],
             tuple(state.get("pinned_hits", ())),
         )
-        return {"retrieved_count": retrieved_count, "evidence": evidence}
+        return {"retrieved_count": retrieved_count, "evidence": evidence, "contextual_question": question}
 
     def _generate_node(self, state: RagState) -> RagState:
         evidence = state["evidence"]
+        turn = {"history": [state["question"].strip()]}
         if not evidence:
-            return {"answer": self._blocked(AnswerStatus.NO_EVIDENCE, retrieved_count=state["retrieved_count"])}
-        return {"answer": self._generate_answer(state["question"].strip(), state["category"], evidence)}
+            return {**turn, "answer": self._blocked(AnswerStatus.NO_EVIDENCE, retrieved_count=state["retrieved_count"])}
+        question = state.get("contextual_question") or state["question"].strip()
+        return {**turn, "answer": self._generate_answer(question, state["category"], evidence)}
 
     def _generate_answer(
         self,
