@@ -9,7 +9,7 @@
 | 필수 기능 F2001~F2012 | 12개 모두 통과 |
 | 심화 기능 | F2013 HTML/CSS/JS 화면 통과, F2014 MMR 통과, F2015 RAG 전후 비교 통과, F2016 부분 |
 | 비기능 NF2001~NF2007 | 7개 모두 통과 |
-| 자동 테스트 | 168개 통과 |
+| 자동 테스트 | 171개 통과 |
 | 남은 항목 | [7장](#7-남은-항목) 참고 |
 
 ## 2. 확인 항목별 결과 (명세서 4.1~4.7)
@@ -140,7 +140,7 @@
 
 ### 4.1 자동 테스트
 
-`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **168개 통과** (2026-10-22). 빈 venv에서 `pip install -e .` 후에도 통과를 확인했다.
+`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **171개 통과** (2026-10-22). 빈 venv에서 `pip install -e .` 후에도 통과를 확인했다.
 
 | 모듈 | 개수 | 대상 |
 |---|---:|---|
@@ -150,7 +150,7 @@
 | test_retrieval | 13 | 검색어 확장·규칙(유류분 포함), RRF, 판례 재정렬 |
 | test_issue_checklist | 11 | 체크리스트 파싱·항목 단위 검증·재시도 |
 | test_statute_items | 11 | 조문 카탈로그, 조건 탐색 |
-| test_redaction | 8 | 개인정보 마스킹, 추가 단어 증폭 방지 |
+| test_redaction | 11 | 개인정보 마스킹, 추가 단어 증폭 방지, 하이픈 날짜는 남기고 계좌번호만 가림 |
 | test_web_api | 7 | F2013 API 요청·응답·오류 처리 |
 | test_mmr | 7 | MMR 선택, 검색 방식 |
 | test_config | 6 | `.env` 설정, 검색어 변환 모델 기본값 |
