@@ -204,7 +204,7 @@ def build_case_evidence(
     return tuple(evidence)
 
 
-def _extract_json_object(raw_response: str) -> dict[str, Any]:
+def extract_json_object(raw_response: str) -> dict[str, Any]:
     if not isinstance(raw_response, str) or not raw_response.strip():
         raise CitationValidationError("답변 생성 결과가 비어 있습니다.")
     match = re.search(r"\{.*\}", raw_response, re.DOTALL)
@@ -219,7 +219,7 @@ def _extract_json_object(raw_response: str) -> dict[str, Any]:
     return payload
 
 
-def _parse_claim(value: Any, evidence_by_id: dict[int, LegalEvidence]) -> GroundedClaim:
+def parse_grounded_claim(value: Any, evidence_by_id: dict[int, LegalEvidence]) -> GroundedClaim:
     if not isinstance(value, dict):
         raise CitationValidationError("주장은 text와 citations를 가진 객체여야 합니다.")
     text = value.get("text")
@@ -288,7 +288,7 @@ def parse_and_validate_draft(
 ) -> GroundedDraft:
     """LLM JSON을 파싱하고 모든 주장에 유효한 검색 근거가 있는지 확인한다."""
 
-    payload = _extract_json_object(raw_response)
+    payload = extract_json_object(raw_response)
     if payload.get("answerable") is False:
         return GroundedDraft(answerable=False)
     if payload.get("answerable") is not True:
@@ -297,13 +297,13 @@ def parse_and_validate_draft(
     evidence_by_id = {item.citation_id: item for item in evidence}
     if not evidence_by_id:
         raise CitationValidationError("검증할 검색 근거가 없습니다.")
-    summary = _parse_claim(payload.get("summary"), evidence_by_id)
+    summary = parse_grounded_claim(payload.get("summary"), evidence_by_id)
     sections: dict[str, tuple[GroundedClaim, ...]] = {}
     for section in ANSWER_SECTIONS:
         raw_items = payload.get(section, [])
         if not isinstance(raw_items, list):
             raise CitationValidationError(f"{section}은 배열이어야 합니다.")
-        sections[section] = tuple(_parse_claim(item, evidence_by_id) for item in raw_items)
+        sections[section] = tuple(parse_grounded_claim(item, evidence_by_id) for item in raw_items)
 
     draft = GroundedDraft(answerable=True, summary=summary, **sections)
     if not draft.claims:

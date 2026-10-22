@@ -116,6 +116,20 @@ class StatuteRagPipeline:
     ) -> GroundedAnswer:
         """pinned_hits는 사용자가 선택한 항목(조문)으로, 검색 순위와 무관하게 근거 맨 앞에 둔다."""
 
+        return self.answer_with_evidence(
+            sanitized_question, category=category, top_k=top_k, pinned_hits=pinned_hits
+        )[0]
+
+    def answer_with_evidence(
+        self,
+        sanitized_question: str,
+        *,
+        category: LegalCategory,
+        top_k: int = 5,
+        pinned_hits: Sequence[RetrievedChunk] = (),
+    ) -> tuple[GroundedAnswer, tuple[LegalEvidence, ...]]:
+        """답변과 함께 retrieve 노드가 만든 근거 목록을 돌려줘 특화 기능이 같은 근거를 재사용하게 한다."""
+
         if not sanitized_question or not sanitized_question.strip():
             raise ValueError("마스킹된 질문이 필요합니다.")
         if top_k < 1:
@@ -129,7 +143,7 @@ class StatuteRagPipeline:
                 "pinned_hits": tuple(pinned_hits),
             }
         )
-        return state["answer"]
+        return state["answer"], tuple(state.get("evidence", ()))
 
     def _build_graph(self) -> Any:
         builder = StateGraph(RagState)

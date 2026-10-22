@@ -212,6 +212,14 @@ class StatuteRagPipelineTests(unittest.TestCase):
         self.assertEqual(answer.status, AnswerStatus.ANSWERED)
         self.assertEqual(answer.retrieved_count, 1)
 
+    def test_answer_with_evidence_returns_the_evidence_used(self):
+        pipeline = StatuteRagPipeline(FakeRetriever([evidence_hit()]), FakeLlm(valid_response()))
+
+        answer, evidence = pipeline.answer_with_evidence("해고 통지", category=LegalCategory.LABOR)
+
+        self.assertEqual(answer.status, AnswerStatus.ANSWERED)
+        self.assertEqual([item.article_no for item in evidence], ["제27조"])
+
     def test_retrieve_evidence_respects_top_k(self):
         second = RetrievedChunk(
             chunk_id="labor-26",
