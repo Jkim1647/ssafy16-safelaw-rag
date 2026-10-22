@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import time
 from collections import Counter
@@ -33,6 +34,8 @@ STATUTE_CHUNKS_PATH = PROJECT_ROOT / "data" / "processed" / "statute_chunks.json
 CASE_INDEX_PATH = PROJECT_ROOT / "data" / "indexes" / "cases"
 STATIC_CASE_DATASET = PROJECT_ROOT / "data" / "processed" / "cases.json"
 CASE_CACHE_PATH = PROJECT_ROOT / "data" / "cache"
+STATUTE_MANIFEST_PATH = PROJECT_ROOT / "data" / "processed" / "statutes_manifest.json"
+CASE_MANIFEST_PATH = PROJECT_ROOT / "data" / "processed" / "cases_manifest.json"
 
 CATEGORY_LABELS = {
     LegalCategory.LABOR: "근로계약·부당해고",
@@ -148,6 +151,35 @@ def article_question(article_label: str, sanitized_question: str) -> str:
     """선택 조문을 질문 앞에 밝혀 검색과 답변이 그 조문을 중심으로 이뤄지게 한다."""
 
     return f"[선택 조문: {article_label}] {sanitized_question.strip()}"
+
+
+@dataclass(frozen=True, slots=True)
+class LibraryFacts:
+    statute_articles: int
+    law_count: int
+    case_count: int
+    oldest_decision: str
+    latest_decision: str
+    collected: str
+
+
+def load_library_facts(statute_manifest: Path = STATUTE_MANIFEST_PATH,
+                       case_manifest: Path = CASE_MANIFEST_PATH) -> LibraryFacts | None:
+    """상담실 약속 문구에 쓸 숫자를 데이터셋 manifest에서 읽는다. 읽지 못하면 숫자를 보여 주지 않는다."""
+
+    try:
+        statutes = json.loads(statute_manifest.read_text(encoding="utf-8"))
+        cases = json.loads(case_manifest.read_text(encoding="utf-8"))
+        return LibraryFacts(
+            statute_articles=int(statutes["document_count"]),
+            law_count=len(statutes["law_counts"]),
+            case_count=int(cases["document_count"]),
+            oldest_decision=str(cases["decision_date_range"]["oldest"]),
+            latest_decision=str(cases["decision_date_range"]["latest"]),
+            collected=str(statutes["collection_date"]),
+        )
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
 
 
 def runtime_readiness(settings: Settings, index_path: Path | None = None) -> tuple[bool, str]:
@@ -270,7 +302,7 @@ def _inject_styles(st: Any) -> None:
         :root { --walnut: #2c1f18; --walnut-light: #3b2a20; --brass: #b08a52; --brass-dark: #8a6a38;
             --counsel: #1f2c3d; --paper: #fcfbf8; --wall: #d5d9dc; --ink-soft: #4b5560; }
         .stApp, [data-testid="stHeader"] { background: var(--wall); }
-        .block-container { max-width: 900px; padding-top: 1.4rem; padding-bottom: 7rem; }
+        .block-container { max-width: 900px; padding-top: 4rem; padding-bottom: 2rem; }
         [data-testid="stSidebar"] { background:
             repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 2px, transparent 2px 11px),
             linear-gradient(180deg, var(--walnut-light), var(--walnut)); }
@@ -296,13 +328,18 @@ def _inject_styles(st: Any) -> None:
         .st-key-consult_sheet, .st-key-checklist_panel { background: var(--paper); border-radius: 4px;
             box-shadow: 0 1px 0 rgba(31,44,61,.06), 0 22px 40px -22px rgba(31,44,61,.45); }
         .st-key-consult_sheet { padding: 1.6rem 2rem 1.2rem; }
-        .office-steps { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 0 .9rem;
-            border-top: 1px solid #e3ded2; border-bottom: 1px solid #e3ded2; }
-        .office-steps span { padding: .55rem .5rem; font-size: .84rem; color: var(--ink-soft); line-height: 1.35; }
-        .office-steps b { font-family: "Nanum Myeongjo", serif; font-size: 1rem; color: var(--brass-dark);
-            margin-right: .35rem; }
-        .privacy-box { background: #f1f2ef; border-radius: 4px; padding: .6rem .85rem; color: #34404b;
-            margin: 0 0 1rem; font-size: .88rem; }
+        .trust-row { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 0 1.3rem; }
+        .trust-row div { padding: .1rem 1.1rem; border-left: 1px solid rgba(138,106,56,.45); }
+        .trust-row div:first-child { border-left: 0; padding-left: .2rem; }
+        .trust-row strong { display: block; font-family: "Nanum Myeongjo", serif; font-size: 1rem;
+            color: var(--counsel); margin-bottom: .3rem; }
+        .trust-row p { margin: 0; font-size: .84rem; line-height: 1.55; color: #3a434d; }
+        [data-testid="stMarkdownContainer"] p.trust-note { margin: -.4rem 0 1.2rem .2rem; font-size: .8rem;
+            color: var(--ink-soft); }
+        .st-key-intake_choices [data-testid="stVerticalBlockBorderWrapper"] { background: #fff; }
+        [data-testid="stMarkdownContainer"] p.intake-title { font-family: "Nanum Myeongjo", serif; font-weight: 800; font-size: 1.05rem;
+            color: var(--counsel); margin: 0 0 .25rem; }
+        [data-testid="stMarkdownContainer"] p.intake-topics { font-size: .84rem; color: var(--ink-soft); margin: 0 0 .6rem; line-height: 1.5; min-height: 3em; }
         [data-testid="stChatMessage"] { background: transparent; }
         [data-testid="stChatMessage"]:has([aria-label="Chat message from user"]) { background: #edf0f4;
             border-radius: 4px; }
@@ -320,7 +357,8 @@ def _inject_styles(st: Any) -> None:
         @media (max-width: 640px) {
             [data-testid="stColumn"]:has(.st-key-checklist_panel) { position: static; max-height: none; }
             .st-key-consult_sheet { padding: 1.1rem 1rem .8rem; }
-            .office-steps { grid-template-columns: repeat(2, 1fr); }
+            .trust-row { grid-template-columns: 1fr; gap: .8rem; }
+            .trust-row div { border-left: 0; padding-left: .2rem; }
             .nameplate .plate { padding: .7rem 2.2rem .65rem; }
             .nameplate .firm { font-size: 1.35rem; }
         }
@@ -551,13 +589,58 @@ def _render_user_turn(st: Any, message: dict[str, Any]) -> None:
 def _consult_greeting(category: LegalCategory | None) -> str:
     if category is None:
         return (
-            "안녕하세요, **SafeLaw 생활법률 상담실**입니다. 왼쪽에서 **상담 분야**를 먼저 골라 주세요. "
-            "그다음 어떤 일이 있었는지 편하게 말씀해 주시면 관련 법령과 판례 원문으로 확인되는 내용만 안내해 드려요."
+            "안녕하세요, **SafeLaw 생활법률 상담실**입니다. 어떤 일로 오셨나요? "
+            "아래에서 **상담 분야**를 골라 주시면 그 분야의 법령과 판례에서 근거를 찾아 안내해 드려요."
         )
     return (
-        f"**{CATEGORY_LABELS[category]}** 상담을 도와드릴게요. 어떤 일이 있었는지 아래 입력창에 말씀해 주세요. "
+        f"**{CATEGORY_LABELS[category]}** 상담을 도와드릴게요. 어떤 일이 있었는지 아래 입력창에 편하게 말씀해 주세요. "
         "답변을 보신 뒤 궁금한 점을 이어서 물으시면 앞선 상담 내용을 함께 고려해 답해 드려요."
     )
+
+
+def _trust_row_html(facts: LibraryFacts | None) -> str:
+    if facts is None:
+        sources = "국가법령정보센터의 법령·판례 원문에서 찾은 근거만 인용해요."
+    else:
+        sources = (
+            f"국가법령정보센터의 현행 법령 {facts.law_count}개 법률 {facts.statute_articles}개 조문과 "
+            f"판례 {facts.case_count}건({facts.oldest_decision[:4]}~{facts.latest_decision[:4]}년 선고)에서 "
+            f"찾은 근거만 인용해요. 원문 기준일 {facts.collected}."
+        )
+    return (
+        '<div class="trust-row">'
+        f"<div><strong>원문으로만 답해요</strong><p>{sources}</p></div>"
+        "<div><strong>근거가 없으면 답하지 않아요</strong><p>답변의 인용 문구가 원문에 그대로 있는지 확인하고, "
+        "확인되지 않으면 추측하지 않고 근거 부족으로 알려 드려요.</p></div>"
+        "<div><strong>개인정보는 가리고 남기지 않아요</strong><p>이름·전화번호 등은 외부 모델에 보내기 전에 가리고, "
+        "상담 기록은 이 화면에만 두고 저장하지 않아요.</p></div>"
+        "</div>"
+    )
+
+
+def _choose_category(state: Any, category: LegalCategory) -> None:
+    state["consult_category"] = category
+
+
+def _render_intake(st: Any, ready: bool) -> None:
+    """상담 분야를 사이드바까지 가지 않고 상담실 안에서 바로 고르게 한다."""
+
+    with st.container(key="intake_choices"):
+        for column, (category, label) in zip(st.columns(3), CATEGORY_LABELS.items()):
+            with column, st.container(border=True):
+                st.markdown(
+                    f'<p class="intake-title">{label}</p><p class="intake-topics">{CATEGORY_HELP[category]}</p>',
+                    unsafe_allow_html=True,
+                )
+                st.button(
+                    "이 분야로 상담하기",
+                    key=f"intake_{category.value}",
+                    on_click=_choose_category,
+                    args=(st.session_state, category),
+                    type="primary",
+                    use_container_width=True,
+                    disabled=not ready,
+                )
 
 
 def _queue_prompt(state: Any, prompt: str) -> None:
@@ -570,6 +653,16 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
     if CONSULT_THREAD_KEY not in st.session_state:
         _start_new_consultation(st.session_state)
     messages: list[dict[str, Any]] = st.session_state[CONSULT_MESSAGES_KEY]
+    if not messages:
+        # 첫 질문 전에는 상담실이 지키는 약속을 데이터셋의 실제 숫자로 보여 준다.
+        if "safelaw_library_facts" not in st.session_state:
+            st.session_state.safelaw_library_facts = load_library_facts()
+        st.markdown(_trust_row_html(st.session_state.safelaw_library_facts), unsafe_allow_html=True)
+        st.markdown(
+            '<p class="trust-note">판례는 자동으로 모은 공개 판결로, 법률 전문가 검수 전이에요. '
+            "구체적인 사건은 변호사나 대한법률구조공단(132)과 상의하세요.</p>",
+            unsafe_allow_html=True,
+        )
     focused = _focused_checklist_message(st.session_state, messages)
     focused_token = focused["token"] if focused else None
 
@@ -583,21 +676,14 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
             _render_checklist_panel(st, messages, focused)
         sheet = chat_area.container(key="consult_sheet")
     with sheet:
-        st.markdown(
-            '<div class="office-steps"><span><b>1</b>상담 분야 선택</span><span><b>2</b>상황 말씀하기</span>'
-            '<span><b>3</b>근거와 함께 안내</span><span><b>4</b>이어서 질문하기</span></div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div class="privacy-box">🔒 정확한 이름·전화번호·상세 주소는 가능하면 적지 마세요. '
-            '적더라도 외부 모델에 보내기 전에 자동으로 가립니다.</div>',
-            unsafe_allow_html=True,
-        )
         conversation = st.container()
     with conversation:
         with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
             st.markdown(_consult_greeting(options.category))
-            if options.category is not None and not messages:
+            if options.category is None:
+                _render_intake(st, ready)
+            elif not messages:
+                st.caption("언제 있었던 일인지, 누가 무엇을 했는지, 받은 문서나 메시지가 있는지 적어 주시면 더 정확해요.")
                 st.caption("이런 상황을 많이 물어보세요")
                 for index, example in enumerate(EXAMPLE_QUESTIONS[options.category]):
                     st.button(
@@ -608,16 +694,18 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
                         use_container_width=True,
                         disabled=not ready,
                     )
-        for message in messages:
+        for index, message in enumerate(messages):
             avatar = USER_AVATAR if message["role"] == "user" else ASSISTANT_AVATAR
             with st.chat_message(message["role"], avatar=avatar):
                 if message["role"] == "user":
                     _render_user_turn(st, message)
                 else:
                     _render_answer(st, message, focused_token)
+                    if index == len(messages) - 1:
+                        st.caption("더 궁금한 점은 아래에 이어서 물어보세요. 앞선 상담 내용을 기억하고 답해 드려요.")
 
     typed = st.chat_input(
-        "상황이나 궁금한 점을 입력하세요. 개인정보는 자동으로 가려집니다.",
+        "어떤 일이 있었는지 편하게 적어 주세요. 이름·연락처는 자동으로 가려져요.",
         key="consult_chat_input",
         disabled=not ready,
         max_chars=2000,
@@ -628,7 +716,7 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
         return
     if options.category is None:
         with conversation, st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
-            st.warning("왼쪽에서 상담 분야를 먼저 골라 주세요.")
+            st.warning("위에서 상담 분야를 먼저 골라 주세요.")
         return
     _run_consultation_turn(st, settings, options, conversation, messages, prompt)
 
@@ -707,7 +795,7 @@ def main() -> None:
         page_title="SafeLaw | 생활법률 상담실",
         page_icon="⚖️",
         layout="centered",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="auto",
     )
     _inject_styles(st)
 

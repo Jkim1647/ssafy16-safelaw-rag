@@ -152,6 +152,37 @@ class ConsultationHistoryTests(ConsultationAppTestCase):
         self.assertEqual(self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY], [])
 
 
+class IntakeTests(ConsultationAppTestCase):
+    def test_client_can_pick_a_category_in_the_room(self):
+        intake = [button for button in self.app.button if button.key and button.key.startswith("intake_")]
+        self.assertEqual(len(intake), 3)
+
+        self.app.button(key="intake_labor").click().run()
+
+        self.assertEqual(self.app.sidebar.selectbox(key="consult_category").value, LegalCategory.LABOR)
+        examples = [button for button in self.app.button if button.key and button.key.startswith("example_labor")]
+        self.assertEqual(len(examples), 3)
+
+    def test_promises_show_real_dataset_numbers_until_the_first_question(self):
+        promises = " ".join(md.value for md in self.app.markdown if 'class="trust-row"' in md.value)
+        self.assertIn("381개 조문", promises)
+        self.assertIn("판례 50건", promises)
+        self.assertIn("근거가 없으면", promises)
+
+        self.start_labor()
+        self.ask("카톡으로 해고 통보를 받았어요")
+
+        self.assertEqual([md for md in self.app.markdown if 'class="trust-row"' in md.value], [])
+
+    def test_only_the_latest_answer_invites_a_follow_up(self):
+        self.start_labor()
+        self.ask("카톡으로 해고 통보를 받았어요")
+        self.ask("서면으로 다시 받으면요?")
+
+        invites = [caption for caption in self.app.caption if "이어서 물어보세요" in caption.value]
+        self.assertEqual(len(invites), 1)
+
+
 class ChecklistPanelTests(ConsultationAppTestCase):
     def setUp(self):
         super().setUp()
