@@ -277,8 +277,8 @@ def build_svg() -> str:
     svg.text(MARGIN + 26, band_y + 32, "OPERATIONS, STORAGE & QUALITY LOOP / 운영·저장·품질 피드백", size=13, fill=MUTED, spacing=1.2)
     groups = [
         (MARGIN + 26, 640, "Live Case Enrichment / 판례 증분 보강",
-         [("Case API", "목록 검색"), ("LLM 후보 선별", "선택·탈락 기록"), ("Cache + Dedup", "사건번호 중복 제거"), ("Incremental Upsert", "판례 컬렉션")],
-         "질문 검색어로 부족한 판례만 수집 · LAW_API_OC가 있을 때 동작", True),
+         [("질문 캐시 확인", "같은 질문은 재사용"), ("Case API", "용어 3개 · 있는 판례 제외"), ("LLM 후보 선별", "선택·탈락 기록"), ("Incremental Upsert", "없는 판례만 색인")],
+         "새 질문마다 retrieve 검색 전에 실행 · LAW_API_OC 필요 · 실패해도 기존 판례로 검색", True),
         (MARGIN + 700, 560, "Local Security & Persistence / 로컬 보안·저장",
          [(".env · Git 제외", "GMS_KEY · OC"), ("원문 미저장", "마스킹 문장만 외부로"), ("세션 메모리", "상담 기록·체크포인터"), ("Chroma", "SQLite + HNSW")],
          "파일·로그·Vector DB에 상담 원문과 마스킹 매핑을 남기지 않음", False),
