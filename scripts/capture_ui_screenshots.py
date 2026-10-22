@@ -17,6 +17,9 @@ import websocket
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# 오른쪽 체크리스트 패널이 대화 옆에 놓이는 데스크톱 폭으로 캡처한다.
+VIEWPORT_WIDTH = 1440
+VIEWPORT_HEIGHT = 960
 
 
 class CdpClient:
@@ -165,31 +168,67 @@ def _send_chat(client: CdpClient, text: str, *, expected_messages: int, timeout:
     time.sleep(1.5)
 
 
+def _choose_intake(client: CdpClient, category: str) -> None:
+    """상담실 안 접수 카드에서 분야를 고른다."""
+    category_json = json.dumps(category, ensure_ascii=False)
+    clicked = client.evaluate(
+        f"""
+        (() => {{
+          const title = Array.from(document.querySelectorAll('p.intake-title'))
+            .find(el => el.textContent.trim() === {category_json});
+          let card = title;
+          while (card && !card.querySelector('button')) card = card.parentElement;
+          const button = card && card.querySelector('button');
+          if (!button) return false;
+          button.click();
+          return true;
+        }})()
+        """
+    )
+    if not clicked:
+        raise RuntimeError(f"접수 카드를 찾지 못했습니다: {category}")
+    _wait_for_text(client, "이런 상황을 많이 물어보세요", timeout=15)
+    time.sleep(1)
+
+
+def _set_checklist(client: CdpClient, enabled: bool) -> None:
+    """사이드바 체크리스트 토글을 원하는 상태로 맞춘다. 끄면 GMS 호출이 한 번 줄어든다."""
+    client.evaluate(
+        f"""
+        (() => {{
+          const box = document.querySelector('[data-testid=stSidebar] input[type=checkbox]');
+          if (box && box.checked !== {str(enabled).lower()}) box.click();
+        }})()
+        """
+    )
+    time.sleep(1)
+
+
 def _ask_consultation(client: CdpClient, *, category: str, query: str) -> None:
-    _choose_option(client, "document.querySelector('[data-testid=stSidebar] button[aria-label=\"Open\"]')", category)
+    _choose_intake(client, category)
     # 첫 화면의 상담 안내 메시지 1개 + 질문 + 답변
     _send_chat(client, query, expected_messages=3)
 
 
-def _scroll_to_message(client: CdpClient, index: int) -> None:
-    _scroll_to(client, f"document.querySelectorAll('[data-testid=stChatMessage]')[{index}]")
+def _click_sidebar_button(client: CdpClient, text: str) -> None:
+    text_json = json.dumps(text, ensure_ascii=False)
+    if not client.evaluate(
+        f"(() => {{ const b = Array.from(document.querySelectorAll('[data-testid=stSidebar] button'))"
+        f".find(el => el.textContent.includes({text_json})); if (!b) return false; b.click(); return true; }})()"
+    ):
+        raise RuntimeError(f"사이드바 버튼을 찾지 못했습니다: {text}")
+    time.sleep(1.5)
 
 
-def _capture(client: CdpClient, output: Path, *, anchor_text: str) -> None:
-    anchor_json = json.dumps(anchor_text, ensure_ascii=False)
+def _scroll_top(client: CdpClient) -> None:
     client.evaluate(
-        f"""
-        (() => {{
-          const node = Array.from(document.querySelectorAll('h1,h2,h3,div,p'))
-            .find(el => el.textContent.trim() === {anchor_json});
-          if (node) {{ node.scrollIntoView({{block: 'start'}}); let box = node.parentElement; while (box && box.scrollHeight <= box.clientHeight) box = box.parentElement; if (box) box.scrollBy(0, -90); }}
-          return Boolean(node);
-        }})()
-        """
+        "(() => { const c = document.querySelector('[data-testid=stAppScrollToBottomContainer]'); if (c) c.scrollTop = 0; })()"
     )
     time.sleep(0.5)
-    result = client.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})
-    output.write_bytes(base64.b64decode(result["data"]))
+
+
+def _scroll_to_message(client: CdpClient, index: int) -> None:
+    _scroll_to(client, f"document.querySelectorAll('[data-testid=stChatMessage]')[{index}]")
 
 
 def _scroll_to(client: CdpClient, finder: str) -> None:
@@ -213,7 +252,10 @@ def _screenshot(client: CdpClient, output: Path) -> None:
     output.write_bytes(base64.b64decode(result["data"]))
 
 
-ACTIVE_PANEL = "document.querySelector('[data-testid=stMain]')"
+# 채팅 입력창이 화면 아래에 고정되면 stMain 대신 stMainBlockContainer만 남는다.
+ACTIVE_PANEL = (
+    "(document.querySelector('[data-testid=stMain]') || document.querySelector('[data-testid=stMainBlockContainer]'))"
+)
 
 
 def _set_value(client: CdpClient, selector: str, value: str) -> None:
@@ -350,7 +392,7 @@ def main() -> None:
             f"--remote-debugging-port={port}",
             "--remote-allow-origins=*",
             f"--user-data-dir={profile}",
-            "--window-size=900,1200",
+            f"--window-size={VIEWPORT_WIDTH},{VIEWPORT_HEIGHT}",
             "--hide-scrollbars",
             args.url,
         ],
@@ -364,11 +406,16 @@ def main() -> None:
         client.call("Runtime.enable")
         client.call(
             "Emulation.setDeviceMetricsOverride",
-            {"width": 900, "height": 1200, "deviceScaleFactor": 1, "mobile": False},
+            {"width": VIEWPORT_WIDTH, "height": VIEWPORT_HEIGHT, "deviceScaleFactor": 1, "mobile": False},
         )
 
         if args.scenario in ("all", "grounded"):
             _load_fresh(client, args.url)
+            # 첫 질문 전 화면: 문패, 상담실 약속, 접수 카드
+            time.sleep(1.5)
+            _scroll_top(client)
+            _screenshot(client, args.output_dir / "safelaw-lawfirm-room.png")
+            _set_checklist(client, True)
             _ask_consultation(
                 client,
                 category="근로계약·부당해고",
@@ -380,7 +427,13 @@ def main() -> None:
             _scroll_to_message(client, 1)
             _screenshot(client, args.output_dir / "safelaw-grounded-answer.png")
             if client.evaluate("document.body.innerText.includes('확인한 항목')"):
-                _capture(client, args.output_dir / "safelaw-issue-checklist.png", anchor_text="내 상황 쟁점 체크리스트")
+                # 대화 안 요약 카드와 오른쪽 패널의 전체 체크리스트를 한 화면에 담는다.
+                _scroll_to(
+                    client,
+                    "Array.from(document.querySelectorAll('[data-testid=stChatMessage] p'))"
+                    ".find(el => el.textContent.startsWith('📋 쟁점 체크리스트'))",
+                )
+                _screenshot(client, args.output_dir / "safelaw-issue-checklist.png")
             # 앞선 상담을 이어받는 질문: LangGraph 상담 스레드가 맥락을 붙인다.
             _send_chat(client, "그럼 회사가 나중에 서면으로 다시 보내면 효력이 생기나요?", expected_messages=5)
             _scroll_to_message(client, 3)
@@ -388,6 +441,7 @@ def main() -> None:
 
         if args.scenario in ("all", "privacy"):
             _load_fresh(client, args.url)
+            _set_checklist(client, False)
             _ask_consultation(
                 client,
                 category="전세·임대차 보증금",
@@ -404,9 +458,17 @@ def main() -> None:
             time.sleep(1)
             _scroll_to_message(client, 1)
             _screenshot(client, args.output_dir / "safelaw-privacy-mask.png")
+            # 처음으로 돌아간 뒤 사이드바 지난 상담에서 같은 상담을 다시 연다. GMS 호출은 없다.
+            _click_button(client, "← 처음으로")
+            _wait_for_text(client, "어떤 일로 오셨나요?", timeout=15)
+            _click_sidebar_button(client, "이름:")
+            _wait_for_text(client, "원문과 외부 모델 전달문 비교", timeout=15)
+            _scroll_to_message(client, 1)
+            _screenshot(client, args.output_dir / "safelaw-consult-history.png")
 
         if args.scenario in ("all", "refusal"):
             _load_fresh(client, args.url)
+            _set_checklist(client, False)
             _ask_consultation(
                 client,
                 category="근로계약·부당해고",

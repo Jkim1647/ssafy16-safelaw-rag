@@ -68,7 +68,7 @@
 - `safelaw-privacy-mask.png`: 가상 전화번호 입력 후 개인정보 마스킹 건수
 - `safelaw-refusal.png`: 점심 메뉴 질문의 `insufficient_evidence` 화면
 
-화면은 `scripts/capture_ui_screenshots.py`로 재생성할 수 있으며 입력 데이터는 모두 가상 사례다.
+화면은 `scripts/capture_ui_screenshots.py`로 재생성할 수 있으며 입력 데이터는 모두 가상 사례다. 2026-10-22 최종 UI(로펌 상담실 테마, 접수 카드, 오른쪽 체크리스트 패널, 지난 상담, 처음으로 버튼)로 Streamlit 화면 9장을 실제 서버에서 다시 캡처했다.
 
 ## 기술 결정
 
