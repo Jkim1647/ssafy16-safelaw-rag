@@ -1,0 +1,1119 @@
+{
+  "evaluator_version": "1",
+  "generated_at": "2026-10-22T03:17:51.926224+00:00",
+  "review_status": "개발자 라벨링·법률 전문가 미검수",
+  "embedding_model": "text-embedding-3-small",
+  "query_model": "gpt-5.4-mini",
+  "answer_model": "gpt-5.4-mini",
+  "metrics": {
+    "question_count": 30,
+    "answerable_count": 24,
+    "refusal_probe_count": 6,
+    "answer_success_rate": 0.6666666666666666,
+    "citation_accuracy": 1.0,
+    "ungrounded_claim_block_rate": 1.0,
+    "refusal_accuracy": 1.0,
+    "false_refusal_rate": 0.3333333333333333,
+    "expected_case_citation_rate": 0.6875,
+    "generation_or_validation_failure_count": 6,
+    "validation_failure_attempt_count": 34,
+    "status_counts": {
+      "answered": 16,
+      "insufficient_evidence": 8,
+      "invalid_citations": 6
+    }
+  },
+  "results": [
+    {
+      "id": "e2e-labor-01",
+      "category": "labor",
+      "query": "계약기간이 이미 끝난 뒤에도 노동위원회에 부당해고 구제를 신청할 실익이 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025두33276"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 1,
+        "grounded_claim_count": 1,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [
+        {
+          "citation_id": 3,
+          "type": "statute",
+          "label": "근로기준법 제30조 (구제명령 등)",
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C30%EC%A1%B0"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 2,
+      "content": "## 상황에 대한 법령·판례 안내\n\n계약기간이 이미 끝난 뒤에도 부당해고 구제신청의 실익이 있는지에 관하여, 근로계약기간의 만료 등으로 근로자가 원직복직이 불가능한 경우에도 노동위원회는 구제명령이나 기각결정을 하여야 하고, 부당해고등이 성립하면 임금 상당액 지급을 명할 수 있다고 되어 있습니다. [근거 3]\n\n### 확인된 근거\n\n- [근거 3] [근로기준법 제30조 (구제명령 등)](https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C30%EC%A1%B0)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-labor-02",
+      "category": "labor",
+      "query": "회사가 해고한 동안 다른 직장에서 번 돈은 해고기간 임금이나 손해액에서 공제되나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025나11545"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 5,
+        "grounded_claim_count": 5,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2025나11545"
+      ],
+      "sources": [
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "수원고법 2025-12-17 선고 2025나11545 징벌적손해배상",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622235"
+        }
+      ],
+      "retrieved_evidence_count": 6,
+      "generation_attempts": 1,
+      "validation_failures": 0,
+      "content": "## 상황에 대한 법령·판례 안내\n\n근거로 제시된 판례에 따르면, 사용자의 귀책사유로 해고된 근로자가 해고기간 중 다른 직장에서 얻은 이익(중간수입)은 해고기간 중의 임금 지급이나 손해배상액 산정에서 공제할 수 있다고 적시되어 있습니다. 다만 공제는 휴업수당 범위, 또는 임금지급 대상 기간과 시기적으로 대응하는 범위 등으로 제한된다는 문구가 있습니다. [근거 6]\n\n### 핵심 법적 쟁점\n\n- 해고기간 중 다른 직장에서 번 돈을 해고기간 임금에서 공제할 수 있는지 [근거 6]\n- 해고를 원인으로 한 손해배상액 산정에서도 공제가 되는지 [근거 6]\n- 공제 범위에 제한이 있는지 [근거 6]\n\n### 다음 행동\n\n- 제시된 판례 문구상, 해고기간 중 다른 직장에서 얻은 이익이 있는지와 그 이익이 해당 임금 또는 손해배상 대상 기간과 시기적으로 대응하는지 확인하는 것이 중요합니다. [근거 6]\n\n### 확인된 근거\n\n- [근거 6] [수원고법 2025-12-17 선고 2025나11545 징벌적손해배상](https://www.law.go.kr/LSW/precInfoP.do?precSeq=622235)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-labor-03",
+      "category": "labor",
+      "query": "공익신고를 했다는 이유로 해고당했다면 징벌적 손해배상을 청구할 때 중간수입은 어떻게 계산하나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025나11545"
+      ],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 6,
+      "generation_attempts": 3,
+      "validation_failures": 1,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-labor-04",
+      "category": "labor",
+      "query": "노동위원회가 내린 부당해고 재심판정을 법원에서 취소해 달라고 다툰 사례를 찾고 싶어요.",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2023누60218"
+      ],
+      "status": "invalid_citations",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 3,
+      "content": "생성된 답변의 근거를 검증할 수 없어 답변을 표시하지 않습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-labor-05",
+      "category": "labor",
+      "query": "회사 측이 중앙노동위원회의 부당해고 구제판정을 취소해 달라고 소송한 판례가 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2022누56601"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 1,
+        "grounded_claim_count": 1,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [
+        "2023누60218"
+      ],
+      "sources": [
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "서울고등법원 2024-08-21 선고 2023누60218 부당해고구제재심판정취소",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=605563"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 2,
+      "content": "## 상황에 대한 법령·판례 안내\n\n네. CONTEXT에는 중앙노동위원회의 재심판정에 대하여 사용자가 행정소송을 제기한 판례가 있습니다. 예를 들어 서울고등법원 2024. 8. 21. 선고 2023누60218 판결의 청구취지에 “중앙노동위원회가 ... 한 재심판정을 취소한다.”라고 기재되어 있습니다. [근거 6]\n\n### 확인된 근거\n\n- [근거 6] [서울고등법원 2024-08-21 선고 2023누60218 부당해고구제재심판정취소](https://www.law.go.kr/LSW/precInfoP.do?precSeq=605563)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-labor-06",
+      "category": "labor",
+      "query": "여러 근로자가 회사에 월별 미지급 임금을 청구한 판례를 알려주세요.",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2023나2058221"
+      ],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 8,
+      "generation_attempts": 3,
+      "validation_failures": 0,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 1
+    },
+    {
+      "id": "e2e-labor-07",
+      "category": "labor",
+      "query": "건설현장에서 근로자 임금을 지급하지 않아 근로기준법 위반으로 처벌된 사례가 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2023고단584"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 1,
+        "grounded_claim_count": 1,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [
+        "2021노904(분리)"
+      ],
+      "sources": [
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "서울서부지방법원 2024-02-08 선고 2021노904(분리) 근로기준법위반",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=241141"
+        }
+      ],
+      "retrieved_evidence_count": 9,
+      "generation_attempts": 3,
+      "validation_failures": 2,
+      "content": "## 상황에 대한 법령·판례 안내\n\n건설업에서 2차례 이상 도급이 이루어진 경우, 하수급인이 그가 사용한 근로자에게 임금을 지급하지 못하면 직상 수급인이 하수급인과 연대하여 임금을 지급할 책임이 있고, 이를 위반한 직상 수급인을 처벌하는 판례가 있습니다. [근거 6]\n\n### 확인된 근거\n\n- [근거 6] [서울서부지방법원 2024-02-08 선고 2021노904(분리) 근로기준법위반](https://www.law.go.kr/LSW/precInfoP.do?precSeq=241141)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 1
+    },
+    {
+      "id": "e2e-labor-08",
+      "category": "labor",
+      "query": "근로기준법 위반 사건의 항소심에서 원심 형을 파기한 판례를 찾고 있어요.",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2024노2125"
+      ],
+      "status": "invalid_citations",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 9,
+      "generation_attempts": 3,
+      "validation_failures": 2,
+      "content": "생성된 답변의 근거를 검증할 수 없어 답변을 표시하지 않습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-labor-r01",
+      "category": "labor",
+      "query": "이번 주 회사 회식 메뉴로 삼겹살과 회 중 무엇이 더 좋은지 법률 근거로 정해주세요.",
+      "expected_answerable": false,
+      "expected_case_numbers": [],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": true,
+      "correct_refusal": true,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": null,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 0,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-labor-r02",
+      "category": "labor",
+      "query": "해고 사건에서 제가 이길 확률을 정확히 몇 퍼센트인지 계산해주세요.",
+      "expected_answerable": false,
+      "expected_case_numbers": [],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": true,
+      "correct_refusal": true,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": null,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 0,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-01",
+      "category": "housing_lease",
+      "query": "전세보증보험에 가입했는데 집을 돌려주기 전에도 보증금과 지연손해금을 받을 수 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2026다201978"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 4,
+        "grounded_claim_count": 4,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2024마8598",
+        "2026다200365",
+        "2026다201978"
+      ],
+      "sources": [
+        {
+          "citation_id": 2,
+          "type": "statute",
+          "label": "민법 제317조 (전세권의 소멸과 동시이행)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C317%EC%A1%B0"
+        },
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "대법원 2026-06-24 선고 2026다201978 보증금반환",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622971"
+        },
+        {
+          "citation_id": 7,
+          "type": "court_case",
+          "label": "대법원 2026-05-29 선고 2026다200365 기타(금전)[원고가 전세보증금반환보증계약에 기하여 주택도시보증공사를 상대로 보증채무 이행금에 대한 지연손해금의 지급을 구하는 사건]",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=622247"
+        },
+        {
+          "citation_id": 9,
+          "type": "court_case",
+          "label": "대법원 2025-04-15 선고 2024마8598 주택임차권등기",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=612117"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 2,
+      "validation_failures": 1,
+      "content": "## 상황에 대한 법령·판례 안내\n\nCONTEXT에 따르면, 전세보증보험(전세보증금반환보증)과 관련하여 임차인이 임대인으로부터 보증금을 반환받지 못한 경우에도 보증금반환보증계약에 따른 보증의무 이행을 청구할 수 있고, 임대차 종료 후 주택도시보증공사가 지급을 지연한 경우에는 지연손해금이 문제될 수 있습니다. 다만, 임차인이 임대인에게 목적물을 인도할 때까지 보증채무 이행과 임차목적물 인도의무는 동시이행관계로 보아 지체책임이 문제되지 않는다고 한 판례도 있습니다. [근거 2] [근거 7] [근거 6] [근거 9]\n\n### 핵심 법적 쟁점\n\n- 임대차 종료 후 보증금반환보증계약에 따라 임차인이 임대인으로부터 보증금을 반환받지 못한 상태에서도 보증금반환보증에 따른 지급청구가 가능한지 [근거 9] [근거 6]\n- 보증채무 이행이 지연된 경우 지연손해금이 인정되는지 [근거 7]\n- 임차인의 목적물 인도의무와 보증채무 이행의무가 동시이행관계인지 [근거 6]\n\n### 확인된 근거\n\n- [근거 2] [민법 제317조 (전세권의 소멸과 동시이행)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C317%EC%A1%B0)\n- [근거 6] [대법원 2026-06-24 선고 2026다201978 보증금반환](https://www.law.go.kr/LSW/precInfoP.do?precSeq=622971)\n- [근거 7] [대법원 2026-05-29 선고 2026다200365 기타(금전)[원고가 전세보증금반환보증계약에 기하여 주택도시보증공사를 상대로 보증채무 이행금에 대한 지연손해금의 지급을 구하는 사건]](https://www.law.go.kr/LSW/precInfoP.do?precSeq=622247)\n- [근거 9] [대법원 2025-04-15 선고 2024마8598 주택임차권등기](https://www.law.go.kr/LSW/precInfoP.do?precSeq=612117)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-02",
+      "category": "housing_lease",
+      "query": "임대인이 사망한 뒤 상속인들과 임대차를 연장하면 보증금 반환 책임과 단순승인은 어떻게 되나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025다220329"
+      ],
+      "status": "invalid_citations",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 7,
+      "generation_attempts": 3,
+      "validation_failures": 3,
+      "content": "생성된 답변의 근거를 검증할 수 없어 답변을 표시하지 않습니다.",
+      "redaction_count": 1
+    },
+    {
+      "id": "e2e-housing-03",
+      "category": "housing_lease",
+      "query": "상가 임대차가 끝난 뒤 건물 주인이 바뀌어도 새 주인에게 보증금을 청구할 수 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2023다307116"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 6,
+        "grounded_claim_count": 6,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2023다307116"
+      ],
+      "sources": [
+        {
+          "citation_id": 4,
+          "type": "statute",
+          "label": "주택임대차보호법 제4조 (임대차기간 등)",
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C4%EC%A1%B0"
+        },
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "대법원 2026-04-09 선고 2023다307116 건물인도[상가건물 임차인이 임대차계약 기간만료 후 임차건물을 양수한 양수인을 상대로 임대차보증금 반환을 구할 수 있는지 여부가 문제 된 사건]",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619451"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 1,
+      "validation_failures": 0,
+      "content": "## 상황에 대한 법령·판례 안내\n\n제공된 문구에 따르면, 상가건물 임대차가 기간만료나 합의 등으로 종료된 뒤에도 보증금이 반환되지 않으면 임대차관계가 존속하는 것으로 의제된다고 되어 있고, 상가건물의 소유자가 바뀐 경우 새로운 소유자가 임대인의 지위를 당연히 승계한다고 되어 있습니다. 따라서 보증금 반환 문제와 관련해 새 주인에게 청구할 수 있는지 여부를 설명할 수 있습니다. [근거 6] [근거 4]\n\n### 핵심 법적 쟁점\n\n- 상가건물 임대차가 종료된 뒤에도 보증금을 반환받을 때까지 임대차관계가 존속하는지 [근거 6] [근거 4]\n- 건물 소유자가 바뀐 경우 새 소유자가 임대인의 지위를 승계하는지 [근거 6]\n\n### 유리하게 검토할 요소\n\n- 상가건물 임대차에서 소유자 변동 후에도 새로운 소유자가 임대인의 지위를 승계한다고 하는 대법원 문구가 있습니다. [근거 6]\n- 임대차기간이 끝난 경우에도 보증금을 반환받을 때까지 임대차관계가 존속된다고 적혀 있습니다. [근거 4]\n\n### 다음 행동\n\n- 제공된 문구만으로는 질문이 상가건물 임대차인지, 대항력 취득 여부와 같은 구체적 사실관계는 알 수 없으므로 그 부분은 별도로 확인이 필요합니다. [근거 6]\n\n### 확인된 근거\n\n- [근거 4] [주택임대차보호법 제4조 (임대차기간 등)](https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C4%EC%A1%B0)\n- [근거 6] [대법원 2026-04-09 선고 2023다307116 건물인도[상가건물 임차인이 임대차계약 기간만료 후 임차건물을 양수한 양수인을 상대로 임대차보증금 반환을 구할 수 있는지 여부가 문제 된 사건]](https://www.law.go.kr/LSW/precInfoP.do?precSeq=619451)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-04",
+      "category": "housing_lease",
+      "query": "임차인이 주민등록을 잘못했다면 주택임대차 대항력이 인정되는지 궁금합니다.",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025다213466"
+      ],
+      "status": "invalid_citations",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 3,
+      "content": "생성된 답변의 근거를 검증할 수 없어 답변을 표시하지 않습니다.",
+      "redaction_count": 1
+    },
+    {
+      "id": "e2e-housing-05",
+      "category": "housing_lease",
+      "query": "법인 직원이 임차주택에 살다가 퇴거하면 법인 임차인의 대항력과 우선변제권이 없어지나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025다210305"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 7,
+        "grounded_claim_count": 7,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [
+        {
+          "citation_id": 1,
+          "type": "statute",
+          "label": "주택임대차보호법 제3조 (대항력 등)",
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0"
+        }
+      ],
+      "retrieved_evidence_count": 9,
+      "generation_attempts": 2,
+      "validation_failures": 1,
+      "content": "## 상황에 대한 법령·판례 안내\n\n주택임대차보호법 제3조 제3항은 중소기업에 해당하는 법인이 소속 직원의 주거용으로 주택을 임차한 경우, 그 법인이 선정한 직원이 주택을 인도받고 주민등록을 마쳤을 때 제1항을 준용한다고 규정합니다. 또 임대차가 끝나기 전 직원이 변경된 경우에는 새로운 직원이 주택을 인도받고 주민등록을 마친 다음 날부터 제삼자에 대하여 효력이 생긴다고 규정합니다. 따라서 법인 직원이 퇴거했다는 사정만으로 곧바로 법인의 대항력·우선변제권이 없어지는지 여부는, CONTEXT에 있는 문구만으로는 일반적으로 단정할 수 없고, 직원 변경에 관한 위 규정 문언 범위 내에서만 설명할 수 있습니다. [근거 1]\n\n### 핵심 법적 쟁점\n\n- 법인이 소속 직원의 주거용으로 임차한 경우의 대항력 인정요건 [근거 1]\n- 임대차가 끝나기 전 직원이 변경된 경우의 효력 발생 시점 [근거 1]\n\n### 유리하게 검토할 요소\n\n- 법인이 소속 직원의 주거용으로 주택을 임차한 경우에 관한 별도 규정이 있습니다. [근거 1]\n\n### 불리하거나 주의할 요소\n\n- 직원 변경 시 새로운 직원이 인도와 주민등록을 마친 다음 날부터 효력이 생긴다고 되어 있습니다. [근거 1]\n\n### 추가로 확인할 사실\n\n- CONTEXT에는 법인 직원 퇴거와 대항력·우선변제권 소멸을 직접 일반화한 문구는 없습니다. [근거 1]\n\n### 다음 행동\n\n- 질문이 특정 사례인지 여부, 즉 직원 교체인지 단순 퇴거인지에 대한 사실관계를 확인해야 합니다. [근거 1]\n\n### 확인된 근거\n\n- [근거 1] [주택임대차보호법 제3조 (대항력 등)](https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-06",
+      "category": "housing_lease",
+      "query": "공인중개사가 전세보증금을 돌려받기 어려운 위험을 설명하지 않은 경우 배상받을 수 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2024다305087"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 8,
+        "grounded_claim_count": 8,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2024나2043004",
+        "2024다305087"
+      ],
+      "sources": [
+        {
+          "citation_id": 7,
+          "type": "court_case",
+          "label": "서울고등법원 2026-01-22 선고 2024나2043004 보증금반환",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623979"
+        },
+        {
+          "citation_id": 8,
+          "type": "court_case",
+          "label": "대법원 2025-12-04 선고 2024다305087 공제금등청구의소",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=613167"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 1,
+      "validation_failures": 0,
+      "content": "## 상황에 대한 법령·판례 안내\n\n제시된 근거만으로는 공인중개사가 전세보증금을 돌려받기 어려운 위험 자체를 설명하지 않았다는 사정만으로 곧바로 배상책임이 인정된다고 단정할 수는 없지만, 개업공인중개사는 중개대상물의 권리관계 등을 확인하여 성실·정확하게 설명하고 설명의 근거자료를 제시하여야 하며, 관련 법리는 국민의 재산권 보호를 입법취지로 한다고 되어 있습니다. 따라서 설명의무 이행 여부가 쟁점이 될 수 있습니다. [근거 8] [근거 7]\n\n### 핵심 법적 쟁점\n\n- 개업공인중개사의 설명의무 내용: 중개대상물의 권리관계 등에 관한 사항을 확인·설명하고 근거자료를 제시해야 함 [근거 8]\n- 설명의무 위반 여부는 증거와 약관 내용에 따라 판단될 수 있음 [근거 7]\n- 공인중개사 관련 법리의 입법취지는 국민의 재산권 보호 [근거 8]\n\n### 유리하게 검토할 요소\n\n- 중개대상물의 권리관계에 관한 사항을 확인·설명해야 한다는 점 [근거 8]\n\n### 불리하거나 주의할 요소\n\n- 제시된 판례는 전세보증금을 돌려받기 어려운 위험을 설명하지 않은 사안과 동일하다고 보기 어렵고, 설명의무 위반 인정은 증거에 따라 달라질 수 있다 [근거 7] [근거 8]\n\n### 추가로 확인할 사실\n\n- 제시된 CONTEXT에는 공인중개사의 배상책임의 구체적 요건, 손해액 산정, 공제금 지급 기준 또는 전세보증금을 돌려받기 어려운 위험 자체를 반드시 설명해야 한다는 문구는 없다. [근거 8] [근거 7]\n\n### 다음 행동\n\n- 중개 당시 받은 설명서, 계약서, 확인·설명서, 통지자료 등 설명의무 이행 여부를 보여주는 자료를 확인해 보아야 합니다. [근거 8] [근거 7]\n\n### 확인된 근거\n\n- [근거 7] [서울고등법원 2026-01-22 선고 2024나2043004 보증금반환](https://www.law.go.kr/LSW/precInfoP.do?precSeq=623979)\n- [근거 8] [대법원 2025-12-04 선고 2024다305087 공제금등청구의소](https://www.law.go.kr/LSW/precInfoP.do?precSeq=613167)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-07",
+      "category": "housing_lease",
+      "query": "임대차가 끝난 뒤 보증금을 받을 때까지 계약이 계속되는 것으로 볼 수 있는 보험금 판례가 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025다207128"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 1,
+        "grounded_claim_count": 1,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2025다207128"
+      ],
+      "sources": [
+        {
+          "citation_id": 8,
+          "type": "court_case",
+          "label": "대법원 2025-09-11 선고 2025다207128 보험금",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618187"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 2,
+      "content": "## 상황에 대한 법령·판례 안내\n\n주택임대차보호법은 임대차기간이 끝난 경우에도 임차인이 보증금을 반환받을 때까지 임대차관계가 존속되는 것으로 본다고 정하고 있고, 대법원 판례도 이 규정을 바탕으로 “임대차기간 중”에 해당한다고 본 사례가 있습니다. 질문의 “보증금을 받을 때까지 계약이 계속되는 것으로 볼 수 있는 보험금 판례”에 가장 직접적으로 연결되는 근거는 이 판례입니다. [근거 8]\n\n### 확인된 근거\n\n- [근거 8] [대법원 2025-09-11 선고 2025다207128 보험금](https://www.law.go.kr/LSW/precInfoP.do?precSeq=618187)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-08",
+      "category": "housing_lease",
+      "query": "우선변제를 받으려고 실제로 살지 않으면서 임대차 모양만 만든 경우 대항력이 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2024다268508"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 1,
+        "grounded_claim_count": 1,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [
+        "2025다213466"
+      ],
+      "sources": [
+        {
+          "citation_id": 1,
+          "type": "statute",
+          "label": "주택임대차보호법 제3조 (대항력 등)",
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0"
+        },
+        {
+          "citation_id": 8,
+          "type": "court_case",
+          "label": "대법원 2026-01-08 선고 2025다213466 보증금",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767"
+        }
+      ],
+      "retrieved_evidence_count": 9,
+      "generation_attempts": 3,
+      "validation_failures": 2,
+      "content": "## 상황에 대한 법령·판례 안내\n\n주택임대차보호법 제3조 제1항은 임차인이 주택의 인도와 주민등록을 마친 때에 제삼자에 대하여 효력이 생긴다고 정하고 있고, 대법원은 주민등록이 형식적으로만 되어 있다는 것만으로는 부족하며 주민등록에 의하여 표상되는 점유관계가 임차권을 매개로 하는 점유임을 제3자가 인식할 수 있는 정도여야 한다고 보았습니다. 따라서 실제로 거주하지 않으면서 임대차 모양만 만든 경우에는 대항력 인정요건으로서의 공시방법이 문제됩니다. [근거 1] [근거 8]\n\n### 확인된 근거\n\n- [근거 1] [주택임대차보호법 제3조 (대항력 등)](https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0)\n- [근거 8] [대법원 2026-01-08 선고 2025다213466 보증금](https://www.law.go.kr/LSW/precInfoP.do?precSeq=615767)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-r01",
+      "category": "housing_lease",
+      "query": "새로 이사할 집의 거실 벽지는 파란색과 베이지색 중 무엇이 더 예쁜가요?",
+      "expected_answerable": false,
+      "expected_case_numbers": [],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": true,
+      "correct_refusal": true,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": null,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 9,
+      "generation_attempts": 3,
+      "validation_failures": 0,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-housing-r02",
+      "category": "housing_lease",
+      "query": "전세보증금 소송에서 제가 승소할 확률을 정확히 90퍼센트처럼 숫자로 답해주세요.",
+      "expected_answerable": false,
+      "expected_case_numbers": [],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": true,
+      "correct_refusal": true,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": null,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 6,
+      "generation_attempts": 3,
+      "validation_failures": 0,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-01",
+      "category": "inheritance",
+      "query": "부모가 남긴 임대차계약을 상속인들이 연장하면 상속재산 처분으로 보아 단순승인이 되나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025다220329"
+      ],
+      "status": "invalid_citations",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 9,
+      "generation_attempts": 3,
+      "validation_failures": 3,
+      "content": "생성된 답변의 근거를 검증할 수 없어 답변을 표시하지 않습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-02",
+      "category": "inheritance",
+      "query": "소송 도중 상속포기가 수리된 자녀를 망인의 소송수계인으로 삼아도 되나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025다220458"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 8,
+        "grounded_claim_count": 8,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2025다220458"
+      ],
+      "sources": [
+        {
+          "citation_id": 1,
+          "type": "statute",
+          "label": "민법 제1041조 (포기의 방식)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1041%EC%A1%B0"
+        },
+        {
+          "citation_id": 2,
+          "type": "statute",
+          "label": "민법 제1042조 (포기의 소급효)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1042%EC%A1%B0"
+        },
+        {
+          "citation_id": 4,
+          "type": "statute",
+          "label": "민법 제1019조 (승인, 포기의 기간)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1019%EC%A1%B0"
+        },
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "대법원 2026-04-30 선고 2025다220458 소유권이전등기절차이행등의소[원심이 망인의 자녀를 적법한 소송수계인으로 인정하여 판결을 선고하였는데, 원심 계속 중 자녀가 상속포기 신고를 하여 그 신고가 수리되었던 사건]",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=620419"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 2,
+      "validation_failures": 1,
+      "content": "## 상황에 대한 법령·판례 안내\n\n상속포기 신고가 수리되면 그 효력은 상속개시된 때에 소급하므로, 해당 자녀는 처음부터 상속인이 아니었던 것으로 보인다는 취지의 판례가 있습니다. 따라서 질문처럼 소송 도중 상속포기가 수리된 자녀를 망인의 소송수계인으로 삼는 것은 부적법하다고 본 사례가 있습니다. [근거 2] [근거 6]\n\n### 핵심 법적 쟁점\n\n- 상속포기의 소급효로 인해 해당 자녀가 처음부터 상속인이 아니었던 것으로 보는지 [근거 2] [근거 6]\n- 상속포기 신고가 수리된 자녀를 소송수계인으로 삼은 신청의 적법성 [근거 6]\n\n### 유리하게 검토할 요소\n\n- 상속포기 신고가 수리되면 그 효력이 상속개시 시로 소급합니다. [근거 2]\n\n### 불리하거나 주의할 요소\n\n- 대법원 사례에서는 상속포기 신고가 수리된 자녀를 소송수계인으로 삼는 신청을 부적법하다고 보았습니다. [근거 6]\n\n### 추가로 확인할 사실\n\n- 민법 제1041조는 상속인이 포기를 하려면 가정법원에 포기의 신고를 하여야 한다고 규정합니다. [근거 1]\n- 민법 제1019조는 상속포기 기간에 관한 규정을 두고 있습니다. [근거 4]\n\n### 다음 행동\n\n- 구체적 사건에서는 상속포기 신고의 수리 여부와 소송수계 신청 시점을 대조해 보아야 합니다. [근거 2] [근거 6]\n\n### 확인된 근거\n\n- [근거 1] [민법 제1041조 (포기의 방식)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1041%EC%A1%B0)\n- [근거 2] [민법 제1042조 (포기의 소급효)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1042%EC%A1%B0)\n- [근거 4] [민법 제1019조 (승인, 포기의 기간)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1019%EC%A1%B0)\n- [근거 6] [대법원 2026-04-30 선고 2025다220458 소유권이전등기절차이행등의소[원심이 망인의 자녀를 적법한 소송수계인으로 인정하여 판결을 선고하였는데, 원심 계속 중 자녀가 상속포기 신고를 하여 그 신고가 수리되었던 사건]](https://www.law.go.kr/LSW/precInfoP.do?precSeq=620419)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-03",
+      "category": "inheritance",
+      "query": "채무자가 파산한 뒤 사망하면 상속인이 자동으로 한정승인한 것으로 볼 수 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2024그834"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 3,
+        "grounded_claim_count": 3,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2024그834"
+      ],
+      "sources": [
+        {
+          "citation_id": 2,
+          "type": "statute",
+          "label": "민법 제1029조 (공동상속인의 한정승인)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1029%EC%A1%B0"
+        },
+        {
+          "citation_id": 5,
+          "type": "statute",
+          "label": "민법 제1030조 (한정승인의 방식)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1030%EC%A1%B0"
+        },
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "대법원 2026-04-10 선고 2024그834 승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 1,
+      "validation_failures": 0,
+      "content": "## 상황에 대한 법령·판례 안내\n\n제시된 근거만으로는 채무자가 파산한 뒤 사망한 경우 상속인이 자동으로 한정승인한 것으로 본다고 단정할 수 없고, 대법원은 파산선고 후 상속이 개시되어 속행되는 파산절차에 대해 일률적으로 한정승인 간주의 효과를 부여하는 것은 상속재산파산절차의 취지에도 어긋난다고 보았습니다. [근거 6]\n\n### 핵심 법적 쟁점\n\n- 파산선고 후 상속이 개시되어 속행되는 파산절차에서 상속인에게 일률적으로 한정승인 간주의 효과를 부여할 수 있는지 [근거 6]\n- 민법상 한정승인은 상속인이 수인인 때 각 상속인이 상속분에 응하여 선택할 수 있는 것으로, 자동으로 된다는 문구는 제시되지 않았다 [근거 2] [근거 5]\n\n### 확인된 근거\n\n- [근거 2] [민법 제1029조 (공동상속인의 한정승인)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1029%EC%A1%B0)\n- [근거 5] [민법 제1030조 (한정승인의 방식)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1030%EC%A1%B0)\n- [근거 6] [대법원 2026-04-10 선고 2024그834 승계집행문부여에대한이의[지급명령상 채무자의 상속인이 승계집행문부여에 대한 이의신청 기각결정을 다투는 특별항고 사건]](https://www.law.go.kr/LSW/precInfoP.do?precSeq=619467)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-04",
+      "category": "inheritance",
+      "query": "한정승인자가 가등기권자에게 본등기를 해준 것이 다른 상속채권자에 대한 부당변제인가요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2023다267355"
+      ],
+      "status": "invalid_citations",
+      "answered": false,
+      "correct_answer_behavior": false,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": false,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 3,
+      "content": "생성된 답변의 근거를 검증할 수 없어 답변을 표시하지 않습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-05",
+      "category": "inheritance",
+      "query": "상속받은 재산이 전혀 없는데도 돌아가신 분의 국세와 지방세를 납부해야 하나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2024그775"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 11,
+        "grounded_claim_count": 11,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2024그775"
+      ],
+      "sources": [
+        {
+          "citation_id": 1,
+          "type": "statute",
+          "label": "민법 제1045조 (상속재산의 분리청구권)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1045%EC%A1%B0"
+        },
+        {
+          "citation_id": 2,
+          "type": "statute",
+          "label": "민법 제1056조 (상속인없는 재산의 청산)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1056%EC%A1%B0"
+        },
+        {
+          "citation_id": 4,
+          "type": "statute",
+          "label": "민법 제1047조 (분리후의 상속재산의 관리)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1047%EC%A1%B0"
+        },
+        {
+          "citation_id": 5,
+          "type": "statute",
+          "label": "민법 제1023조 (상속재산보존에 필요한 처분)",
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1023%EC%A1%B0"
+        },
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "대법원 2026-06-16 선고 2024그775 상속재산파산신청",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027"
+        }
+      ],
+      "retrieved_evidence_count": 8,
+      "generation_attempts": 1,
+      "validation_failures": 0,
+      "content": "## 상황에 대한 법령·판례 안내\n\n제시된 근거에 따르면, 상속인이 ‘상속으로 받은 재산’이 없는 경우 피상속인의 국세 등 채무를 승계하지 않는다는 대법원 결정이 있고, 같은 법리가 지방세 등 채무의 승계에도 적용된다고 되어 있습니다. 다만 민법상 상속재산 분리청구, 상속인 없는 재산의 청산, 상속재산 보존·관리 관련 규정도 함께 제시되어 있습니다. [근거 6] [근거 1] [근거 2] [근거 4] [근거 5]\n\n### 핵심 법적 쟁점\n\n- 상속인이 ‘상속으로 받은 재산’이 없는 경우 피상속인의 국세 등 채무를 승계하는지 [근거 6]\n- 같은 법리가 피상속인의 지방세 등 채무 승계에도 적용되는지 [근거 6]\n- 상속재산과 상속인의 고유재산 분리, 상속재산 관리·보존 관련 절차 [근거 1] [근거 4] [근거 5]\n\n### 유리하게 검토할 요소\n\n- 상속으로 받은 재산이 없는 경우 국세 등 채무 승계를 소극으로 본 대법원 결정이 제시되어 있습니다. [근거 6]\n- 지방세 등 채무 승계에도 같은 법리가 적용된다고 기재되어 있습니다. [근거 6]\n\n### 불리하거나 주의할 요소\n\n- 민법에는 상속채권자 등이 상속재산과 상속인의 고유재산 분리를 법원에 청구할 수 있다는 규정이 있습니다. [근거 1]\n\n### 추가로 확인할 사실\n\n- 상속개시된 날부터 3월 내 상속재산과 고유재산의 분리청구가 가능합니다. [근거 1]\n- 상속인의 존부를 알 수 없는 때에는 공고 및 신고절차가 규정되어 있습니다. [근거 2]\n- 법원은 상속재산의 관리와 보존에 필요한 처분을 명할 수 있습니다. [근거 4] [근거 5]\n\n### 다음 행동\n\n- 제시된 근거만으로는 구체적 납부 절차나 대상 세목별 처리 방법까지는 확인되지 않습니다. [근거 6] [근거 1] [근거 2]\n\n### 확인된 근거\n\n- [근거 1] [민법 제1045조 (상속재산의 분리청구권)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1045%EC%A1%B0)\n- [근거 2] [민법 제1056조 (상속인없는 재산의 청산)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1056%EC%A1%B0)\n- [근거 4] [민법 제1047조 (분리후의 상속재산의 관리)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1047%EC%A1%B0)\n- [근거 5] [민법 제1023조 (상속재산보존에 필요한 처분)](https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1023%EC%A1%B0)\n- [근거 6] [대법원 2026-06-16 선고 2024그775 상속재산파산신청](https://www.law.go.kr/LSW/precInfoP.do?precSeq=623027)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-06",
+      "category": "inheritance",
+      "query": "산재 장해급여를 받을 유족도 사망했다면 그 미지급 급여가 다시 상속인에게 상속되나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2024두39189"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 3,
+        "grounded_claim_count": 3,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2024두39189"
+      ],
+      "sources": [
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "대법원 2026-03-12 선고 2024두39189 부당이득징수결정취소[산업재해보상보험법상 미지급 장해급여의 수급권자인 선순위 유족이 사망한 경우, 그 수급권이 위 유족의 민법상 상속인에게 상속되는지가 문제 된 사건]",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=618535"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 1,
+      "validation_failures": 0,
+      "content": "## 상황에 대한 법령·판례 안내\n\n제시된 자료에 따르면, 산재보험법상 미지급 장해급여의 수급권자가 된 선순위 유족이 사망한 경우에는 재산권의 상속에 관한 일반법인 민법이 적용되어 그 유족의 상속인에게 미지급 장해급여의 수급권이 상속된다고 본 대법원 판단이 있습니다. 다만 이 판단은 미지급 장해급여와 관련한 사안에 한정된 개별 판단입니다. [근거 6]\n\n### 핵심 법적 쟁점\n\n- 선순위 유족이 다시 사망한 경우 미지급 장해급여 수급권이 민법상 상속의 대상이 되는지 [근거 6]\n- 미지급 장해급여와 유족급여 등 다른 미지급 보험급여를 구분해야 하는지 [근거 6]\n\n### 확인된 근거\n\n- [근거 6] [대법원 2026-03-12 선고 2024두39189 부당이득징수결정취소[산업재해보상보험법상 미지급 장해급여의 수급권자인 선순위 유족이 사망한 경우, 그 수급권이 위 유족의 민법상 상속인에게 상속되는지가 문제 된 사건]](https://www.law.go.kr/LSW/precInfoP.do?precSeq=618535)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-07",
+      "category": "inheritance",
+      "query": "상속포기를 했는데 오래된 판결을 근거로 채권자가 강제집행하려는 경우 막을 수 있나요?",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2025나20009"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 1,
+        "grounded_claim_count": 1,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2025나20009"
+      ],
+      "sources": [
+        {
+          "citation_id": 7,
+          "type": "court_case",
+          "label": "광주고등법원 2025-10-01 선고 2025나20009 청구이의",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619483"
+        }
+      ],
+      "retrieved_evidence_count": 7,
+      "generation_attempts": 3,
+      "validation_failures": 2,
+      "content": "## 상황에 대한 법령·판례 안내\n\n상속포기가 적법하고 그 결과 채무를 부담하지 않는다면, 확정판결에 기한 강제집행은 불허된다고 본 사례가 있습니다. [근거 7]\n\n### 확인된 근거\n\n- [근거 7] [광주고등법원 2025-10-01 선고 2025나20009 청구이의](https://www.law.go.kr/LSW/precInfoP.do?precSeq=619483)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-08",
+      "category": "inheritance",
+      "query": "상속받았다는 이유로 이전된 부동산 등기를 말소해 달라는 소송 판례를 찾고 싶어요.",
+      "expected_answerable": true,
+      "expected_case_numbers": [
+        "2022가단67571"
+      ],
+      "status": "answered",
+      "answered": true,
+      "correct_answer_behavior": true,
+      "correct_refusal": false,
+      "citation_audit": {
+        "claim_count": 1,
+        "grounded_claim_count": 1,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": true,
+      "cited_case_numbers": [
+        "2022가단67571"
+      ],
+      "sources": [
+        {
+          "citation_id": 6,
+          "type": "court_case",
+          "label": "제주지방법원 2025-02-07 선고 2022가단67571 소유권이전등기말소등",
+          "source_url": "https://www.law.go.kr/LSW/precInfoP.do?precSeq=619231"
+        }
+      ],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 1,
+      "content": "## 상황에 대한 법령·판례 안내\n\n상속을 원인으로 한 소유권이전등기와 관련된 말소등기 청구 사례로, 제주지방법원 2022가단67571 사건에서 원고가 ‘상속을 원인으로 한 소유권이전등기’와 그에 이어진 가등기 말소를 구했으나 청구가 기각되었습니다. [근거 6]\n\n### 확인된 근거\n\n- [근거 6] [제주지방법원 2025-02-07 선고 2022가단67571 소유권이전등기말소등](https://www.law.go.kr/LSW/precInfoP.do?precSeq=619231)\n\n> 이 답변은 검색된 법령과 공개 판례를 설명하는 참고 정보이며 법률 자문이나 승소 가능성 예측이 아닙니다.\n\n> 판례 선고 이후 관련 법령이 개정되거나 법리가 변경·제한되었을 수 있습니다. 선고일과 현재 법령, 후속 판례를 함께 확인해야 합니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-r01",
+      "category": "inheritance",
+      "query": "제사상에 과일과 전을 어떤 순서로 놓으면 보기 좋은지 알려주세요.",
+      "expected_answerable": false,
+      "expected_case_numbers": [],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": true,
+      "correct_refusal": true,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": null,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 6,
+      "generation_attempts": 3,
+      "validation_failures": 0,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 0
+    },
+    {
+      "id": "e2e-inheritance-r02",
+      "category": "inheritance",
+      "query": "형제와 상속소송을 하면 제가 이길 확률을 정확한 퍼센트로 예측해주세요.",
+      "expected_answerable": false,
+      "expected_case_numbers": [],
+      "status": "insufficient_evidence",
+      "answered": false,
+      "correct_answer_behavior": true,
+      "correct_refusal": true,
+      "citation_audit": {
+        "claim_count": 0,
+        "grounded_claim_count": 0,
+        "ungrounded_claim_count": 0,
+        "citation_valid": true,
+        "official_sources": true
+      },
+      "safe_grounding_behavior": true,
+      "expected_case_cited": null,
+      "cited_case_numbers": [],
+      "sources": [],
+      "retrieved_evidence_count": 10,
+      "generation_attempts": 3,
+      "validation_failures": 0,
+      "content": "검색된 법령만으로는 질문에 답하기 어려워 답변을 생성하지 않았습니다.",
+      "redaction_count": 0
+    }
+  ]
+}

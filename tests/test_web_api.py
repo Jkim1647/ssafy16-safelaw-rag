@@ -5,7 +5,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from fastapi.testclient import TestClient
+try:
+    from fastapi.testclient import TestClient
+except ImportError as exc:  # 웹 화면은 선택 설치 항목이다: pip install -e ".[web]"
+    raise unittest.SkipTest("FastAPI가 설치되지 않아 웹 API 테스트를 건너뜁니다.") from exc
 
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.citations import CaseEvidence, EvidenceQuote, GroundedClaim, StatuteEvidence

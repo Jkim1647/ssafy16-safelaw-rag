@@ -38,6 +38,7 @@
 | [RAG 파이프라인 설계문서](docs/rag-pipeline-design.md) | 컬렉션·메타데이터, 수집·청킹·색인, 병합·중복 제거, 프롬프트 3개, 청크·Top-k 선택 이유, 근거 표시, 특화 기능, 문제 해결 |
 | [검증 결과](docs/verification-results.md) | 명세서 4장 항목별 실행 결과, 요구사항 대조표, 테스트 결과표, 응답 시간, 남은 항목 |
 | [RAG 사용 전후 비교](docs/rag-before-after.md) | 심화 F2015 대표 질문 6개 비교 |
+| [웹 화면·API](docs/web-api.md) | 심화 F2013 HTML/CSS/JS 화면과 요청·응답 형식 |
 | [데이터 출처·이용 조건](docs/data-source-inventory.md) | API·수집 범위·건수·해시·이용 조건 |
 | [제출 체크리스트](docs/submission-checklist.md) | 제출물과 점검 현황 |
 
@@ -46,13 +47,13 @@
 | 구분 | 기능 |
 |---|---|
 | 필수 (F2001~F2012) | 법령 조문 메타데이터 색인(RAG 1), 검색어 추출(프롬프트1), 판례 후보 선별·수집(프롬프트2), 판례 색인(RAG 2), 근거 병합·중복 제거, LangGraph 근거 기반 답변(프롬프트3), 근거 표시, 조문 선택·채팅, 쟁점 체크리스트(특화), 조건 기반 조문 탐색, 진행 상태·면책 안내 |
-| 심화 | F2014 MMR 검색, F2015 RAG 전후 비교, F2016 법령·판례 출처 결합(부분). F2013 HTML/JS 화면은 미구현 |
+| 심화 | F2013 HTML/CSS/JS 화면(FastAPI 분리), F2014 MMR 검색, F2015 RAG 전후 비교, F2016 법령·판례 출처 결합(부분) |
 
 ## 전체 시스템 아키텍처
 
 ![SafeLaw 개인정보 보호형 법률 RAG 전체 아키텍처](docs/assets/safelaw-hd-system-architecture.png)
 
-원본은 4K(`3840×2160`) PNG로 저장되어 확대해도 각 단계와 연결 관계를 확인할 수 있습니다. 그림의 청크 수는 저장소 데이터로 재현되는 기준 색인(법령 `386`, 판례 `652`)이며, 질의 시 판례 증분 보강을 거친 로컬 색인은 이보다 클 수 있습니다. 세부 처리 규칙과 계층별 책임은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
+원본은 4K(`3840×2160`) PNG로 저장되어 확대해도 각 단계와 연결 관계를 확인할 수 있습니다. 그림의 청크 수는 저장소 데이터로 재현되는 기준 색인(법령 `382`, 판례 `652`)이며, 질의 시 판례 증분 보강을 거친 로컬 색인은 이보다 클 수 있습니다. 세부 처리 규칙과 계층별 책임은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
 
 ## 프로젝트 구조
 
@@ -116,7 +117,14 @@ python -m pip install -e .
 streamlit run app.py
 ```
 
-브라우저의 기본 주소는 `http://localhost:8501`입니다. 화면은 두 개의 탭으로 구성됩니다.
+HTML/CSS/JS 화면(심화 F2013)은 FastAPI 서버로 실행합니다. 요청·응답 형식은 [`docs/web-api.md`](docs/web-api.md)에 있습니다.
+
+```powershell
+python -m pip install -e ".[web]"
+uvicorn legal_rag.web.api:app --port 8000
+```
+
+Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://localhost:8000`입니다. 화면은 두 개의 탭으로 구성됩니다.
 
 **상황으로 검토하기**
 
@@ -221,7 +229,7 @@ python scripts/build_statute_index.py
 - Vector Store: Chroma, cosine 거리
 - 법령 색인 위치: `data/indexes/statutes/` — 재생성 가능한 산출물이므로 Git 제외
 
-현재 데이터에서는 381개 조문이 386개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
+현재 데이터에서는 381개 조문 중 본문이 "제N조 삭제 <개정일>"뿐인 4개(근로기준법 제35조, 주택임대차보호법 제5조, 민법 제651조·제1002조)를 빼고 377개 조문이 382개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
 
 ### 청크·근거 수 설정
 
@@ -240,10 +248,10 @@ python scripts/build_statute_index.py
 
 | 문서 | 크기 / 중복 | 청크 수 |
 |---|---|---:|
-| 법령 381조문 | **1200 / 150 (기본)** | **386** |
-| 법령 381조문 | 800 / 150 | 401 |
-| 법령 381조문 | 500 / 100 | 436 |
-| 법령 381조문 | 300 / 50 | 531 |
+| 법령 377조문 | **1200 / 150 (기본)** | **382** |
+| 법령 377조문 | 800 / 150 | 397 |
+| 법령 377조문 | 500 / 100 | 432 |
+| 법령 377조문 | 300 / 50 | 527 |
 | 판례 50건 | **1400 / 180 (기본)** | **652** |
 | 판례 50건 | 1400 / 0 | 630 |
 | 판례 50건 | 1000 / 200 | 912 |
@@ -291,7 +299,7 @@ python scripts/show_evidence.py "회사에서 카카오톡으로 내일부터 �
   --collection cases --category housing_lease --limit 5
 ```
 
-기준 색인은 법령 `386`개, 판례 `652`개 벡터입니다. 판례 컬렉션은 질문 기반 API 보강으로 새 청크가 증분 추가되므로 로컬의 현재 건수는 더 클 수 있습니다. 정확한 현재 건수는 위 조회 명령으로 확인합니다. `data/indexes/`와 동적 캐시는 재생성 가능한 산출물이므로 Git에 올리지 않습니다.
+기준 색인은 법령 `382`개, 판례 `652`개 벡터입니다. 판례 컬렉션은 질문 기반 API 보강으로 새 청크가 증분 추가되므로 로컬의 현재 건수는 더 클 수 있습니다. 정확한 현재 건수는 위 조회 명령으로 확인합니다. `data/indexes/`와 동적 캐시는 재생성 가능한 산출물이므로 Git에 올리지 않습니다.
 
 역할별 채팅 모델 배치와 임베딩 모델 혼용 시 주의점은 [`docs/model-routing.md`](docs/model-routing.md)에 정리했습니다.
 Chroma를 유지하고 Pinecone은 운영 확장 시 재검토하기로 한 근거는 [`docs/vector-store-decision.md`](docs/vector-store-decision.md)에 정리했습니다.
@@ -346,7 +354,7 @@ python scripts/evaluate_statute_retrieval.py
 - `data/evaluation/statute_retrieval_results.json`: 질문별 Top-5와 최종 집계
 - `data/evaluation/statute_retrieval_baseline.json`: 개선 전 기준선
 
-현재 30문항 결과는 전체 `Recall@5 1.000`, `MRR 0.781`입니다. 이 수치는 자체 작성한 고정 평가셋에 대한 검색 성능이며, 실제 법률 판단의 정확도나 새로운 질문에 대한 일반화 성능을 뜻하지 않습니다.
+현재 30문항 결과는 전체 `Recall@5 1.000`, `MRR 0.740`입니다(검색어 변환 `gpt-5.4-mini`, `data/evaluation/statute_retrieval_fast_query.json`). 검색어 변환에 `gpt-5-nano`를 쓰던 이전 결과는 `MRR 0.781`이었습니다. 이 수치는 자체 작성한 고정 평가셋에 대한 검색 성능이며, 실제 법률 판단의 정확도나 새로운 질문에 대한 일반화 성능을 뜻하지 않습니다.
 
 RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과정은 [`docs/troubleshooting.md`](docs/troubleshooting.md)에 정리했습니다. 판례 30문항의 사건번호 단위 평가, 기준 성능과 동적 API 보강 구조는 [`docs/case-retrieval-evaluation.md`](docs/case-retrieval-evaluation.md)에 기록합니다. 정답 라벨의 법률 검수 절차는 [`docs/case-evaluation-review-checklist.md`](docs/case-evaluation-review-checklist.md)를 따르며, 외부 검수자는 [`docs/case-evaluation-review-sheet.md`](docs/case-evaluation-review-sheet.md)에 결과를 기록합니다.
 
@@ -360,7 +368,11 @@ python scripts/audit_case_evaluation_labels.py
 
 검색부터 답변 생성·인용 검증·답변 거부까지 연결한 30문항 평가는 [`docs/end-to-end-rag-evaluation.md`](docs/end-to-end-rag-evaluation.md)에 정리했습니다.
 
-최종 End-to-End 평가는 답변 가능 24문항과 거부 대상 6문항으로 구성합니다. 3회 인용 교정 적용 후 답변 성공률 `0.7500`, 인용 정확성 `1.0000`, 근거 없는 주장 차단률 `1.0000`, 답변 거부 정확성 `1.0000`을 기록했습니다. 남은 6건은 `invalid_citations`로 안전하게 차단됐으며, 법률적 정답률이 아니라 개발자 작성 평가셋에 대한 시스템 지표입니다.
+최종 End-to-End 평가는 답변 가능 24문항과 거부 대상 6문항으로 구성합니다. 현재 설정(검색어 변환 `gpt-5.4-mini`)에서 답변 성공률 `0.6667`, 인용 정확성 `1.0000`, 근거 없는 주장 차단률 `1.0000`, 답변 거부 정확성 `1.0000`을 기록했습니다. 검색어 변환에 `gpt-5-nano`를 쓰던 이전 결과는 답변 성공률 `0.7500`이었습니다. 차단된 문항은 모두 모델 문장을 노출하지 않았으며, 법률적 정답률이 아니라 개발자 작성 평가셋에 대한 시스템 지표입니다.
+
+### 응답 시간과 검색어 변환 모델
+
+검색어 변환을 `gpt-5-nano`로 하던 때는 질문 하나에 31.8~64.0초가 걸렸고, 그중 검색어 변환이 26~34초를 차지했습니다. 기본값을 `gpt-5.4-mini`로 바꾼 뒤 같은 조건(판례 실시간 보강·쟁점 체크리스트 포함)에서 8.3~16.7초로 줄었습니다. 대신 법령 MRR은 0.781 → 0.740, E2E 답변 성공률은 0.750 → 0.667로 조금 낮아졌습니다. 속도보다 검색 품질을 우선하려면 `.env`에 `GMS_QUERY_MODEL=gpt-5-nano`를 지정합니다.
 
 ## 근거 제한 답변 생성
 
