@@ -184,6 +184,16 @@ class ChecklistPanelTests(ConsultationAppTestCase):
         self.assertTrue(all("(1차)" in claim for claim in self.panel_claims()))
         self.assertEqual(len(self.panel_claims()), 2)
 
+    def test_panel_explains_legal_terms_once(self):
+        self.ask("카톡으로 해고 통보를 받았어요")
+
+        glossary = [caption.value for caption in self.app.caption if "📖 **" in caption.value]
+        self.assertEqual(len(glossary), 2)
+        self.assertIn("**서면통지**", glossary[0])
+        self.assertIn("**구제신청**", glossary[1])
+        self.assertNotIn("서면통지", glossary[1])
+        self.assertTrue(any("일반적인 설명" in caption.value for caption in self.app.caption))
+
     def test_no_panel_when_the_checklist_is_turned_off(self):
         self.app.sidebar.toggle[0].set_value(False).run()
         self.ask("카톡으로 해고 통보를 받았어요")
