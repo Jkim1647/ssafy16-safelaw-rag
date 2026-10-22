@@ -79,6 +79,27 @@ class CustomTermAmplificationTests(unittest.TestCase):
 
         self.assertEqual(result.sanitized_text, "[CUSTOM_1]와 [CUSTOM_2]")
 
+    def test_hyphenated_dates_stay_for_deadline_reasoning(self):
+        text = "2026-10-01에 해고됐고 2026-1-5에 통지서를 받았어요. 26-10-01 이후 연락이 없어요."
+
+        result = PrivacyGuard().redact(text)
+
+        self.assertEqual(result.sanitized_text, text)
+        self.assertEqual(result.redaction_count, 0)
+
+    def test_account_numbers_are_still_redacted_next_to_dates(self):
+        result = PrivacyGuard().redact("2026-10-01까지 110-123-456789 계좌와 1002-123-456789 계좌로 보증금을 받기로 했어요.")
+
+        self.assertIn("2026-10-01", result.sanitized_text)
+        self.assertNotIn("110-123-456789", result.sanitized_text)
+        self.assertNotIn("1002-123-456789", result.sanitized_text)
+        self.assertEqual([entity.kind for entity in result.entities], ["ACCOUNT", "ACCOUNT"])
+
+    def test_impossible_month_or_day_is_not_treated_as_a_date(self):
+        result = PrivacyGuard().redact("계좌 2026-13-40으로 보내 주세요.")
+
+        self.assertNotIn("2026-13-40", result.sanitized_text)
+
 
 if __name__ == "__main__":
     unittest.main()
