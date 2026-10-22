@@ -186,6 +186,8 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
                     dynamic_dataset=CASE_CACHE_PATH / "dynamic_cases.json",
                     history_path=CASE_CACHE_PATH / "case_collection_history.json",
                     selector=CaseCandidateSelector(answer_llm),
+                    chunk_max_chars=settings.case_chunk_size,
+                    chunk_overlap_chars=settings.case_chunk_overlap,
                 )
             return StatuteRagPipeline(
                 CombinedLegalRetriever(statute_retriever, case_retriever, enricher),
@@ -448,7 +450,7 @@ def _render_situation_review(st: Any, settings: Settings, ready: bool) -> None:
             answer = pipeline.answer(
                 privacy.sanitized_text,
                 category=category,
-                top_k=5,
+                top_k=settings.rag_top_k,
             )
     except UiConfigurationError as exc:
         st.error(str(exc))
@@ -604,7 +606,7 @@ def _render_article_chat(st: Any, settings: Settings, ready: bool, item: Statute
                 answer = st.session_state.safelaw_pipeline.answer(
                     article_question(item.label, privacy.sanitized_text),
                     category=item.category,
-                    top_k=5,
+                    top_k=settings.rag_top_k,
                     pinned_hits=item.pinned_hits(),
                 )
         except UiConfigurationError as exc:

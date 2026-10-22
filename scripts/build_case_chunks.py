@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import CaseDocument, LegalCategory, PrecedentLevel  # noqa: E402
 from legal_rag.rag.case_chunking import chunk_cases  # noqa: E402
 
@@ -23,8 +24,11 @@ def main() -> int:
     parser.add_argument("--input", type=Path, default=ROOT / "data" / "processed" / "cases.json")
     parser.add_argument("--output", type=Path, default=ROOT / "data" / "processed" / "case_chunks.json")
     parser.add_argument("--manifest", type=Path, default=ROOT / "data" / "processed" / "case_chunks_manifest.json")
-    parser.add_argument("--max-chars", type=int, default=1400)
-    parser.add_argument("--overlap-chars", type=int, default=180)
+    settings = Settings.from_environment()
+    parser.add_argument("--max-chars", type=int, default=settings.case_chunk_size,
+                        help="기본값: .env의 CASE_CHUNK_SIZE")
+    parser.add_argument("--overlap-chars", type=int, default=settings.case_chunk_overlap,
+                        help="기본값: .env의 CASE_CHUNK_OVERLAP")
     args = parser.parse_args()
     payload = json.loads(args.input.read_text(encoding="utf-8"))
     documents = [CaseDocument(**{**item, "category": LegalCategory(item["category"]),

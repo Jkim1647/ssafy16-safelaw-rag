@@ -104,7 +104,8 @@ class IncrementalCaseEnricher:
     def __init__(self, client: CourtCaseOpenApiClient, embedder: EmbeddingProvider,
                  store: CaseChunkStore, *, static_dataset: Path, dynamic_dataset: Path,
                  history_path: Path, display_per_term: int = 5,
-                 selector: CaseSelector | None = None) -> None:
+                 selector: CaseSelector | None = None,
+                 chunk_max_chars: int = 1400, chunk_overlap_chars: int = 180) -> None:
         self._client = client
         self._embedder = embedder
         self._store = store
@@ -113,6 +114,8 @@ class IncrementalCaseEnricher:
         self._history_path = history_path
         self._display_per_term = display_per_term
         self._selector = selector
+        self._chunk_max_chars = chunk_max_chars
+        self._chunk_overlap_chars = chunk_overlap_chars
 
     @staticmethod
     def cache_key(plan: SearchPlan, category: LegalCategory) -> str:
@@ -187,7 +190,9 @@ class IncrementalCaseEnricher:
                 reason=reasons.get(index, ""),
             ))
 
-        chunks = chunk_cases(new_documents) if new_documents else []
+        chunks = chunk_cases(
+            new_documents, max_chars=self._chunk_max_chars, overlap_chars=self._chunk_overlap_chars,
+        ) if new_documents else []
         if chunks:
             index_chunks(chunks, self._embedder, self._store)  # type: ignore[arg-type]
             dynamic_items.extend(_serialize(item) for item in new_documents)
