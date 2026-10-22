@@ -31,7 +31,7 @@
 
 ![SafeLaw 개인정보 보호형 법률 RAG 전체 아키텍처](docs/assets/safelaw-hd-system-architecture.png)
 
-원본은 4K(`3840×2160`) PNG로 저장되어 확대해도 각 단계와 연결 관계를 확인할 수 있습니다. 세부 처리 규칙과 계층별 책임은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
+원본은 4K(`3840×2160`) PNG로 저장되어 확대해도 각 단계와 연결 관계를 확인할 수 있습니다. 그림의 청크 수는 저장소 데이터로 재현되는 기준 색인(법령 `386`, 판례 `652`)이며, 질의 시 판례 증분 보강을 거친 로컬 색인은 이보다 클 수 있습니다. 세부 처리 규칙과 계층별 책임은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
 
 ## 프로젝트 구조
 
