@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import time
+from collections import Counter
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
@@ -84,6 +85,7 @@ CONSULT_MESSAGES_KEY = "consult_messages"
 CONSULTATIONS_KEY = "consultations"
 CONSULT_THREAD_KEY = "consult_thread_id"
 PENDING_PROMPT_KEY = "consult_pending_prompt"
+CHECKLIST_FOCUS_KEY = "consult_checklist_focus"
 VIEW_CONSULT = "💬 상담실"
 VIEW_ARTICLES = "📚 조문 찾아보기"
 USER_AVATAR = "🙋"
@@ -279,6 +281,16 @@ def _inject_styles(st: Any) -> None:
         [data-testid="stChatMessage"] h2 { font-size: 1.2rem; margin-top: .2rem; }
         [data-testid="stChatMessage"] h3 { font-size: 1.02rem; }
         div.stButton > button { border-radius: 10px; font-weight: 600; }
+        /* 체크리스트가 있으면 본문을 넓히고 오른쪽 패널을 화면에 고정한다. */
+        .block-container:has(.st-key-checklist_panel) { max-width: 1280px; }
+        [data-testid="stColumn"]:has(.st-key-checklist_panel) { position: sticky; top: 3.75rem;
+            align-self: flex-start; max-height: calc(100vh - 10rem); overflow-y: auto; }
+        .st-key-checklist_panel { background: #fffdf8; border: 1px solid #dcd5c4; border-radius: 14px;
+            padding: 1rem 1.1rem; }
+        .st-key-checklist_panel h3 { font-size: 1.05rem; }
+        @media (max-width: 640px) {
+            [data-testid="stColumn"]:has(.st-key-checklist_panel) { position: static; max-height: none; }
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -421,7 +433,7 @@ def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message:
     return SidebarOptions(view, category, parse_sensitive_terms(terms), include_checklist)
 
 
-def _render_answer(st: Any, message: dict[str, Any]) -> None:
+def _render_answer(st: Any, message: dict[str, Any], focused_token: str | None = None) -> None:
     status = AnswerStatus(message["status"])
     presentation = STATUS_PRESENTATIONS[status]
     st.caption(f"{presentation.icon} {presentation.title} · 상태 코드 `{status.value}`")
@@ -431,7 +443,52 @@ def _render_answer(st: Any, message: dict[str, Any]) -> None:
         st.warning(message["content"])
         st.caption("상황을 조금 더 구체적으로 말씀해 주시거나 상담 분야를 확인해 주세요.")
     if message.get("checklist") is not None:
-        _render_issue_checklist(st, message["checklist"], message["token"])
+        _render_checklist_summary(st, message, focused=message["token"] == focused_token)
+
+
+def _checklist_summary(checklist: IssueChecklist) -> str:
+    if not checklist.is_ready:
+        return "📋 이번 답변은 쟁점 체크리스트를 만들지 못했어요."
+    counts = Counter(item.status for item in checklist.items)
+    parts = " · ".join(f"{icon} {label} {counts[key]}" for key, (icon, label) in CHECK_STATUSES.items() if counts[key])
+    return f"📋 쟁점 체크리스트 {len(checklist.items)}개 · {parts}"
+
+
+def _render_checklist_summary(st: Any, message: dict[str, Any], *, focused: bool) -> None:
+    """대화 안에는 요약만 두고, 체크할 수 있는 전체 목록은 오른쪽 패널에 둔다."""
+
+    with st.container(border=True):
+        st.markdown(_checklist_summary(message["checklist"]))
+        if focused:
+            st.caption("오른쪽 패널에서 항목별로 확인할 수 있어요.")
+        else:
+            st.button(
+                "오른쪽 패널에서 보기",
+                key=f"focus_{message['token']}",
+                on_click=_focus_checklist,
+                args=(st.session_state, message["token"]),
+            )
+
+
+def _focus_checklist(state: Any, token: str) -> None:
+    state[CHECKLIST_FOCUS_KEY] = token
+
+
+def _focused_checklist_message(state: Any, messages: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """사용자가 고른 답변의 체크리스트, 없으면 가장 최근 답변의 체크리스트를 고른다."""
+
+    candidates = [message for message in messages if message.get("checklist") is not None]
+    if not candidates:
+        return None
+    focus = state.get(CHECKLIST_FOCUS_KEY)
+    return next((message for message in candidates if message["token"] == focus), candidates[-1])
+
+
+def _render_checklist_panel(st: Any, messages: list[dict[str, Any]], focused: dict[str, Any]) -> None:
+    answers = [message for message in messages if message["role"] == "assistant"]
+    with st.container(key="checklist_panel"):
+        st.caption(f"{answers.index(focused) + 1}번째 답변 기준")
+        _render_issue_checklist(st, focused["checklist"], focused["token"])
 
 
 def _render_user_turn(st: Any, message: dict[str, Any]) -> None:
@@ -487,9 +544,17 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
     if CONSULT_THREAD_KEY not in st.session_state:
         _start_new_consultation(st.session_state)
     messages: list[dict[str, Any]] = st.session_state[CONSULT_MESSAGES_KEY]
+    focused = _focused_checklist_message(st.session_state, messages)
+    focused_token = focused["token"] if focused else None
 
     # 입력창보다 먼저 대화 영역을 만들어 새 질문과 답변도 대화 흐름 안에 쌓이게 한다.
-    conversation = st.container()
+    if focused is None:
+        conversation = st.container()
+    else:
+        chat_area, panel_area = st.columns([3, 2], gap="large")
+        with panel_area:
+            _render_checklist_panel(st, messages, focused)
+        conversation = chat_area.container()
     with conversation:
         with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
             st.markdown(_consult_greeting(options.category))
@@ -510,7 +575,7 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
                 if message["role"] == "user":
                     _render_user_turn(st, message)
                 else:
-                    _render_answer(st, message)
+                    _render_answer(st, message, focused_token)
 
     typed = st.chat_input(
         "상황이나 궁금한 점을 입력하세요. 개인정보는 자동으로 가려집니다.",
@@ -577,7 +642,9 @@ def _run_consultation_turn(st: Any, settings: Settings, options: SidebarOptions,
                 "checklist": checklist,
                 "token": uuid.uuid4().hex,
             }
-            _render_answer(st, assistant_message)
+            _render_answer(st, assistant_message, assistant_message["token"])
+    if checklist is not None:
+        st.session_state[CHECKLIST_FOCUS_KEY] = assistant_message["token"]
     # 대화 기록은 현재 세션 메모리에만 둔다. 원문은 화면 비교용으로만 보관한다.
     messages.extend((user_message, assistant_message))
     entry = st.session_state[CONSULTATIONS_KEY][st.session_state[CONSULT_THREAD_KEY]]
