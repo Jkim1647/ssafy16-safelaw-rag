@@ -14,10 +14,9 @@ from legal_rag.adapters.vector_store import ChromaCaseVectorStore, ChromaStatute
 from legal_rag.config import Settings
 from legal_rag.collectors.court_cases import CourtCaseOpenApiClient
 from legal_rag.domain.models import LegalCategory
-from legal_rag.rag.pipeline import AnswerStatus, GroundedAnswer, StatuteRagPipeline
+from legal_rag.rag.pipeline import AnswerStatus, StatuteRagPipeline
 from legal_rag.rag.case_enrichment import IncrementalCaseEnricher
 from legal_rag.rag.case_selection import CaseCandidateSelector
-from legal_rag.rag.citations import CaseEvidence
 from legal_rag.rag.condition_search import ConditionSearchError, StatuteConditionSearch
 from legal_rag.rag.issue_checklist import CHECK_STATUSES, IssueChecklist, IssueChecklistBuilder
 from legal_rag.rag.retrieval import CombinedLegalRetriever, ExpandedStatuteRetriever, LegalQueryExpander
@@ -80,7 +79,13 @@ EXAMPLE_CONDITIONS = {
 }
 
 CHAT_STATE_KEY = "article_chats"
-SITUATION_RESULT_KEY = "situation_result"
+CONSULT_MESSAGES_KEY = "consult_messages"
+CONSULT_THREAD_KEY = "consult_thread_id"
+PENDING_PROMPT_KEY = "consult_pending_prompt"
+VIEW_CONSULT = "💬 상담실"
+VIEW_ARTICLES = "📚 조문 찾아보기"
+USER_AVATAR = "🙋"
+ASSISTANT_AVATAR = "⚖️"
 SELECTED_ARTICLE_KEY = "selected_article_id"
 CONDITION_RESULT_KEY = "article_condition_result"
 
@@ -140,10 +145,10 @@ def article_question(article_label: str, sanitized_question: str) -> str:
     return f"[선택 조문: {article_label}] {sanitized_question.strip()}"
 
 
-def runtime_readiness(settings: Settings, index_path: Path = INDEX_PATH) -> tuple[bool, str]:
+def runtime_readiness(settings: Settings, index_path: Path | None = None) -> tuple[bool, str]:
     if not settings.has_gms_key:
         return False, ".env에 GMS_KEY를 설정해 주세요."
-    if not index_path.exists():
+    if not (index_path or INDEX_PATH).exists():
         return False, "법령 색인이 없습니다. build_statute_index.py를 먼저 실행해 주세요."
     return True, "GMS와 법령 색인을 사용할 수 있습니다."
 
@@ -256,122 +261,267 @@ def _inject_styles(st: Any) -> None:
     st.markdown(
         """
         <style>
-        .stApp { background: #f7f8f5; }
-        .block-container { max-width: 980px; padding-top: 2rem; padding-bottom: 4rem; }
-        .safelaw-kicker { color: #316b52; font-size: .82rem; font-weight: 700;
-            letter-spacing: .08em; text-transform: uppercase; }
-        .safelaw-title { color: #17231d; font-size: 2.35rem; font-weight: 780;
-            letter-spacing: -.035em; margin: .2rem 0 .5rem; }
-        .safelaw-subtitle { color: #53645a; font-size: 1.02rem; margin-bottom: 1.5rem; }
-        .privacy-box { background: #eef5f0; border: 1px solid #cfe0d5; border-radius: 14px;
-            padding: 1rem 1.1rem; color: #294536; margin: .75rem 0 1.25rem; }
-        [data-testid="stForm"] { background: white; border: 1px solid #dde4df;
-            border-radius: 18px; padding: 1.35rem; box-shadow: 0 8px 28px rgba(40,65,50,.06); }
-        [data-testid="stSidebar"] { background: #eef2ed; }
-        div.stButton > button, div[data-testid="stFormSubmitButton"] > button {
-            border-radius: 10px; font-weight: 700; }
-        div[data-testid="stFormSubmitButton"] > button {
-            background: #316b52 !important; border-color: #316b52 !important; color: white !important; }
-        div[data-testid="stFormSubmitButton"] > button:hover {
-            background: #285943 !important; border-color: #285943 !important; color: white !important; }
+        .stApp { background: #f6f4ee; }
+        .block-container { max-width: 900px; padding-top: 1.6rem; padding-bottom: 7rem; }
+        [data-testid="stSidebar"] { background: #ebe7dc; }
+        .office-sign { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.2rem;
+            background: #1f3a30; color: #f6f4ee; border-radius: 16px; margin-bottom: 1rem; }
+        .office-sign .seal { font-size: 1.9rem; line-height: 1; }
+        .office-sign .name { font-size: 1.45rem; font-weight: 800; letter-spacing: -.02em; }
+        .office-sign .desc { font-size: .9rem; opacity: .85; }
+        .office-steps { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1rem; }
+        .office-steps span { background: #fffdf8; border: 1px solid #dcd5c4; border-radius: 999px;
+            padding: .3rem .8rem; font-size: .85rem; color: #3c4a40; }
+        .privacy-box { background: #eef5f0; border: 1px solid #cfe0d5; border-radius: 12px;
+            padding: .7rem 1rem; color: #294536; margin: 0 0 1rem; font-size: .92rem; }
+        [data-testid="stChatMessage"] h2 { font-size: 1.2rem; margin-top: .2rem; }
+        [data-testid="stChatMessage"] h3 { font-size: 1.02rem; }
+        div.stButton > button { border-radius: 10px; font-weight: 600; }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
 
-def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message: str) -> None:
+@dataclass(frozen=True, slots=True)
+class SidebarOptions:
+    view: str
+    category: LegalCategory | None
+    sensitive_terms: tuple[str, ...]
+    include_checklist: bool
+
+
+def _start_new_consultation(state: Any) -> None:
+    state[CONSULT_MESSAGES_KEY] = []
+    state[CONSULT_THREAD_KEY] = uuid.uuid4().hex
+
+
+def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message: str) -> SidebarOptions:
     with st.sidebar:
-        st.subheader("SafeLaw")
-        st.caption("개인정보 보호형 생활법률 검색")
+        st.subheader("⚖️ SafeLaw")
+        st.caption("개인정보 보호형 생활법률 상담실")
         if ready:
             st.success("시스템 준비 완료", icon="✅")
         else:
             st.error(readiness_message, icon="⚠️")
+
+        view = st.radio("메뉴", [VIEW_CONSULT, VIEW_ARTICLES], key="safelaw_view")
+        category = None
+        include_checklist = True
+        if view == VIEW_CONSULT:
+            category = st.selectbox(
+                "상담 분야",
+                options=[None, *list(LegalCategory)],
+                format_func=lambda item: "상담 분야를 골라 주세요" if item is None else CATEGORY_LABELS[item],
+                key="consult_category",
+            )
+            include_checklist = st.toggle(
+                "내 상황 쟁점 체크리스트 함께 보기",
+                value=True,
+                help="답변마다 법령·판례가 따지는 판단 요소를 근거 번호와 함께 정리합니다.",
+            )
+            turns = sum(1 for item in st.session_state.get(CONSULT_MESSAGES_KEY, []) if item["role"] == "user")
+            st.button(
+                "🆕 새 상담 시작",
+                on_click=_start_new_consultation,
+                args=(st.session_state,),
+                use_container_width=True,
+                disabled=turns == 0,
+            )
+            if turns:
+                st.caption(f"이번 상담에서 {turns}번 질문했어요. 이어서 묻는 질문은 앞선 상담 내용을 함께 고려해요.")
+
+        terms = st.text_input(
+            "추가로 가릴 이름·회사명 (쉼표로 구분)",
+            placeholder="홍길동, 세이프로 주식회사",
+            key="sensitive_terms_input",
+            help="입력한 단어는 [CUSTOM_N]으로 바뀐 뒤 검색과 답변 생성에 사용됩니다.",
+        )
         st.divider()
-        st.markdown("**지원 도메인**")
-        for category, label in CATEGORY_LABELS.items():
-            st.markdown(f"- **{label}**  \n  {CATEGORY_HELP[category]}")
-        st.divider()
-        st.markdown("**개인정보 보호**")
+        with st.expander("상담 가능한 분야"):
+            for item, label in CATEGORY_LABELS.items():
+                st.markdown(f"- **{label}**  \n  {CATEGORY_HELP[item]}")
         st.caption(
-            "전화번호·주민등록번호·이메일·주소와 직접 지정한 단어는 "
-            "외부 모델 호출 전에 로컬에서 마스킹합니다. 질문 원문은 파일이나 Vector DB에 저장하지 않습니다."
+            "전화번호·주민등록번호·이메일·주소와 직접 지정한 단어는 외부 모델 호출 전에 로컬에서 가립니다. "
+            "상담 원문과 대화 기록은 이 세션의 메모리에만 있고 파일이나 Vector DB에 저장하지 않습니다."
         )
         with st.expander("실행 정보"):
             st.code(
                 f"환경: {settings.app_env}\n"
                 f"검색어 변환 모델: {settings.query_model}\n"
                 f"답변 생성 모델: {settings.answer_model}\n"
-                f"임베딩 모델: {settings.gms_embedding_model}",
+                f"임베딩 모델: {settings.gms_embedding_model}\n"
+                f"검색 방식: {settings.rag_search_mode} · Top-k {settings.rag_top_k}",
                 language="text",
             )
             st.caption(
                 "판례 자동 보강: "
                 + ("활성화" if settings.has_law_api_key else "비활성화 (LAW_API_OC 미설정)")
             )
+    return SidebarOptions(view, category, parse_sensitive_terms(terms), include_checklist)
 
 
-def _render_result(
-    st: Any,
-    answer: GroundedAnswer,
-    *,
-    original_text: str,
-    sanitized_text: str,
-    redaction_count: int,
-) -> None:
-    presentation = STATUS_PRESENTATIONS[answer.status]
-    st.subheader("검토 결과")
-    message = f"{presentation.icon} {presentation.title}"
-    getattr(st, presentation.level)(message)
-    st.caption(
-        f"개인정보 마스킹 {redaction_count}건 · 검색 근거 {answer.retrieved_count}건 · "
-        f"상태 코드 `{answer.status.value}`"
-    )
+def _render_answer(st: Any, message: dict[str, Any]) -> None:
+    status = AnswerStatus(message["status"])
+    presentation = STATUS_PRESENTATIONS[status]
+    st.caption(f"{presentation.icon} {presentation.title} · 상태 코드 `{status.value}`")
+    if status is AnswerStatus.ANSWERED:
+        st.markdown(message["content"])
+    else:
+        st.warning(message["content"])
+        st.caption("상황을 조금 더 구체적으로 말씀해 주시거나 상담 분야를 확인해 주세요.")
+    if message.get("checklist") is not None:
+        _render_issue_checklist(st, message["checklist"], message["token"])
 
-    if redaction_count:
-        st.markdown("#### 개인정보 마스킹 비교")
-        original_column, sanitized_column = st.columns(2)
-        with original_column:
-            with st.container(border=True):
+
+def _render_user_turn(st: Any, message: dict[str, Any]) -> None:
+    st.markdown(message["content"])
+    if message["redaction_count"]:
+        st.caption(f"🔒 개인정보 {message['redaction_count']}건을 가린 뒤 전달했어요.")
+        with st.expander("원문과 외부 모델 전달문 비교"):
+            original_column, sanitized_column = st.columns(2)
+            with original_column:
                 st.markdown("**입력 원문**")
                 st.caption("현재 브라우저·로컬 앱에서만 확인")
-                st.write(original_text)
-        with sanitized_column:
-            with st.container(border=True):
+                st.write(message["original"])
+            with sanitized_column:
                 st.markdown("**외부 모델 전달문**")
                 st.caption("검색·임베딩·LLM에 사용")
-                st.write(sanitized_text)
-        st.caption(
-            "원문과 치환 매핑은 현재 요청을 처리하는 메모리에만 유지하며 "
-            "파일·로그·Vector DB에 저장하지 않습니다."
-        )
+                st.write(message["content"])
 
-    if answer.is_answered:
-        st.markdown(answer.content)
-        if answer.sources:
-            with st.expander("근거 링크만 모아보기"):
-                statutes = [item for item in answer.sources if not isinstance(item, CaseEvidence)]
-                cases = [item for item in answer.sources if isinstance(item, CaseEvidence)]
-                if statutes:
-                    st.markdown("**법령 근거**")
-                for source in statutes:
-                    st.link_button(
-                        f"근거 {source.citation_id} · {source.label}",
-                        source.source_url,
+
+def _consult_greeting(category: LegalCategory | None) -> str:
+    if category is None:
+        return (
+            "안녕하세요, **SafeLaw 생활법률 상담실**입니다. 왼쪽에서 **상담 분야**를 먼저 골라 주세요. "
+            "그다음 어떤 일이 있었는지 편하게 말씀해 주시면 관련 법령과 판례 원문으로 확인되는 내용만 안내해 드려요."
+        )
+    return (
+        f"**{CATEGORY_LABELS[category]}** 상담을 도와드릴게요. 어떤 일이 있었는지 아래 입력창에 말씀해 주세요. "
+        "답변을 보신 뒤 궁금한 점을 이어서 물으시면 앞선 상담 내용을 함께 고려해 답해 드려요."
+    )
+
+
+def _queue_prompt(state: Any, prompt: str) -> None:
+    state[PENDING_PROMPT_KEY] = prompt
+
+
+def _render_consultation_room(st: Any, settings: Settings, ready: bool, options: SidebarOptions) -> None:
+    st.markdown(
+        '<div class="office-sign"><span class="seal">⚖️</span><div>'
+        '<div class="name">SafeLaw 생활법률 상담실</div>'
+        '<div class="desc">법령과 공개 판례 원문으로 확인되는 내용만 안내합니다</div></div></div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<div class="office-steps"><span>① 상담 분야 선택</span><span>② 상황 말씀하기 · 개인정보 자동 가림</span>'
+        '<span>③ 법령·판례 근거와 함께 안내</span><span>④ 이어서 질문하기</span></div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<div class="privacy-box">🔒 정확한 이름·전화번호·상세 주소는 가능하면 적지 마세요. '
+        '적더라도 외부 모델에 보내기 전에 가립니다.</div>',
+        unsafe_allow_html=True,
+    )
+
+    if CONSULT_THREAD_KEY not in st.session_state:
+        _start_new_consultation(st.session_state)
+    messages: list[dict[str, Any]] = st.session_state[CONSULT_MESSAGES_KEY]
+
+    # 입력창보다 먼저 대화 영역을 만들어 새 질문과 답변도 대화 흐름 안에 쌓이게 한다.
+    conversation = st.container()
+    with conversation:
+        with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
+            st.markdown(_consult_greeting(options.category))
+            if options.category is not None and not messages:
+                st.caption("이런 상황을 많이 물어보세요")
+                for index, example in enumerate(EXAMPLE_QUESTIONS[options.category]):
+                    st.button(
+                        example,
+                        key=f"example_{options.category.value}_{index}",
+                        on_click=_queue_prompt,
+                        args=(st.session_state, example),
                         use_container_width=True,
+                        disabled=not ready,
                     )
-                if cases:
-                    st.markdown("**유사 판례**")
-                for source in cases:
-                    st.link_button(
-                        f"근거 {source.citation_id} · {source.label}",
-                        source.source_url,
-                        use_container_width=True,
+        for message in messages:
+            avatar = USER_AVATAR if message["role"] == "user" else ASSISTANT_AVATAR
+            with st.chat_message(message["role"], avatar=avatar):
+                if message["role"] == "user":
+                    _render_user_turn(st, message)
+                else:
+                    _render_answer(st, message)
+
+    typed = st.chat_input(
+        "상황이나 궁금한 점을 입력하세요. 개인정보는 자동으로 가려집니다.",
+        key="consult_chat_input",
+        disabled=not ready,
+        max_chars=2000,
+    )
+    prompt = typed or st.session_state.pop(PENDING_PROMPT_KEY, None)
+    if not prompt:
+        st.caption("SafeLaw는 법률정보 검색 보조 도구입니다. 변호사의 법률 자문을 대체하거나 승소 가능성을 예측하지 않습니다.")
+        return
+    if options.category is None:
+        with conversation, st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
+            st.warning("왼쪽에서 상담 분야를 먼저 골라 주세요.")
+        return
+    _run_consultation_turn(st, settings, options, conversation, messages, prompt)
+
+
+def _run_consultation_turn(st: Any, settings: Settings, options: SidebarOptions, conversation: Any,
+                           messages: list[dict[str, Any]], prompt: str) -> None:
+    assert options.category is not None
+    privacy = PrivacyGuard().redact(prompt, options.sensitive_terms)
+    user_message = {
+        "role": "user",
+        "content": privacy.sanitized_text,
+        "original": prompt,
+        "redaction_count": privacy.redaction_count,
+    }
+    with conversation:
+        with st.chat_message("user", avatar=USER_AVATAR):
+            _render_user_turn(st, user_message)
+        with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
+            try:
+                if "safelaw_pipeline" not in st.session_state:
+                    st.session_state.safelaw_pipeline = build_pipeline(settings, INDEX_PATH)
+                with st.status("상담 내용을 확인하고 있어요…", expanded=False) as status:
+                    status.write(f"🔒 개인정보 {privacy.redaction_count}건을 가렸어요.")
+                    status.update(label="관련 법령과 판례를 찾고 근거 문구를 검증하고 있어요…")
+                    answer, evidence = st.session_state.safelaw_pipeline.converse(
+                        privacy.sanitized_text,
+                        thread_id=st.session_state[CONSULT_THREAD_KEY],
+                        category=options.category,
+                        top_k=settings.rag_top_k,
                     )
-    else:
-        st.warning(answer.content)
-        st.caption("질문을 구체화하거나 다른 도메인을 선택한 뒤 다시 시도해 주세요.")
+                    checklist = None
+                    if options.include_checklist and evidence:
+                        status.update(label="같은 근거로 쟁점 체크리스트를 정리하고 있어요…")
+                        if "safelaw_checklist_builder" not in st.session_state:
+                            st.session_state.safelaw_checklist_builder = build_checklist_builder(settings)
+                        checklist = st.session_state.safelaw_checklist_builder.build(
+                            privacy.sanitized_text, options.category, evidence
+                        )
+                    status.update(label="답변을 준비했어요", state="complete")
+            except UiConfigurationError as exc:
+                st.error(str(exc))
+                return
+            except (RuntimeError, ValueError):
+                st.error("요청을 처리하지 못했습니다. 설정과 네트워크 상태를 확인한 뒤 다시 시도해 주세요.")
+                return
+            assistant_message = {
+                "role": "assistant",
+                "status": answer.status.value,
+                "content": answer.content,
+                "checklist": checklist,
+                "token": uuid.uuid4().hex,
+            }
+            _render_answer(st, assistant_message)
+    # 대화 기록은 현재 세션 메모리에만 둔다. 원문은 화면 비교용으로만 보관한다.
+    messages.extend((user_message, assistant_message))
+    # 사이드바(질문 수, 새 상담 버튼)는 이 턴보다 먼저 그려졌으므로 기록을 반영해 다시 그린다.
+    st.rerun()
 
 
 def main() -> None:
@@ -381,156 +531,20 @@ def main() -> None:
         raise RuntimeError("Streamlit을 사용하려면 'pip install -e .'을 실행하세요.") from exc
 
     st.set_page_config(
-        page_title="SafeLaw | 근거 기반 생활법률 안내",
+        page_title="SafeLaw | 생활법률 상담실",
         page_icon="⚖️",
-        layout="wide",
+        layout="centered",
         initial_sidebar_state="expanded",
     )
     _inject_styles(st)
 
     settings = Settings.from_environment()
     ready, readiness_message = runtime_readiness(settings)
-    _render_sidebar(st, settings, ready, readiness_message)
-
-    st.markdown('<div class="safelaw-kicker">Privacy-first legal RAG</div>', unsafe_allow_html=True)
-    st.markdown('<div class="safelaw-title">상황을 적으면 관련 법령과 판례를 확인합니다</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="safelaw-subtitle">검색된 법령과 공개 판례 원문으로 검증할 수 있는 내용만 안내하고, 근거가 부족하면 답변하지 않습니다.</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="privacy-box">🔒 입력한 개인정보는 외부 호출 전에 마스킹됩니다. '
-        '정확한 이름·전화번호·상세 주소는 가능하면 입력하지 마세요.</div>',
-        unsafe_allow_html=True,
-    )
-
-    situation_tab, article_tab = st.tabs(["상황으로 검토하기", "조문 찾기·조문별 상담"])
-    with situation_tab:
-        _render_situation_review(st, settings, ready)
-    with article_tab:
-        _render_article_explorer(st, settings, ready)
-
-
-def _render_situation_review(st: Any, settings: Settings, ready: bool) -> None:
-    category = st.selectbox(
-        "상담 분야",
-        options=[None, *list(LegalCategory)],
-        index=0,
-        format_func=lambda item: (
-            "상담 받으실 분야를 선택해 주세요"
-            if item is None
-            else CATEGORY_LABELS[item]
-        ),
-        help="현재 법령 데이터가 구축된 세 분야 중 하나를 선택하세요.",
-        key="legal_category_v3",
-    )
-    if category is not None:
-        with st.expander("질문 예시 보기", expanded=True):
-            for number, example in enumerate(EXAMPLE_QUESTIONS[category], start=1):
-                st.markdown(f"**예시 {number}.** {example}")
-
-    with st.form("legal_question_form", clear_on_submit=False):
-        question = st.text_area(
-            "상황을 구체적으로 적어주세요",
-            height=180,
-            max_chars=2000,
-            placeholder=(
-                "이름·전화번호·상세 주소 등 개인정보는 입력하지 않는 것을 권장합니다. "
-                "입력된 식별정보는 외부 호출 전에 마스킹됩니다."
-            ),
-        )
-        with st.expander("추가로 가릴 이름·회사명 입력 (선택)"):
-            sensitive_terms = st.text_input(
-                "쉼표로 구분",
-                placeholder="홍길동, 세이프로 주식회사",
-                label_visibility="collapsed",
-            )
-            st.caption("입력한 단어는 `[CUSTOM_N]`으로 바뀐 뒤 검색과 답변 생성에 사용됩니다.")
-        include_checklist = st.checkbox(
-            "내 상황 쟁점 체크리스트도 함께 만들기",
-            value=True,
-            help="검색된 법령·판례가 요구하는 판단 요소를 뽑아 상황에 나와 있는지 근거 번호와 함께 보여줍니다.",
-        )
-        submitted = st.form_submit_button(
-            "관련 법령·판례 검토하기",
-            type="primary",
-            use_container_width=True,
-            disabled=not ready,
-        )
-
-    if submitted:
-        _run_situation_review(st, settings, category, question, sensitive_terms, include_checklist)
-
-    stored = st.session_state.get(SITUATION_RESULT_KEY)
-    if stored is None:
-        st.divider()
-        st.caption(
-            "SafeLaw는 법률정보 검색 보조 도구입니다. 변호사의 법률 자문을 대체하거나 승소 가능성을 예측하지 않습니다."
-        )
-        return
-
-    st.divider()
-    _render_result(
-        st,
-        stored["answer"],
-        original_text=stored["original_text"],
-        sanitized_text=stored["sanitized_text"],
-        redaction_count=stored["redaction_count"],
-    )
-    if stored["checklist"] is not None:
-        st.divider()
-        _render_issue_checklist(st, stored["checklist"], stored["token"])
-
-
-def _run_situation_review(st: Any, settings: Settings, category: LegalCategory | None, question: str,
-                          sensitive_terms: str, include_checklist: bool) -> None:
-    # 새 요청이 실패했을 때 이전 결과가 새 결과처럼 보이지 않게 먼저 지운다.
-    st.session_state.pop(SITUATION_RESULT_KEY, None)
-    if category is None:
-        st.warning("상담 받으실 분야를 선택해 주세요.")
-        return
-    if not question.strip():
-        st.warning("검토할 상황을 입력해 주세요.")
-        return
-
-    try:
-        privacy = PrivacyGuard().redact(
-            question,
-            parse_sensitive_terms(sensitive_terms),
-        )
-        if "safelaw_pipeline" not in st.session_state:
-            st.session_state.safelaw_pipeline = build_pipeline(settings, INDEX_PATH)
-        pipeline = st.session_state.safelaw_pipeline
-        with st.spinner("개인정보를 가린 뒤 관련 법령·판례와 근거 문구를 검증하고 있습니다..."):
-            answer, evidence = pipeline.answer_with_evidence(
-                privacy.sanitized_text,
-                category=category,
-                top_k=settings.rag_top_k,
-            )
-        checklist = None
-        if include_checklist:
-            if "safelaw_checklist_builder" not in st.session_state:
-                st.session_state.safelaw_checklist_builder = build_checklist_builder(settings)
-            with st.spinner("같은 근거로 내 상황 쟁점 체크리스트를 만들고 인용을 검증하고 있습니다..."):
-                checklist = st.session_state.safelaw_checklist_builder.build(
-                    privacy.sanitized_text, category, evidence
-                )
-    except UiConfigurationError as exc:
-        st.error(str(exc))
-        return
-    except (RuntimeError, ValueError):
-        st.error("요청을 처리하지 못했습니다. 설정과 네트워크 상태를 확인한 뒤 다시 시도해 주세요.")
-        return
-
-    # 체크 상태를 바꿀 때마다 화면이 다시 그려지므로 결과를 세션 메모리에만 보관한다.
-    st.session_state[SITUATION_RESULT_KEY] = {
-        "answer": answer,
-        "checklist": checklist,
-        "original_text": question,
-        "sanitized_text": privacy.sanitized_text,
-        "redaction_count": privacy.redaction_count,
-        "token": uuid.uuid4().hex,
-    }
+    options = _render_sidebar(st, settings, ready, readiness_message)
+    if options.view == VIEW_CONSULT:
+        _render_consultation_room(st, settings, ready, options)
+    else:
+        _render_article_explorer(st, settings, ready, options.sensitive_terms)
 
 
 def _render_issue_checklist(st: Any, checklist: IssueChecklist, token: str) -> None:
@@ -723,9 +737,12 @@ def _render_chat_messages(st: Any, history: list[dict[str, Any]]) -> None:
                 st.caption(f"개인정보 {message['redaction_count']}건을 가린 문장입니다.")
 
 
-def _render_article_explorer(st: Any, settings: Settings, ready: bool) -> None:
+def _render_article_explorer(st: Any, settings: Settings, ready: bool, sensitive_terms: tuple[str, ...]) -> None:
     st.markdown(
-        "법령 조문을 하나의 항목으로 보고, 조건에 맞는 조문을 찾은 뒤 그 조문을 중심으로 질문합니다."
+        '<div class="office-sign"><span class="seal">📚</span><div>'
+        '<div class="name">조문 찾아보기</div>'
+        '<div class="desc">조건으로 조문을 찾고, 그 조문을 고정 근거로 두고 질문합니다</div></div></div>',
+        unsafe_allow_html=True,
     )
     category = st.selectbox(
         "상담 분야",
@@ -746,15 +763,6 @@ def _render_article_explorer(st: Any, settings: Settings, ready: bool) -> None:
         st.error("조문 데이터셋을 읽지 못했습니다. build_statute_chunks.py를 먼저 실행해 주세요.")
         return
 
-    with st.expander("추가로 가릴 이름·회사명 입력 (선택)"):
-        extra_terms = st.text_input(
-            "쉼표로 구분",
-            placeholder="홍길동, 세이프로 주식회사",
-            label_visibility="collapsed",
-            key="article_sensitive_terms",
-        )
-        st.caption("조건 검색과 조문별 채팅 모두에서 입력한 단어를 `[CUSTOM_N]`으로 바꾼 뒤 외부 모델에 전달합니다.")
-    sensitive_terms = parse_sensitive_terms(extra_terms)
 
     _render_condition_search(st, settings, ready, category, catalog, sensitive_terms)
 
