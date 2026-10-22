@@ -13,14 +13,17 @@ sys.path.insert(0, str(ROOT / "src"))
 from streamlit.testing.v1 import AppTest
 
 from legal_rag.domain.models import LegalCategory
+from legal_rag.rag.citations import EvidenceQuote, GroundedClaim
+from legal_rag.rag.issue_checklist import ChecklistItem, IssueChecklist
 from legal_rag.rag.pipeline import AnswerStatus, GroundedAnswer
 from legal_rag.ui import streamlit_app
 
 
 class FakePipeline:
-    def __init__(self):
+    def __init__(self, evidence=()):
         self.calls = []
         self.forgotten = []
+        self.evidence = evidence
 
     def forget_conversation(self, thread_id):
         self.forgotten.append(thread_id)
@@ -28,7 +31,28 @@ class FakePipeline:
     def converse(self, question, *, thread_id, category, top_k):
         self.calls.append((question, thread_id, category))
         answer = GroundedAnswer(AnswerStatus.ANSWERED, f"## 상황에 대한 법령·판례 안내\n\n답변 {len(self.calls)} [근거 1]")
-        return answer, ()
+        return answer, self.evidence
+
+
+class FakeChecklistBuilder:
+    def __init__(self):
+        self.calls = 0
+
+    def build(self, question, category, evidence):
+        self.calls += 1
+        claims = (
+            ("해고 사유와 시기를 서면으로 통지해야 합니다.", "mentioned"),
+            ("해고일로부터 3개월 안에 구제신청을 해야 합니다.", "unknown"),
+        )
+        items = tuple(
+            ChecklistItem(
+                GroundedClaim(f"{text} ({self.calls}차)", (1,), (EvidenceQuote(1, "서면으로 통지하여야"),)),
+                status,
+                f"{index + 1}번 사실을 확인했나요?",
+            )
+            for index, (text, status) in enumerate(claims)
+        )
+        return IssueChecklist(AnswerStatus.ANSWERED, items=items)
 
 
 class ConsultationAppTestCase(unittest.TestCase):
@@ -126,6 +150,46 @@ class ConsultationHistoryTests(ConsultationAppTestCase):
         self.assertEqual(self.history_buttons(), [])
         self.assertEqual(self.pipeline.forgotten, [thread])
         self.assertEqual(self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY], [])
+
+
+class ChecklistPanelTests(ConsultationAppTestCase):
+    def setUp(self):
+        super().setUp()
+        self.pipeline.evidence = (object(),)
+        self.app.session_state["safelaw_checklist_builder"] = FakeChecklistBuilder()
+        self.app.sidebar.selectbox(key="consult_category").set_value(LegalCategory.LABOR).run()
+
+    def panel_claims(self):
+        return [md.value for md in self.app.markdown if "차)" in md.value]
+
+    def test_chat_shows_a_brief_summary_and_the_panel_holds_the_full_checklist(self):
+        self.ask("카톡으로 해고 통보를 받았어요")
+
+        answer = self.app.chat_message[-1]
+        summary = " ".join(md.value for md in answer.markdown)
+        self.assertIn("쟁점 체크리스트 2개", summary)
+        self.assertIn("확인 필요 1", summary)
+        self.assertEqual([checkbox for checkbox in answer.checkbox], [])
+        self.assertEqual(len(self.app.checkbox), 2)
+        self.assertEqual(len(self.panel_claims()), 2)
+
+    def test_panel_follows_the_latest_answer_and_can_show_an_earlier_one(self):
+        self.ask("카톡으로 해고 통보를 받았어요")
+        self.ask("서면으로 다시 받으면요?")
+        self.assertTrue(all("(2차)" in claim for claim in self.panel_claims()))
+
+        first_token = self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY][1]["token"]
+        self.app.button(key=f"focus_{first_token}").click().run()
+
+        self.assertTrue(all("(1차)" in claim for claim in self.panel_claims()))
+        self.assertEqual(len(self.panel_claims()), 2)
+
+    def test_no_panel_when_the_checklist_is_turned_off(self):
+        self.app.sidebar.toggle[0].set_value(False).run()
+        self.ask("카톡으로 해고 통보를 받았어요")
+
+        self.assertEqual(self.panel_claims(), [])
+        self.assertEqual(len(self.app.main.columns), 0)
 
 
 if __name__ == "__main__":
