@@ -15,6 +15,7 @@ from legal_rag.collectors.court_cases import CourtCaseOpenApiClient
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.pipeline import AnswerStatus, GroundedAnswer, StatuteRagPipeline
 from legal_rag.rag.case_enrichment import IncrementalCaseEnricher
+from legal_rag.rag.case_selection import CaseCandidateSelector
 from legal_rag.rag.citations import CaseEvidence
 from legal_rag.rag.condition_search import ConditionSearchError, StatuteConditionSearch
 from legal_rag.rag.retrieval import CombinedLegalRetriever, ExpandedStatuteRetriever, LegalQueryExpander
@@ -184,6 +185,7 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
                     static_dataset=STATIC_CASE_DATASET,
                     dynamic_dataset=CASE_CACHE_PATH / "dynamic_cases.json",
                     history_path=CASE_CACHE_PATH / "case_collection_history.json",
+                    selector=CaseCandidateSelector(answer_llm),
                 )
             return StatuteRagPipeline(
                 CombinedLegalRetriever(statute_retriever, case_retriever, enricher),
