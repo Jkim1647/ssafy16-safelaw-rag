@@ -150,7 +150,7 @@ Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://loc
 
 ![로펌 상담실처럼 꾸민 SafeLaw 상담실 첫 화면](docs/assets/safelaw-lawfirm-room.png)
 
-아래 기능별 캡처는 로펌 테마 적용 전 화면입니다. 기능과 배치는 같고 색과 글꼴만 다릅니다.
+아래 화면은 모두 2026-10-22 최종 UI를 실제 Streamlit 서버(GMS 호출, 실제 색인)에서 1440×960으로 캡처한 것입니다. 입력한 개인정보는 모두 가상 값입니다.
 
 ### 상담실: 검색 근거로 검증된 법령·판례 답변
 
@@ -162,7 +162,9 @@ Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://loc
 
 ![앞선 상담 내용을 이어받아 답한 두 번째 질문](docs/assets/safelaw-consult-followup.png)
 
-![사이드바 지난 상담 목록에서 첫 상담을 다시 열어 이어 물은 화면](docs/assets/safelaw-consult-history.png)
+`← 처음으로`로 분야 선택 화면에 돌아간 뒤 사이드바 지난 상담에서 같은 상담을 다시 연 화면입니다. 목록 제목도 마스킹된 첫 질문으로 만들어집니다.
+
+![처음으로 돌아갔다가 지난 상담에서 다시 연 상담](docs/assets/safelaw-consult-history.png)
 
 ### 외부 호출 전 개인정보 마스킹 비교
 
@@ -176,6 +178,8 @@ Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://loc
 
 ### 내 상황 쟁점 체크리스트 (도메인 특화 기능)
 
+대화 안에는 상태별 개수 요약만 두고, 체크할 수 있는 항목·근거 문구·`📖` 용어 풀이는 오른쪽 패널에 표시됩니다.
+
 ![판단 요소별 상황 대응과 근거 번호를 보여 주는 쟁점 체크리스트](docs/assets/safelaw-issue-checklist.png)
 
 ### 조건 기반 조문 탐색
@@ -186,7 +190,7 @@ Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://loc
 
 ![선택 조문을 고정 근거로 둔 채팅](docs/assets/safelaw-article-chat.png)
 
-화면 자료는 다음 명령으로 다시 생성할 수 있습니다. 로컬 Streamlit이 실행 중이어야 하며(기본 `8501`, `--url`로 변경) 실제 개인정보를 사용하지 않습니다.
+화면 자료는 다음 명령으로 다시 생성할 수 있습니다. 로컬 Streamlit이 실행 중이어야 하며(기본 `8501`, `--url`로 변경) 실제 개인정보를 사용하지 않습니다. 전체 캡처는 답변·체크리스트·조건 탐색에 GMS를 약 10회 호출합니다. 웹 화면(`safelaw-web-frontend.png`)은 `--scenario web`으로 따로 만듭니다.
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\capture_ui_screenshots.py
