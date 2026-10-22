@@ -226,6 +226,11 @@ class StatuteRagPipeline:
         snapshot = self._chat_graph.get_state({"configurable": {"thread_id": thread_id}})
         return list(snapshot.values.get("history", []))
 
+    def forget_conversation(self, thread_id: str) -> None:
+        """사용자가 상담 기록을 지우면 체크포인터에 남은 그 스레드의 질문도 함께 지운다."""
+
+        self._chat_graph.checkpointer.delete_thread(thread_id)
+
     def _build_graph(self, checkpointer: Any | None = None) -> Any:
         builder = StateGraph(RagState)
         builder.add_node("retrieve", self._retrieve_node)

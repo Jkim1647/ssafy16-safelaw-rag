@@ -9,7 +9,7 @@
 | 필수 기능 F2001~F2012 | 12개 모두 통과 |
 | 심화 기능 | F2013 HTML/CSS/JS 화면 통과, F2014 MMR 통과, F2015 RAG 전후 비교 통과, F2016 부분 |
 | 비기능 NF2001~NF2007 | 7개 모두 통과 |
-| 자동 테스트 | 138개 통과 |
+| 자동 테스트 | 147개 통과 |
 | 남은 항목 | [7장](#7-남은-항목) 참고 |
 
 ## 2. 확인 항목별 결과 (명세서 4.1~4.7)
@@ -49,6 +49,8 @@
 
 | 확인 항목 | 결과 | 증빙 |
 |---|---|---|
+| 상담실에서 이어지는 질문이 앞선 상담 맥락을 유지 | 통과 | "그럼 회사가 나중에 서면으로 다시 보내면 효력이 생기나요?"에 "어제 카카오톡으로 해고 통지를 받았더라도…"라고 첫 질문 상황을 이어 답함. 같은 상담은 같은 `thread_id`, 새 상담은 새 `thread_id` (`test_pipeline`, `test_consultation_room`) |
+| 지난 상담 목록에서 복구·삭제 | 통과 | 브라우저에서 상담 2개를 만든 뒤 첫 상담을 다시 열어 "그럼 회사가 나중에 서면으로 다시 보내면 어떻게 돼요?"를 묻자 카카오톡 해고 통보 맥락을 이어 답함. 목록은 최근 순, 🗑️ 삭제 시 목록과 체크포인터 스레드가 함께 지워짐 (`test_consultation_room`, `test_pipeline`) |
 | 항목을 바꿔도 이전 대화가 섞이지 않음 | 통과 | 제27조 대화 2개 → 제26조로 전환 시 0개 → 제27조로 복귀 시 2개 유지 (브라우저 확인) |
 | 조건 탐색 결과에 조건과 맞지 않는 항목이 섞이지 않음 | 통과 | "해고할 때 회사가 지켜야 하는 통보 절차" → 후보 10개 중 제27조·제26조만 선정 이유와 함께 표시. 후보 밖 번호는 코드가 무시 |
 | 도메인 특화 기능의 결과에도 근거 제시 | 통과 | 쟁점 체크리스트 항목마다 `[근거 N]`과 원문 인용 문구, 근거 링크 목록 |
@@ -114,7 +116,7 @@
 | F2006 | `rag/retrieval.py`, `rag/pipeline.py` `evidence_from_retrieval` | Top-k 비교, 고정 조문, `test_pipeline` | 통과 |
 | F2007 | `rag/pipeline.py` LangGraph, `rag/prompts.py` | 그래프 출력, 거부 동작 | 통과 |
 | F2008 | `rag/citations.py`, `ui/streamlit_app.py` | 인용 검증, 근거 링크 | 통과 |
-| F2009 | `rag/statute_catalog.py`, `ui/streamlit_app.py` 조문 탭 | 조문별 대화 분리 | 통과 |
+| F2009 | `rag/statute_catalog.py`, `ui/streamlit_app.py` 조문 찾아보기·상담실 | 조문별 대화 분리, 상담 스레드 이어짐(`test_consultation_room`) | 통과 |
 | F2010 | `rag/issue_checklist.py` | 체크리스트 화면, `test_issue_checklist` | 통과 |
 | F2011 | `rag/condition_search.py` | 조건 탐색 카드, `test_statute_items` | 통과 |
 | F2012 | `ui/streamlit_app.py` | 진행 상태, 키·색인 없음 안내, 면책 | 통과 |
@@ -134,11 +136,12 @@
 
 ### 4.1 자동 테스트
 
-`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **138개 통과** (2026-10-22). 빈 venv에서 `pip install -e .` 후에도 통과를 확인했다.
+`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **147개 통과** (2026-10-22). 빈 venv에서 `pip install -e .` 후에도 통과를 확인했다.
 
 | 모듈 | 개수 | 대상 |
 |---|---:|---|
-| test_pipeline | 14 | LangGraph 노드, 재시도, 고정 조문, Top-k |
+| test_pipeline | 18 | LangGraph 노드, 상담 스레드 맥락·삭제, 재시도, 고정 조문, Top-k |
+| test_consultation_room | 5 | 상담실 채팅 AppTest: 분야 안내, 대화 누적·마스킹, 새 상담 스레드, 지난 상담 복구·삭제 |
 | test_retrieval | 13 | 검색어 확장·규칙(유류분 포함), RRF, 판례 재정렬 |
 | test_issue_checklist | 11 | 체크리스트 파싱·항목 단위 검증·재시도 |
 | test_statute_items | 11 | 조문 카탈로그, 조건 탐색 |

@@ -29,6 +29,7 @@
 13. LangGraph `retrieve` → `generate` 노드 기반 RAG 파이프라인
 14. 법령 조문 항목의 조건 기반 탐색 카드와 조문별 채팅
 15. 판례 후보 선별 프롬프트, 청크·Top-k `.env` 설정, 내 상황 쟁점 체크리스트, MMR 검색, RAG 전후 비교
+16. 이어지는 질문의 맥락을 기억하는 LangGraph 상담 스레드와 채팅형 생활법률 상담실 화면
 
 ## 제출 문서
 
@@ -124,18 +125,20 @@ python -m pip install -e ".[web]"
 uvicorn legal_rag.web.api:app --port 8000
 ```
 
-Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://localhost:8000`입니다. 화면은 두 개의 탭으로 구성됩니다.
+Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://localhost:8000`입니다. Streamlit은 왼쪽 메뉴에서 `💬 상담실`과 `📚 조문 찾아보기`를 고릅니다.
 
-**상황으로 검토하기**
+**💬 상담실** — 법률 상담소에서 상담하듯 대화가 아래로 쌓이고, 입력창은 화면 아래에 고정됩니다.
 
-- 근로계약·부당해고, 전세·임대차 보증금, 상속 도메인 선택
-- 최대 2,000자의 상황 입력과 추가 민감 단어 지정
-- 개인정보 마스킹 건수와 답변 검증 상태 확인
+- 왼쪽에서 상담 분야를 고르면 상담 안내와 자주 묻는 상황 예시가 나타나고, 예시를 누르면 바로 질문됩니다.
+- **이어지는 질문**: 같은 상담 안에서 "그럼 회사가 나중에 서면으로 보내면요?"처럼 이어 물으면, LangGraph 체크포인터에 쌓인 앞선 질문(최근 3개)을 함께 붙여 검색하고 답합니다. `🆕 새 상담 시작`을 누르면 새 상담 스레드가 열립니다.
+- **지난 상담**: 사이드바에 지난 상담이 최근 순으로 쌓입니다. 제목은 마스킹된 첫 질문입니다. 누르면 대화가 그대로 복구되고, 같은 `thread_id`로 이어서 물을 수 있습니다. 🗑️을 누르면 화면 기록과 체크포인터의 그 스레드가 함께 지워집니다. 기록은 브라우저 세션 메모리에만 있어 새로고침하면 사라집니다.
+- 질문 말풍선에 가린 개인정보 건수가 표시되고, `원문과 외부 모델 전달문 비교`를 펼쳐 마스킹 결과를 확인할 수 있습니다. 추가로 가릴 이름·회사명은 왼쪽 메뉴에서 지정합니다.
+- 답변 처리 중에는 "관련 법령과 판례를 찾고 근거 문구를 검증하고 있어요" 같은 진행 상태가 표시됩니다.
 - 검증된 법령 기반 답변과 국가법령정보센터 원문 링크 확인
 - 근거 부족·인용 실패·외부 호출 실패 시 안전한 차단 메시지 확인
 - **도메인 특화 기능 — 내 상황 쟁점 체크리스트**: 답변과 같은 근거로 법령·판례가 요구하는 판단 요소를 3~6개 뽑고, 입력한 상황에 그 사실이 `✅ 상황에 나와 있음`·`⚠️ 상황과 다름`·`❓ 확인 필요` 중 어디에 해당하는지 표시합니다. 항목마다 사용자가 스스로 확인할 질문, `[근거 N]` 번호, 원문 인용 문구가 붙고, 확인한 항목을 체크하면 진행률이 표시됩니다.
 
-**조문 찾기·조문별 상담** — 법령 조문 하나를 서비스 항목으로 다룹니다.
+**📚 조문 찾아보기** — 법령 조문 하나를 서비스 항목으로 다룹니다.
 
 - 조건 기반 조문 탐색: "해고할 때 회사가 지켜야 하는 통보 절차를 정한 조문"처럼 자연어 조건을 입력하면 법령 색인에서 후보 10개를 찾고, LLM이 조건에 직접 해당하는 조문만 골라 선정 이유와 함께 카드로 보여줍니다. LLM은 후보 번호만 반환하므로 후보 밖의 조문은 결과에 섞이지 않습니다.
 - 조문 선택: 카드의 `이 조문으로 상담하기` 또는 분야별 전체 조문 목록에서 직접 고릅니다.
@@ -143,9 +146,17 @@ Streamlit의 기본 주소는 `http://localhost:8501`, 웹 화면은 `http://loc
 
 ## 전체 기능 화면
 
-### 검색 근거로 검증된 법령·판례 답변
+### 상담실: 검색 근거로 검증된 법령·판례 답변
 
 ![해고 서면통지 질문에 대한 검증된 법령·판례 답변](docs/assets/safelaw-grounded-answer.png)
+
+### 상담실: 앞선 상담을 이어받는 질문
+
+두 번째 질문에는 해고 상황을 다시 적지 않았지만, 상담 스레드에 쌓인 첫 질문을 함께 검색해 같은 사건을 전제로 답합니다.
+
+![앞선 상담 내용을 이어받아 답한 두 번째 질문](docs/assets/safelaw-consult-followup.png)
+
+![사이드바 지난 상담 목록에서 첫 상담을 다시 열어 이어 물은 화면](docs/assets/safelaw-consult-history.png)
 
 ### 외부 호출 전 개인정보 마스킹 비교
 
@@ -239,7 +250,7 @@ python scripts/build_statute_index.py
 |---|---:|---|
 | `STATUTE_CHUNK_SIZE` / `STATUTE_CHUNK_OVERLAP` | 1200 / 150 | `build_statute_chunks.py` |
 | `CASE_CHUNK_SIZE` / `CASE_CHUNK_OVERLAP` | 1400 / 180 | `build_case_chunks.py`, 질문 시 판례 증분 색인 |
-| `RAG_TOP_K` | 5 | Streamlit 두 탭, `answer_statutes.py`, `search_statutes.py`, `show_evidence.py` |
+| `RAG_TOP_K` | 5 | Streamlit 상담실·조문 찾아보기, `answer_statutes.py`, `search_statutes.py`, `show_evidence.py` |
 | `RAG_SEARCH_MODE` / `RAG_MMR_FETCH_K` / `RAG_MMR_LAMBDA` | similarity / 30 / 0.5 | Streamlit 답변 파이프라인의 법령·판례 검색 |
 
 청크 설정을 바꾸면 청크 생성과 색인 스크립트를 다시 실행해야 검색에 반영됩니다. 스크립트의 `--max-chars`, `--overlap-chars`, `--top-k` 옵션은 `.env`보다 우선합니다. 평가 스크립트는 기준선 재현을 위해 기존 고정값을 유지합니다.
@@ -376,7 +387,7 @@ python scripts/audit_case_evaluation_labels.py
 
 ## 근거 제한 답변 생성
 
-검색과 생성은 LangGraph `StateGraph`의 `retrieve` → `generate` 두 노드로 구성합니다. `retrieve`는 법령·판례 근거 목록을, `generate`는 근거 제한 답변과 인용 검증 결과를 상태에 기록합니다. 노드별 입출력은 [`docs/architecture.md`](docs/architecture.md#langgraph-노드-구성)에 정리했고, 그래프 구조는 다음 명령으로 출력합니다.
+검색과 생성은 LangGraph `StateGraph`의 `retrieve` → `generate` 두 노드로 구성합니다. 상담실은 같은 그래프를 체크포인터(`InMemorySaver`)와 함께 컴파일해 상담마다 `thread_id`를 두고, 상태의 `history`에 마스킹된 질문을 쌓아 다음 질문의 검색·생성에 최근 3개를 함께 붙입니다. `retrieve`는 법령·판례 근거 목록을, `generate`는 근거 제한 답변과 인용 검증 결과를 상태에 기록합니다. 노드별 입출력은 [`docs/architecture.md`](docs/architecture.md#langgraph-노드-구성)에 정리했고, 그래프 구조는 다음 명령으로 출력합니다.
 
 ```powershell
 python scripts/show_rag_graph.py

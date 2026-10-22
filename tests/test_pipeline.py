@@ -241,6 +241,14 @@ class StatuteRagPipelineTests(unittest.TestCase):
         self.assertEqual(pipeline.conversation_history("a"), ["상담 A"])
         self.assertEqual(pipeline.conversation_history("unknown"), [])
 
+    def test_forget_conversation_removes_thread_history(self):
+        pipeline = StatuteRagPipeline(FakeRetriever([evidence_hit()]), FakeLlm(valid_response()))
+        pipeline.converse("지울 상담", thread_id="t1", category=LegalCategory.LABOR)
+
+        pipeline.forget_conversation("t1")
+
+        self.assertEqual(pipeline.conversation_history("t1"), [])
+
     def test_contextual_question_keeps_only_recent_turns(self):
         question = contextual_question(["1번", "2번", "3번", "4번"], "5번")
 
