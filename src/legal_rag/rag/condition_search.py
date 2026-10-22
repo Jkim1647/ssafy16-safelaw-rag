@@ -6,14 +6,13 @@
 
 from __future__ import annotations
 
-import json
-import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Protocol
 
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.retrieval import CATEGORY_LABELS, RetrievalResult
+from legal_rag.rag.selection import SelectionParseError, parse_numbered_selection
 from legal_rag.rag.statute_catalog import StatuteCatalog, StatuteItem, item_id_for
 
 
@@ -76,34 +75,6 @@ def build_selection_messages(
     ]
 
 
-def _parse_selection(raw_response: str, candidate_count: int) -> list[tuple[int, str]]:
-    match = re.search(r"\{.*\}", raw_response, re.DOTALL)
-    if not match:
-        raise ConditionSearchError("조문 선별 응답에 JSON 객체가 없습니다.")
-    try:
-        payload = json.loads(match.group(0))
-    except json.JSONDecodeError as exc:
-        raise ConditionSearchError("조문 선별 응답을 해석하지 못했습니다.") from exc
-    selected = payload.get("selected") if isinstance(payload, dict) else None
-    if not isinstance(selected, list):
-        raise ConditionSearchError("조문 선별 응답에 selected 배열이 없습니다.")
-
-    result: list[tuple[int, str]] = []
-    seen: set[int] = set()
-    for entry in selected:
-        if not isinstance(entry, dict):
-            continue
-        id_match = re.fullmatch(r"C(\d+)", str(entry.get("id", "")).strip())
-        if not id_match:
-            continue
-        index = int(id_match.group(1)) - 1
-        if not 0 <= index < candidate_count or index in seen:
-            continue
-        seen.add(index)
-        result.append((index, str(entry.get("reason", "")).strip()))
-    return result
-
-
 class StatuteConditionSearch:
     def __init__(
         self,
@@ -141,7 +112,10 @@ class StatuteConditionSearch:
             raw_response = self._llm.invoke(build_selection_messages(condition, category, candidates))
         except RuntimeError as exc:
             raise ConditionSearchError("조문 선별 모델 호출에 실패했습니다.") from exc
-        selection = _parse_selection(raw_response, len(candidates))
+        try:
+            selection = parse_numbered_selection(raw_response, len(candidates), "C")
+        except SelectionParseError as exc:
+            raise ConditionSearchError(str(exc)) from exc
         return ConditionSearchResult(
             candidates=tuple(candidates),
             matches=tuple(ConditionMatch(candidates[index], reason) for index, reason in selection),
