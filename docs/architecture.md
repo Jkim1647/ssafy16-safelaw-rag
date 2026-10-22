@@ -22,7 +22,7 @@ flowchart LR
     CV --> MERGE
     MERGE --> GEN[근거 제한 답변 생성]
     GEN --> VERIFY[인용·출처 검증]
-    VERIFY -->|[\uadfc거 N] 및 원문 URL| UI
+    VERIFY -->|근거 N 및 원문 URL| UI
 
     LLM[GMS LLM] <--> QE
     LLM <--> GEN

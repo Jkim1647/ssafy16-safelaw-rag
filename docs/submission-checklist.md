@@ -1,16 +1,39 @@
 # 최종 제출 체크리스트
 
+## 명세서 6장 산출물
+
+- [x] 1) 요구사항 정의서: [`requirements-definition.md`](requirements-definition.md) — 기능별 요구사항 표, 도메인 조건 충족 근거
+- [x] 2) RAG 파이프라인 설계문서: [`rag-pipeline-design.md`](rag-pipeline-design.md) (계층·보안 경계는 [`architecture.md`](architecture.md))
+- [x] 3) 검증 결과: [`verification-results.md`](verification-results.md) — 4장 항목별 실행 결과, 요구사항 대조표, 테스트 결과표, 화면 캡처
+- [ ] 3) 셀프·상호 체크리스트 — 3일차 오후 배포 후 `verification-results.md` 6절에 기록
+- [x] 3) 심화 결과 비교: MMR(README), RAG 전후([`rag-before-after.md`](rag-before-after.md))
+- [x] 4) 소스코드, 수집·색인 스크립트, 심화 기능 코드
+- [ ] 5) 셀프 체크리스트 결과 — 3일차 오후 배포
+- [x] 6) README: 개요·실행 방법, 필수/심화 기능 구분, 데이터 준비·색인 절차, 출처·이용 조건, 심화 요약
+- [ ] 제출 형식 확인: 명세서는 `AI코어프로젝트2_[주제명]_지역_반_성명.zip`을 lab.ssafy.com에 업로드, 안내받은 방식은 GitLab 레포
+
+## 아직 못 한 항목
+
+- [ ] F2013 HTML/CSS/JS 프론트엔드 — 미구현(2일차 17시 이후 새 기능 금지)
+- [ ] NF2001 응답 시간 개선 — 현재 31.8~64.0초, 인용 교정 3회 시 길어짐
+- [ ] 삭제된 조문 4건(근로기준법 제35조, 주택임대차보호법 제5조, 민법 제651조·제1002조) 색인 제외 후 재색인·재평가
+- [ ] 유류분 질문에서 민법 제1112조가 검색되지 않는 문제
+- [x] LangGraph 의존성 추가 이후 새 환경 재확인 — 2026-10-22 빈 Python 3.12 venv에서 `pip install -e .`, `streamlit`·`chromadb`·`langgraph`·`legal_rag` import, 테스트 125개 통과
+- [ ] 기존 8501 Streamlit 재시작 (이전 코드로 실행 중)
+- [ ] GitLab push (현재 로컬 커밋만 있음)
+- [ ] 법률 전문가 또는 지도 리뷰어의 평가셋 라벨 검수
+
 ## GitLab 제출물
 
 - [x] 프로젝트 소스 코드
 - [x] `.env`, API 키, 로컬 Chroma, 원시 상담 질문 Git 제외
-- [x] RAG 파이프라인 설계 문서: `docs/architecture.md`
+- [x] RAG 파이프라인 설계 문서: `docs/rag-pipeline-design.md`, `docs/architecture.md`
 - [x] 검색 및 End-to-End 검증 결과
 - [x] 데이터 출처·API·이용 조건 현황
 - [x] 실행 방법, 도메인 선정 이유, 데이터 준비·색인 절차, 전체 기능을 포함한 README
 - [x] README용 화면 캡처 또는 GIF 파일 추가
 - [x] 4K 전체 시스템 아키텍처를 README·설계 문서에 연결
-- [x] 새 환경에서 README 순서대로 설치·실행 확인
+- [x] 새 환경에서 README 순서대로 설치·실행 확인 (2026-10-22 LangGraph 추가 후 재확인, 테스트 125개)
 - [ ] 법률 전문가 또는 지도 리뷰어의 평가셋 라벨 검수
 
 전문가 검수 준비 상태:
@@ -21,7 +44,7 @@
 - [x] 자동 감사 오류 0건
 - [ ] 실제 검수자의 질문-쟁점·최신성·후속 판례 확인 및 서명
 
-새 환경 검증은 2026-10-22 Python 3.12에서 `pip install -e .`, 전체 73개 테스트, `streamlit`·`chromadb`·`legal_rag` import 순서로 완료했다. API 키가 필요한 실제 외부 질의는 기존 UI 점검 결과로 검증했다.
+새 환경 검증은 2026-10-22 Python 3.12에서 `pip install -e .`, 전체 테스트, `streamlit`·`chromadb`·`legal_rag` import 순서로 완료했다. LangGraph 의존성을 추가한 뒤 빈 venv에서 다시 확인해 125개 테스트가 통과했다. API 키가 필요한 실제 외부 질의는 기존 UI 점검 결과로 검증했다.
 
 전문가 검수용 30문항 서명표는 `docs/case-evaluation-review-sheet.md`에 준비했고, 자동 사전 감사 결과와 공식 원문 링크는 `docs/case-evaluation-label-audit.md`에 생성했다. 검수자 서명과 수정 의견을 받기 전에는 전문가 검수 항목을 완료 처리하지 않는다.
 

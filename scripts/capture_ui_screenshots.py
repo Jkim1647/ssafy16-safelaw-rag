@@ -1,4 +1,4 @@
-"""로컬 Streamlit의 제출용 화면 3장을 Chrome DevTools Protocol로 캡처한다."""
+"""로컬 Streamlit의 제출용 화면을 Chrome DevTools Protocol로 캡처한다."""
 
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def _wait_until(predicate, *, timeout: float, message: str) -> None:
     raise TimeoutError(message)
 
 
-def _connect(port: int) -> CdpClient:
+def _connect(port: int, url: str) -> CdpClient:
     target: dict[str, Any] | None = None
 
     def find_target() -> bool:
@@ -84,7 +84,7 @@ def _connect(port: int) -> CdpClient:
                 item
                 for item in targets
                 if item.get("type") == "page"
-                and str(item.get("url", "")).startswith("http://localhost:8501")
+                and str(item.get("url", "")).startswith(url)
             ),
             None,
         )
@@ -202,13 +202,127 @@ def _capture(client: CdpClient, output: Path, *, anchor_text: str) -> None:
     output.write_bytes(base64.b64decode(result["data"]))
 
 
+def _scroll_to(client: CdpClient, finder: str) -> None:
+    """finder는 요소를 반환하는 JS 식이다. 찾으면 화면 맨 위로 스크롤한다."""
+    found = client.evaluate(
+        f"""
+        (() => {{
+          const node = {finder};
+          if (node) node.scrollIntoView({{block: 'start'}});
+          return Boolean(node);
+        }})()
+        """
+    )
+    if not found:
+        raise RuntimeError("캡처 기준 요소를 찾지 못했습니다.")
+    time.sleep(0.5)
+
+
+def _screenshot(client: CdpClient, output: Path) -> None:
+    result = client.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})
+    output.write_bytes(base64.b64decode(result["data"]))
+
+
+ACTIVE_PANEL = (
+    "Array.from(document.querySelectorAll('[role=tabpanel]'))"
+    ".find(panel => panel.offsetParent !== null)"
+)
+
+
+def _set_value(client: CdpClient, selector: str, value: str) -> None:
+    selector_json = json.dumps(selector)
+    value_json = json.dumps(value, ensure_ascii=False)
+    filled = client.evaluate(
+        f"""
+        (() => {{
+          const node = {ACTIVE_PANEL}?.querySelector({selector_json});
+          if (!node) return false;
+          const proto = node.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+          Object.getOwnPropertyDescriptor(proto, 'value').set.call(node, {value_json});
+          node.dispatchEvent(new Event('input', {{bubbles: true}}));
+          node.dispatchEvent(new Event('change', {{bubbles: true}}));
+          return true;
+        }})()
+        """
+    )
+    if not filled:
+        raise RuntimeError(f"입력 요소를 찾지 못했습니다: {selector}")
+    time.sleep(0.5)
+
+
+def _click_button(client: CdpClient, text: str) -> None:
+    text_json = json.dumps(text, ensure_ascii=False)
+    clicked = client.evaluate(
+        f"""
+        (() => {{
+          const button = Array.from({ACTIVE_PANEL}?.querySelectorAll('button') || [])
+            .find(el => el.textContent.includes({text_json}));
+          if (!button) return false;
+          button.click();
+          return true;
+        }})()
+        """
+    )
+    if not clicked:
+        raise RuntimeError(f"버튼을 찾지 못했습니다: {text}")
+
+
+def _run_article_scenario(client: CdpClient, url: str, output_dir: Path) -> None:
+    _load_fresh(client, url)
+    client.evaluate(
+        "Array.from(document.querySelectorAll('[role=tab]'))"
+        ".find(tab => tab.textContent.includes('조문 찾기')).click()"
+    )
+    time.sleep(1)
+    category = json.dumps("근로계약·부당해고", ensure_ascii=False)
+    client.evaluate(f"{ACTIVE_PANEL}.querySelector('button[aria-label=\"Open\"]').click()")
+    _wait_until(
+        lambda: bool(client.evaluate("Boolean(document.querySelector('[role=option]'))")),
+        timeout=5,
+        message="조문 탭 상담 분야 목록이 열리지 않았습니다.",
+    )
+    client.evaluate(
+        f"Array.from(document.querySelectorAll('[role=option]')).find(el => el.textContent.trim() === {category}).click()"
+    )
+    _wait_for_text(client, "또는 목록에서 직접 선택", timeout=15)
+    _set_value(
+        client,
+        'input[aria-label="찾고 싶은 조문의 조건을 자연어로 적어주세요"]',
+        "해고할 때 회사가 지켜야 하는 통보 절차를 정한 조문",
+    )
+    _click_button(client, "조건에 맞는 조문 찾기")
+    _wait_for_text(client, "개 조문을 골랐습니다")
+    # 상태 문구가 먼저 그려지고 카드는 같은 실행의 뒤쪽에서 그려진다.
+    _wait_for_text(client, "이 조문으로 상담하기", timeout=30)
+    time.sleep(1)
+    _scroll_to(client, f"Array.from({ACTIVE_PANEL}.querySelectorAll('p')).find(el => el.textContent.startsWith('조건: '))")
+    _screenshot(client, output_dir / "safelaw-condition-search.png")
+
+    _click_button(client, "이 조문으로 상담하기")
+    _wait_for_text(client, "💬", timeout=15)
+    _set_value(client, "textarea", "팀장이 카카오톡으로만 해고를 알렸어요. 이 통보도 효력이 있나요?")
+    client.evaluate("document.querySelector('[data-testid=stChatInputSubmitButton]').click()")
+    _wait_until(
+        lambda: bool(client.evaluate(
+            "(() => { const messages = document.querySelectorAll('[data-testid=stChatMessage]');"
+            " const last = messages[messages.length - 1];"
+            " return messages.length >= 2 && Boolean(last)"
+            " && (last.innerText.includes('상태 코드') || last.innerText.includes('처리하지 못했습니다')); })()"
+        )),
+        timeout=180,
+        message="조문별 채팅 답변을 확인하지 못했습니다.",
+    )
+    _scroll_to(client, "Array.from(document.querySelectorAll('h3')).find(el => el.textContent.startsWith('💬'))")
+    _screenshot(client, output_dir / "safelaw-article-chat.png")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="SafeLaw README용 Streamlit 화면 캡처")
     parser.add_argument("--url", default="http://localhost:8501")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "docs" / "assets")
     parser.add_argument(
         "--scenario",
-        choices=("all", "grounded", "privacy", "refusal"),
+        choices=("all", "grounded", "privacy", "refusal", "article"),
         default="all",
         help="캡처할 화면. 기본값은 전체입니다.",
     )
@@ -234,7 +348,7 @@ def main() -> None:
     )
     client: CdpClient | None = None
     try:
-        client = _connect(port)
+        client = _connect(port, args.url)
         client.call("Page.enable")
         client.call("Runtime.enable")
         client.call(
@@ -253,7 +367,20 @@ def main() -> None:
                 ),
             )
             _wait_for_text(client, "근거 검증 완료")
+            # 같은 제출에서 도메인 특화 기능인 쟁점 체크리스트도 함께 생성된다.
+            # 화면이 모두 그려진 뒤 찍어야 스크롤 위치가 밀리지 않는다.
+            _wait_until(
+                lambda: bool(client.evaluate(
+                    "document.body.innerText.includes('확인한 항목')"
+                    " || document.body.innerText.includes('체크리스트를 만들')"
+                    " || document.body.innerText.includes('표시하지 않습니다')"
+                )),
+                timeout=120,
+                message="쟁점 체크리스트 결과를 확인하지 못했습니다.",
+            )
+            time.sleep(1)
             _capture(client, args.output_dir / "safelaw-grounded-answer.png", anchor_text="검토 결과")
+            _capture(client, args.output_dir / "safelaw-issue-checklist.png", anchor_text="내 상황 쟁점 체크리스트")
 
         if args.scenario in ("all", "privacy"):
             _load_fresh(client, args.url)
@@ -279,6 +406,9 @@ def main() -> None:
             )
             _wait_for_text(client, "근거 부족")
             _capture(client, args.output_dir / "safelaw-refusal.png", anchor_text="검토 결과")
+
+        if args.scenario in ("all", "article"):
+            _run_article_scenario(client, args.url, args.output_dir)
 
         for path in sorted(args.output_dir.glob("safelaw-*.png")):
             print(f"{path.relative_to(ROOT)}: {path.stat().st_size:,} bytes")
