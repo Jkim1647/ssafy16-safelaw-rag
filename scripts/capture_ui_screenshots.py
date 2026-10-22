@@ -105,7 +105,7 @@ def _wait_for_text(client: CdpClient, text: str, timeout: float = 120) -> None:
 
 def _load_fresh(client: CdpClient, url: str) -> None:
     client.call("Page.navigate", {"url": url})
-    _wait_for_text(client, "SafeLaw 생활법률 상담실", timeout=30)
+    _wait_for_text(client, "생활법률 상담실", timeout=30)
     _wait_until(
         lambda: bool(client.evaluate(
             "Boolean(document.querySelector('[data-testid=stSidebar] input[aria-label=\"상담 분야\"]'))"
