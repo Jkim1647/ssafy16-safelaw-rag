@@ -482,7 +482,7 @@ def _sync_picked_article(state: Any, widget_key: str) -> None:
 
 
 def _render_condition_search(st: Any, settings: Settings, ready: bool, category: LegalCategory,
-                             catalog: StatuteCatalog) -> None:
+                             catalog: StatuteCatalog, sensitive_terms: tuple[str, ...]) -> None:
     with st.form("condition_search_form", clear_on_submit=False):
         condition = st.text_input(
             "찾고 싶은 조문의 조건을 자연어로 적어주세요",
@@ -501,7 +501,7 @@ def _render_condition_search(st: Any, settings: Settings, ready: bool, category:
             st.warning("찾고 싶은 조문의 조건을 입력해 주세요.")
         else:
             try:
-                privacy = PrivacyGuard().redact(condition)
+                privacy = PrivacyGuard().redact(condition, sensitive_terms)
                 if "safelaw_condition_search" not in st.session_state:
                     st.session_state.safelaw_condition_search = build_condition_search(settings, catalog)
                 with st.status("후보 조문을 검색하고 조건에 맞는 조문만 고르고 있습니다...") as status:
@@ -555,7 +555,8 @@ def _render_condition_search(st: Any, settings: Settings, ready: bool, category:
                 )
 
 
-def _render_article_chat(st: Any, settings: Settings, ready: bool, item: StatuteItem) -> None:
+def _render_article_chat(st: Any, settings: Settings, ready: bool, item: StatuteItem,
+                         sensitive_terms: tuple[str, ...]) -> None:
     st.markdown(f"### 💬 {item.label}")
     st.caption(f"시행일 {item.effective_date} · [국가법령정보센터 원문]({item.source_url})")
     with st.expander("조문 원문 보기"):
@@ -581,7 +582,7 @@ def _render_article_chat(st: Any, settings: Settings, ready: bool, item: Statute
     if not prompt:
         return
 
-    privacy = PrivacyGuard().redact(prompt)
+    privacy = PrivacyGuard().redact(prompt, sensitive_terms)
     user_message = {
         "role": "user",
         "content": privacy.sanitized_text,
@@ -641,7 +642,17 @@ def _render_article_explorer(st: Any, settings: Settings, ready: bool) -> None:
         st.error("조문 데이터셋을 읽지 못했습니다. build_statute_chunks.py를 먼저 실행해 주세요.")
         return
 
-    _render_condition_search(st, settings, ready, category, catalog)
+    with st.expander("추가로 가릴 이름·회사명 입력 (선택)"):
+        extra_terms = st.text_input(
+            "쉼표로 구분",
+            placeholder="홍길동, 세이프로 주식회사",
+            label_visibility="collapsed",
+            key="article_sensitive_terms",
+        )
+        st.caption("조건 검색과 조문별 채팅 모두에서 입력한 단어를 `[CUSTOM_N]`으로 바꾼 뒤 외부 모델에 전달합니다.")
+    sensitive_terms = parse_sensitive_terms(extra_terms)
+
+    _render_condition_search(st, settings, ready, category, catalog, sensitive_terms)
 
     items = catalog.items(category)
     picker_key = f"article_picker_{category.value}"
@@ -664,4 +675,4 @@ def _render_article_explorer(st: Any, settings: Settings, ready: bool) -> None:
         )
         return
     st.divider()
-    _render_article_chat(st, settings, ready, selected)
+    _render_article_chat(st, settings, ready, selected, sensitive_terms)
