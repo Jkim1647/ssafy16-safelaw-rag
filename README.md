@@ -112,7 +112,7 @@ SSAFY 16기 AI 코어 프로젝트 2회차(RAG) · 개인 프로젝트 · 2026�
 
 ![SafeLaw 개인정보 보호형 법률 RAG 전체 아키텍처](docs/assets/safelaw-hd-system-architecture.png)
 
-원본은 4K(`3840×2160`) PNG로 저장되어 확대해도 각 단계와 연결 관계를 확인할 수 있습니다. 그림의 청크 수는 저장소 데이터로 재현되는 기준 색인(법령 `382`, 판례 `652`)이며, 질의 시 판례 증분 보강을 거친 로컬 색인은 이보다 클 수 있습니다. 세부 처리 규칙과 계층별 책임은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
+그림은 4K(`3840×2160`) PNG라 확대해도 각 단계와 연결 관계를 확인할 수 있습니다. 원본 SVG는 `docs/assets/safelaw-hd-system-architecture.svg`이고, `scripts/render_architecture.py`로 SVG와 PNG를 함께 다시 만듭니다. 03·04 레인이 LangGraph의 `retrieve`·`generate` 두 노드이고, 05 레인이 쟁점 체크리스트·용어 풀이·상담 화면입니다. 그림의 청크 수는 저장소 데이터로 재현되는 기준 색인(법령 `382`, 판례 `652`)이며, 질의 시 판례 증분 보강을 거친 로컬 색인은 이보다 클 수 있습니다. 세부 처리 규칙과 계층별 책임은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
 
 ## 프로젝트 구조
 
@@ -161,6 +161,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ show_rag_graph.py           # LangGraph retrieve/generate 구조 출력
 │  ├─ show_evidence.py            # Top-k별 근거 목록 비교
 │  ├─ capture_ui_screenshots.py   # README 제출용 UI 캡처 자동 생성
+│  ├─ render_architecture.py      # 아키텍처 SVG 원본 생성과 4K PNG 렌더링
 │  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
 └─ tests/                          # 보안·도메인·RAG 검증
 ```

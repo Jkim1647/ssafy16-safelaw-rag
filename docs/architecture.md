@@ -2,30 +2,40 @@
 
 ![SafeLaw 개인정보 보호형 법률 RAG 전체 아키텍처](assets/safelaw-hd-system-architecture.png)
 
-위 이미지는 오프라인 법령·판례 색인, 질의 시 개인정보 마스킹과 검색어 확장, 법령·판례 이중 검색, 근거 제한 생성·인용 검증, 최신 판례 증분 보강 및 평가 피드백을 한 화면에 정리한 4K 아키텍처다.
+위 이미지는 2026-10-22 구현 기준 전체 흐름을 한 화면에 정리한 4K 아키텍처다. 다섯 레인은 지식 준비(01), 개인정보 보호·상담 맥락·질의 확장(02), LangGraph `retrieve` 노드의 법령·판례 이중 검색(03), `generate` 노드의 근거 제한 생성·인용 검증(04), 쟁점 체크리스트·용어 풀이·상담 화면(05)이다. 아래 띠에는 판례 증분 보강(LLM 후보 선별 포함), 로컬 보안·저장, 평가 지표를 두었다.
+
+원본은 `assets/safelaw-hd-system-architecture.svg`이고, 문구는 `scripts/render_architecture.py`에 있다. 그림을 바꿀 때는 스크립트의 문구를 고친 뒤 다음 명령으로 SVG와 4K PNG를 함께 다시 만든다. PNG 렌더링에는 Google Chrome이 필요하다.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\render_architecture.py
+```
 
 ## 온라인 질문 처리
 
 ```mermaid
 flowchart LR
-    U[사용자] --> UI[Streamlit UI]
+    U[사용자] --> UI[Streamlit 상담실 · 조문 찾아보기 · FastAPI 웹]
     UI --> PG[로컬 Privacy Guard]
-    PG -->|PII 마스킹 질문| APP[상담 Use Case]
-    PG -.->|Raw 원문 저장 금지| DROP[(폐기)]
+    PG -->|마스킹된 질문| TH[상담 스레드 InMemorySaver]
+    PG -.->|원문 저장 금지| DROP[(폐기)]
+    TH -->|최근 질문 3개 + 현재 질문| QE[검색어 변환 일상어 → 법률 용어]
 
-    APP --> QE[쟁점·검색어 추출]
-    QE --> SR[법령 Retriever]
-    QE --> CR[판례 Retriever]
-    SR --> SV[(법령 Vector Store)]
-    CR --> CV[(판례 Vector Store)]
-    SV --> MERGE[근거 병합·재순위화]
-    CV --> MERGE
-    MERGE --> GEN[근거 제한 답변 생성]
-    GEN --> VERIFY[인용·출처 검증]
-    VERIFY -->|근거 N 및 원문 URL| UI
+    subgraph LG[LangGraph StateGraph]
+        R[retrieve 노드] --> G[generate 노드]
+    end
 
-    LLM[GMS LLM] <--> QE
-    LLM <--> GEN
+    QE --> R
+    R --> SV[(법령 컬렉션)]
+    R --> CV[(판례 컬렉션)]
+    ENR[판례 API · LLM 후보 선별] -.->|부족하면 증분 보강| CV
+    G --> VERIFY[인용·출처 검증]
+    VERIFY -->|통과 답변 + 근거 N + 원문 URL| UI
+    R -.->|같은 근거 재사용| CK[쟁점 체크리스트 · 용어 풀이]
+    CK --> UI
+
+    LLM[GMS gpt-5.4-mini] <--> QE
+    LLM <--> G
+    LLM <--> CK
 
     classDef security fill:#fff3cd,stroke:#8a6d00,color:#111;
     classDef store fill:#e7f1ff,stroke:#225ea8,color:#111;
@@ -84,7 +94,8 @@ flowchart LR
 2. `IssueChecklistBuilder`가 근거와 마스킹된 상황을 받아 판단 요소 3~6개를 JSON으로 생성한다. 각 항목은 `status`(`mentioned`·`contradicted`·`unknown`), 확인 질문, 근거 번호, 원문 인용 문구를 가진다.
 3. `status`는 상황 문장에 그 사실이 있는지만 나타낸다. 요건 충족이나 결과를 판단하지 않도록 프롬프트와 화면 문구에서 모두 제한한다.
 4. 각 항목은 답변과 같은 인용 검증(`parse_grounded_claim`)을 거친다. 항목은 서로 독립적인 확인 질문이므로 검증에 실패한 항목만 빼고 나머지를 표시하며, 뺀 개수를 화면에 알린다. 검증된 항목이 하나도 없으면 한 번 다시 생성하고, 그래도 없으면 체크리스트를 표시하지 않는다.
-5. 상담실에서는 답변 말풍선마다 체크리스트가 붙고, 대화 기록과 체크 상태는 세션 메모리에만 보관한다. 체크할 때마다 화면이 다시 그려져도 대화가 유지된다.
+5. 상담실에서는 답변 말풍선 안에 상태별 개수 요약만 두고, 체크할 수 있는 전체 목록은 대화 오른쪽 고정 패널에 표시한다. 새 답변이 오면 패널이 최신 답변으로 바뀌고, 이전 답변 요약의 `오른쪽 패널에서 보기`로 전환한다. 대화 기록과 체크 상태는 세션 메모리에만 보관한다.
+6. 항목에 나온 법률 용어는 `domain/glossary.py`의 고정 용어집(50개)에서 골라 `📖` 풀이를 붙인다. 풀이는 LLM이 만들지 않으며, "서면으로 통지"처럼 조문식 표현도 같은 용어로 잇고 같은 용어는 처음 나온 항목에서 한 번만 푼다.
 
 처음에는 항목 하나라도 인용이 틀리면 체크리스트 전체를 버렸다. 실제 모델로 같은 질문을 세 번 생성해 보니 한 번은 5개 중 1개 항목의 인용 문구가 원문과 달라 전체가 차단됐다. 항목 단위로 검증하도록 바꿔, 검증된 항목은 보여주면서 근거 없는 항목은 계속 막는다.
 
