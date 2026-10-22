@@ -69,6 +69,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
 │  ├─ evaluate_end_to_end_rag.py # 검색-생성-검증 전체 품질 측정
 │  ├─ inspect_chroma.py           # Chroma 문서·메타데이터 조회
+│  ├─ capture_ui_screenshots.py   # README 제출용 UI 캡처 자동 생성
 │  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
 └─ tests/                          # 보안·도메인·RAG 검증
 ```
@@ -91,6 +92,28 @@ streamlit run app.py
 - 개인정보 마스킹 건수와 답변 검증 상태 확인
 - 검증된 법령 기반 답변과 국가법령정보센터 원문 링크 확인
 - 근거 부족·인용 실패·외부 호출 실패 시 안전한 차단 메시지 확인
+
+## 전체 기능 화면
+
+### 검색 근거로 검증된 법령·판례 답변
+
+![해고 서면통지 질문에 대한 검증된 법령·판례 답변](docs/assets/safelaw-grounded-answer.png)
+
+### 외부 호출 전 개인정보 마스킹 및 인용 실패 차단
+
+아래 입력의 이름·전화번호·주소는 화면 검증을 위해 만든 가상 정보입니다. 사용자 입력은 화면에는 그대로 보이지만 외부 모델 호출 전에 로컬에서 마스킹되며, 생성 인용문을 검증할 수 없으면 모델 답변을 표시하지 않습니다.
+
+![가상 개인정보 마스킹 및 인용 검증 실패 차단](docs/assets/safelaw-privacy-mask.png)
+
+### 법률과 무관한 질문의 안전한 답변 거부
+
+![법률과 무관한 질문의 근거 부족 답변 거부](docs/assets/safelaw-refusal.png)
+
+화면 자료는 다음 명령으로 다시 생성할 수 있습니다. 로컬 Streamlit이 `8501` 포트에서 실행 중이어야 하며 실제 개인정보를 사용하지 않습니다.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\capture_ui_screenshots.py
+```
 
 ## 법령 데이터셋
 
