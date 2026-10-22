@@ -1,0 +1,241 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" font-family="'Pretendard', 'Noto Sans KR', 'Malgun Gothic', 'Segoe UI', sans-serif">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4b5563"/></marker><marker id="arrow-dash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c6bc4"/></marker></defs>
+<rect x="0.0" y="0.0" width="1920.0" height="1080.0" rx="0" fill="#ffffff" stroke="none" stroke-width="1.2"/>
+<text x="44.0" y="52.0" font-size="13" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="1.5">END-TO-END SYSTEM MAP · 2026-10-22 구현 기준</text>
+<text x="44.0" y="96.0" font-size="38" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">SafeLaw Privacy-First Legal RAG</text>
+<text x="44.0" y="127.0" font-size="17" font-weight="400" fill="#4b5563" text-anchor="start" letter-spacing="0">개인정보 보호형 생활법률 상담 — 법령과 판례 원문으로 검증되는 내용만 답변</text>
+<rect x="1528.0" y="52.0" width="348.0" height="44.0" rx="22" fill="#eef2f7" stroke="#d1d5db" stroke-width="1.2"/>
+<circle cx="1554" cy="74" r="7" fill="#2c74c9"/>
+<text x="1570.0" y="80.0" font-size="16.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">LangGraph · Dual RAG · Multi-turn</text>
+<line x1="44" y1="148" x2="1876" y2="148" stroke="#d6dae0" stroke-width="1"/>
+<text x="44.0" y="176.0" font-size="13" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="1.2">EXTERNAL SOURCES &amp; MODELS / 외부 데이터·모델</text>
+<text x="1004.0" y="176.0" font-size="13" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="1.2">USER SURFACES / 사용자 화면</text>
+<rect x="44.0" y="188.0" width="293.3" height="64.0" rx="10" fill="#e8f1fb" stroke="#9cc3ea" stroke-width="1.2"/>
+<text x="190.7" y="214.0" font-size="16.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">National Law Open API</text>
+<text x="190.7" y="237.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">국가법령정보 법령·판례 원문 · LAW_API_OC</text>
+<rect x="353.3" y="188.0" width="293.3" height="64.0" rx="10" fill="#fbeee6" stroke="#eab89a" stroke-width="1.2"/>
+<text x="500.0" y="214.0" font-size="16.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Embedding Endpoint</text>
+<text x="500.0" y="237.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">text-embedding-3-small · 1,536차원</text>
+<rect x="662.7" y="188.0" width="293.3" height="64.0" rx="10" fill="#eaf5ec" stroke="#a6d3ae" stroke-width="1.2"/>
+<text x="809.3" y="214.0" font-size="16.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">SSAFY GMS LLM · gpt-5.4-mini</text>
+<text x="809.3" y="237.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">검색어 변환 · 답변 · 체크리스트 · 선별</text>
+<rect x="1004.0" y="188.0" width="280.0" height="64.0" rx="10" fill="#f3f1fa" stroke="#c5bce6" stroke-width="1.2"/>
+<text x="1144.0" y="214.0" font-size="16.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Streamlit 상담실</text>
+<text x="1144.0" y="237.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">접수 카드 · 채팅 · 지난 상담</text>
+<rect x="1300.0" y="188.0" width="280.0" height="64.0" rx="10" fill="#f3f1fa" stroke="#c5bce6" stroke-width="1.2"/>
+<text x="1440.0" y="214.0" font-size="16.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Streamlit 조문 찾아보기</text>
+<text x="1440.0" y="237.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">조건 탐색 · 조문별 채팅</text>
+<rect x="1596.0" y="188.0" width="280.0" height="64.0" rx="10" fill="#f3f1fa" stroke="#c5bce6" stroke-width="1.2"/>
+<text x="1736.0" y="214.0" font-size="16.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">FastAPI 웹 화면</text>
+<text x="1736.0" y="237.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">HTML·CSS·JS · /api/review</text>
+<rect x="44.0" y="278.0" width="353.6" height="494.0" rx="14" fill="#fdf4ec" stroke="#c46a2a" stroke-width="1.6"/>
+<path d="M44.0,342 V292 a14,14 0 0 1 14,-14 H383.6 a14,14 0 0 1 14,14 V342 Z" fill="#c46a2a"/>
+<text x="64.0" y="309.0" font-size="20" font-weight="700" fill="#ffffff" text-anchor="start" letter-spacing="0">01 Knowledge Preparation</text>
+<text x="64.0" y="330.0" font-size="12.5" font-weight="400" fill="#ffffff" text-anchor="start" letter-spacing="0">지식 준비 · 청킹 · 오프라인 색인</text>
+<rect x="60.0" y="358.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="78.0" cy="378.0" r="5.5" fill="#c46a2a"/>
+<text x="92.0" y="383.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Collect &amp; Normalize / 수집·정규화</text>
+<text x="92.0" y="404.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">Open API로 조문·판례 수집·정규화</text>
+<text x="92.0" y="420.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">법령 4개 법률 381조 · 판례 50건</text>
+<path d="M220.8,433.0 L220.8,456.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="60.0" y="460.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="78.0" cy="480.0" r="5.5" fill="#c46a2a"/>
+<text x="92.0" y="485.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Structure-aware Chunking / 구조 청킹</text>
+<text x="92.0" y="506.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">법령: 조·항·호 기준 1,200자 / 150자</text>
+<text x="92.0" y="522.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">판례: 사실·쟁점·판단·결론 1,400자 / 180자</text>
+<path d="M220.8,535.0 L220.8,558.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="60.0" y="562.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="78.0" cy="582.0" r="5.5" fill="#c46a2a"/>
+<text x="92.0" y="587.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Context-rich Embedding / 문맥 임베딩</text>
+<text x="92.0" y="608.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">도메인 + 법령·조문 제목 + 쟁점 + 본문</text>
+<text x="92.0" y="624.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">삭제 조문 4개는 색인에서 제외</text>
+<path d="M220.8,637.0 L220.8,660.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="60.0" y="664.0" width="155.8" height="72.0" rx="9" fill="#e9f1fb" stroke="#a9c6e8" stroke-width="1.2"/>
+<text x="137.9" y="688.0" font-size="15" font-weight="700" fill="#111827" text-anchor="middle" letter-spacing="0">STATUTE INDEX</text>
+<text x="137.9" y="708.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">safelaw_statutes</text>
+<text x="137.9" y="724.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">382 chunks · cosine</text>
+<rect x="225.8" y="664.0" width="155.8" height="72.0" rx="9" fill="#e9f1fb" stroke="#a9c6e8" stroke-width="1.2"/>
+<text x="303.7" y="688.0" font-size="15" font-weight="700" fill="#111827" text-anchor="middle" letter-spacing="0">CASE INDEX</text>
+<text x="303.7" y="708.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">safelaw_cases</text>
+<text x="303.7" y="724.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">652 chunks · authority</text>
+<rect x="413.6" y="278.0" width="353.6" height="494.0" rx="14" fill="#eff7f1" stroke="#3e8e57" stroke-width="1.6"/>
+<path d="M413.6,342 V292 a14,14 0 0 1 14,-14 H753.2 a14,14 0 0 1 14,14 V342 Z" fill="#3e8e57"/>
+<text x="433.6" y="309.0" font-size="20" font-weight="700" fill="#ffffff" text-anchor="start" letter-spacing="0">02 Privacy &amp; Context</text>
+<text x="433.6" y="330.0" font-size="12.5" font-weight="400" fill="#ffffff" text-anchor="start" letter-spacing="0">개인정보 보호 · 상담 맥락 · 질의 확장</text>
+<rect x="429.6" y="358.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="447.6" cy="378.0" r="5.5" fill="#3e8e57"/>
+<text x="461.6" y="383.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">User Question / 사용자 질문</text>
+<text x="461.6" y="404.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">상담 분야(접수 카드) + 자연어 상황</text>
+<text x="461.6" y="420.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">이어지는 질문도 같은 상담 스레드로</text>
+<path d="M590.4,433.0 L590.4,438.5" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="429.6" y="442.5" width="321.6" height="88.0" rx="9" fill="#fdf1f1" stroke="#e9a3a3" stroke-width="1.2"/>
+<circle cx="447.6" cy="462.5" r="5.5" fill="#d64545"/>
+<text x="461.6" y="467.5" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Privacy Guard / 로컬 마스킹</text>
+<text x="461.6" y="488.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">규칙: 주민번호·전화·이메일·주소·카드·계좌</text>
+<text x="461.6" y="504.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">이름·회사명(표시 뒤)·사용자 지정 단어</text>
+<text x="461.6" y="520.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">날짜·금액은 유지 · 원문 미저장</text>
+<path d="M590.4,533.5 L590.4,539.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="429.6" y="543.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="447.6" cy="563.0" r="5.5" fill="#3e8e57"/>
+<text x="461.6" y="568.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Conversation Thread / 상담 스레드</text>
+<text x="461.6" y="589.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">LangGraph InMemorySaver · thread_id</text>
+<text x="461.6" y="605.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">최근 질문 3개 + 현재 질문으로 검색</text>
+<path d="M590.4,618.0 L590.4,623.5" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="429.6" y="627.5" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="447.6" cy="647.5" r="5.5" fill="#3e8e57"/>
+<text x="461.6" y="652.5" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Legal Query Expansion / 법률 질의 확장</text>
+<text x="461.6" y="673.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">일상어 → 법률 용어 JSON</text>
+<text x="461.6" y="689.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">규칙 용어 보강 · 실패 시 규칙으로 대체</text>
+<path d="M590.4,702.5 L590.4,708.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="429.6" y="712.0" width="101.9" height="44.0" rx="8" fill="#ffffff" stroke="#d7dbe0" stroke-width="1.2"/>
+<text x="480.5" y="731.0" font-size="13.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Original</text>
+<text x="480.5" y="747.0" font-size="11" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">원문 · 0.7</text>
+<rect x="539.5" y="712.0" width="101.9" height="44.0" rx="8" fill="#ffffff" stroke="#d7dbe0" stroke-width="1.2"/>
+<text x="590.4" y="731.0" font-size="13.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Rewrite</text>
+<text x="590.4" y="747.0" font-size="11" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">재작성 · 1.3</text>
+<rect x="649.3" y="712.0" width="101.9" height="44.0" rx="8" fill="#ffffff" stroke="#d7dbe0" stroke-width="1.2"/>
+<text x="700.3" y="731.0" font-size="13.5" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Legal Terms</text>
+<text x="700.3" y="747.0" font-size="11" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">법률어 · 1.0</text>
+<rect x="783.2" y="278.0" width="353.6" height="494.0" rx="14" fill="#eef4fc" stroke="#2c74c9" stroke-width="1.6"/>
+<path d="M783.2,342 V292 a14,14 0 0 1 14,-14 H1122.8 a14,14 0 0 1 14,14 V342 Z" fill="#2c74c9"/>
+<text x="803.2" y="309.0" font-size="20" font-weight="700" fill="#ffffff" text-anchor="start" letter-spacing="0">03 Dual Retrieval</text>
+<text x="803.2" y="330.0" font-size="12.5" font-weight="400" fill="#ffffff" text-anchor="start" letter-spacing="0">LangGraph retrieve 노드 · RRF · 재정렬</text>
+<rect x="799.2" y="358.0" width="155.8" height="72.0" rx="9" fill="#e9f1fb" stroke="#a9c6e8" stroke-width="1.2"/>
+<text x="877.1" y="382.0" font-size="15" font-weight="700" fill="#111827" text-anchor="middle" letter-spacing="0">Statute Search</text>
+<text x="877.1" y="402.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">safelaw_statutes</text>
+<text x="877.1" y="418.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">분야 필터 · 고정 조문</text>
+<rect x="965.0" y="358.0" width="155.8" height="72.0" rx="9" fill="#e9f1fb" stroke="#a9c6e8" stroke-width="1.2"/>
+<text x="1042.9" y="382.0" font-size="15" font-weight="700" fill="#111827" text-anchor="middle" letter-spacing="0">Case Search</text>
+<text x="1042.9" y="402.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">safelaw_cases</text>
+<text x="1042.9" y="418.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">권위 등급 · 증분 보강</text>
+<path d="M960.0,433.0 L960.0,452.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="799.2" y="456.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="817.2" cy="476.0" r="5.5" fill="#2c74c9"/>
+<text x="831.2" y="481.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Weighted Reciprocal Rank Fusion</text>
+<text x="831.2" y="502.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">가중 RRF: weight ÷ (60 + rank)</text>
+<text x="831.2" y="518.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">세 질의 결과를 문서 ID 기준으로 통합</text>
+<path d="M960.0,531.0 L960.0,550.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="799.2" y="554.0" width="321.6" height="56.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="817.2" cy="574.0" r="5.5" fill="#2c74c9"/>
+<text x="831.2" y="579.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Legal Reranking / 법률 재정렬</text>
+<text x="831.2" y="600.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">조문 제목·본문 일치 + 판례 권위 + 도메인</text>
+<path d="M960.0,613.0 L960.0,632.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="799.2" y="636.0" width="321.6" height="56.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="817.2" cy="656.0" r="5.5" fill="#2c74c9"/>
+<text x="831.2" y="661.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">MMR Option / 다양성 선택</text>
+<text x="831.2" y="682.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">RAG_SEARCH_MODE=mmr · 후보 30개에서 선택</text>
+<path d="M960.0,695.0 L960.0,714.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="823.2" y="718.0" width="273.6" height="38.0" rx="19" fill="#ffffff" stroke="#2c74c9" stroke-width="1.6"/>
+<text x="960.0" y="743.0" font-size="15.5" font-weight="700" fill="#111827" text-anchor="middle" letter-spacing="0">Top-K Evidence · 법령 5 + 판례 5</text>
+<rect x="1152.8" y="278.0" width="353.6" height="494.0" rx="14" fill="#fcf1f7" stroke="#b04f8a" stroke-width="1.6"/>
+<path d="M1152.8,342 V292 a14,14 0 0 1 14,-14 H1492.4 a14,14 0 0 1 14,14 V342 Z" fill="#b04f8a"/>
+<text x="1172.8" y="309.0" font-size="20" font-weight="700" fill="#ffffff" text-anchor="start" letter-spacing="0">04 Grounded Generation</text>
+<text x="1172.8" y="330.0" font-size="12.5" font-weight="400" fill="#ffffff" text-anchor="start" letter-spacing="0">LangGraph generate 노드 · 인용 검증 · 차단</text>
+<rect x="1168.8" y="358.0" width="321.6" height="56.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="1186.8" cy="378.0" r="5.5" fill="#b04f8a"/>
+<text x="1200.8" y="383.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Evidence Pack / 근거 패키지</text>
+<text x="1200.8" y="404.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">원문 청크 + 메타데이터 + [근거 N] + 공식 URL</text>
+<path d="M1329.6,417.0 L1329.6,440.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="1168.8" y="444.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="1186.8" cy="464.0" r="5.5" fill="#b04f8a"/>
+<text x="1200.8" y="469.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Grounded Generation / 근거 제한 생성</text>
+<text x="1200.8" y="490.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">검색된 법령·판례 밖의 사실 주장 금지</text>
+<text x="1200.8" y="506.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">쟁점 · 유리/불리 요소 · 추가 확인 사실</text>
+<path d="M1329.6,519.0 L1329.6,542.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="1168.8" y="546.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="1186.8" cy="566.0" r="5.5" fill="#b04f8a"/>
+<text x="1200.8" y="571.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Citation Validator / 인용 검증</text>
+<text x="1200.8" y="592.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">인용 ID 존재 · 원문 글자 일치 · 조문 번호</text>
+<text x="1200.8" y="608.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">실패 시 교정 생성 최대 3회 → 계속 실패면 차단</text>
+<path d="M1329.6,621.0 L1329.6,644.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="1168.8" y="648.0" width="155.8" height="72.0" rx="9" fill="#ecf7ee" stroke="#8cc79a" stroke-width="1.2"/>
+<text x="1246.7" y="672.0" font-size="15" font-weight="700" fill="#24723a" text-anchor="middle" letter-spacing="0">PASS / 검증 통과</text>
+<text x="1246.7" y="692.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">답변 + 인용</text>
+<text x="1246.7" y="708.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">공식 근거 링크</text>
+<rect x="1334.6" y="648.0" width="155.8" height="72.0" rx="9" fill="#fdeeee" stroke="#e39a9a" stroke-width="1.2"/>
+<text x="1412.5" y="672.0" font-size="15" font-weight="700" fill="#b42323" text-anchor="middle" letter-spacing="0">BLOCK / 안전 차단</text>
+<text x="1412.5" y="692.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">근거 부족 · 인용 실패</text>
+<text x="1412.5" y="708.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">범위 밖 질문</text>
+<rect x="1522.4" y="278.0" width="353.6" height="494.0" rx="14" fill="#f4f2fb" stroke="#6d5ab0" stroke-width="1.6"/>
+<path d="M1522.4,342 V292 a14,14 0 0 1 14,-14 H1862.0 a14,14 0 0 1 14,14 V342 Z" fill="#6d5ab0"/>
+<text x="1542.4" y="309.0" font-size="20" font-weight="700" fill="#ffffff" text-anchor="start" letter-spacing="0">05 Checklist &amp; Consultation UI</text>
+<text x="1542.4" y="330.0" font-size="12.5" font-weight="400" fill="#ffffff" text-anchor="start" letter-spacing="0">도메인 특화 기능 · 상담 화면</text>
+<rect x="1538.4" y="358.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="1556.4" cy="378.0" r="5.5" fill="#6d5ab0"/>
+<text x="1570.4" y="383.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Issue Checklist / 쟁점 체크리스트</text>
+<text x="1570.4" y="404.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">같은 근거 재사용 · 판단 요소 3~6개</text>
+<text x="1570.4" y="420.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">항목별 인용 검증 · 실패 항목만 제외</text>
+<path d="M1699.2,433.0 L1699.2,456.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="1538.4" y="460.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="1556.4" cy="480.0" r="5.5" fill="#6d5ab0"/>
+<text x="1570.4" y="485.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Glossary / 법률 용어 풀이</text>
+<text x="1570.4" y="506.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">로컬 용어집 50개 · LLM 미사용</text>
+<text x="1570.4" y="522.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">조문식 표현도 같은 용어로 연결</text>
+<path d="M1699.2,535.0 L1699.2,558.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="1538.4" y="562.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="1556.4" cy="582.0" r="5.5" fill="#6d5ab0"/>
+<text x="1570.4" y="587.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Consultation Room / 상담실</text>
+<text x="1570.4" y="608.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">채팅 · 지난 상담 복구·삭제 · 처음으로</text>
+<text x="1570.4" y="624.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">대화엔 요약, 오른쪽 패널에 체크리스트</text>
+<path d="M1699.2,637.0 L1699.2,660.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="1538.4" y="664.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
+<circle cx="1556.4" cy="684.0" r="5.5" fill="#6d5ab0"/>
+<text x="1570.4" y="689.0" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Article Explorer / 조문 찾아보기</text>
+<text x="1570.4" y="710.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">조건 탐색: 후보 10 → LLM 선별 → 카드</text>
+<text x="1570.4" y="726.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">선택 조문을 [근거 1]로 고정한 채팅</text>
+<path d="M755.2,734.0 L775.2,734.0 L775.2,394.0 L795.2,394.0" fill="none" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1100.8,737.0 L1144.8,737.0 L1144.8,386.0 L1164.8,386.0" fill="none" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1249.2,724.0 L1249.2,784.0 L1514.4,784.0 L1514.4,598.0 L1534.4,598.0" fill="none" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1494.4,394.0 L1534.4,394.0" fill="none" stroke="#7c6bc4" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-dash)"/>
+<rect x="44.0" y="798.0" width="1832.0" height="216.0" rx="14" fill="#f1f8f7" stroke="#a7d3cc" stroke-width="1.4"/>
+<text x="70.0" y="830.0" font-size="13" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="1.2">OPERATIONS, STORAGE &amp; QUALITY LOOP / 운영·저장·품질 피드백</text>
+<text x="70.0" y="866.0" font-size="17" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Live Case Enrichment / 판례 증분 보강</text>
+<rect x="70.0" y="884.0" width="143.5" height="52.0" rx="9" fill="#e8f1fb" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="141.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Case API</text>
+<text x="141.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">목록 검색</text>
+<path d="M216.5,910.0 L232.5,910.0" fill="none" stroke="#4b5563" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="235.5" y="884.0" width="143.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="307.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">LLM 후보 선별</text>
+<text x="307.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">선택·탈락 기록</text>
+<path d="M382.0,910.0 L398.0,910.0" fill="none" stroke="#4b5563" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="401.0" y="884.0" width="143.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="472.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Cache + Dedup</text>
+<text x="472.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">사건번호 중복 제거</text>
+<path d="M547.5,910.0 L563.5,910.0" fill="none" stroke="#4b5563" stroke-width="1.6" marker-end="url(#arrow)"/>
+<rect x="566.5" y="884.0" width="143.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="638.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Incremental Upsert</text>
+<text x="638.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">판례 컬렉션</text>
+<text x="70.0" y="964.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">질문 검색어로 부족한 판례만 수집 · LAW_API_OC가 있을 때 동작</text>
+<text x="744.0" y="866.0" font-size="17" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Local Security &amp; Persistence / 로컬 보안·저장</text>
+<rect x="744.0" y="884.0" width="132.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="810.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">.env · Git 제외</text>
+<text x="810.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">GMS_KEY · OC</text>
+<rect x="886.5" y="884.0" width="132.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="952.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">원문 미저장</text>
+<text x="952.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">마스킹 문장만 외부로</text>
+<rect x="1029.0" y="884.0" width="132.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="1095.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">세션 메모리</text>
+<text x="1095.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">상담 기록·체크포인터</text>
+<rect x="1171.5" y="884.0" width="132.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="1237.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Chroma</text>
+<text x="1237.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">SQLite + HNSW</text>
+<text x="744.0" y="964.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">파일·로그·Vector DB에 상담 원문과 마스킹 매핑을 남기지 않음</text>
+<text x="1338.0" y="866.0" font-size="17" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Evaluation / 검색·생성 품질 평가</text>
+<rect x="1338.0" y="884.0" width="120.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="1398.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Recall@5</text>
+<text x="1398.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">법령 1.000</text>
+<rect x="1468.5" y="884.0" width="120.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="1528.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">MRR</text>
+<text x="1528.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">법령 0.740</text>
+<rect x="1599.0" y="884.0" width="120.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="1659.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Citation Acc.</text>
+<text x="1659.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">1.000</text>
+<rect x="1729.5" y="884.0" width="120.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
+<text x="1789.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">Refusal Acc.</text>
+<text x="1789.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">1.000</text>
+<text x="1338.0" y="964.0" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">30문항 · 라벨은 개발자 작성, 전문가 검수 전 · 결과로 검색·검증 기준 조정</text>
+<line x1="720" y1="850" x2="720" y2="990" stroke="#cfe3df" stroke-width="1.2"/>
+<line x1="1316" y1="850" x2="1316" y2="990" stroke="#cfe3df" stroke-width="1.2"/>
+<text x="44.0" y="1052.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">실선: 실행 흐름   ·   점선: 답변과 같은 근거를 체크리스트가 재사용   ·   03·04 레인이 LangGraph StateGraph의 두 노드</text>
+<text x="1876.0" y="1052.0" font-size="12.5" font-weight="400" fill="#5b6472" text-anchor="end" letter-spacing="0">원본: docs/assets/safelaw-hd-system-architecture.svg → scripts/render_architecture.py로 4K PNG 렌더링</text>
+</svg>
