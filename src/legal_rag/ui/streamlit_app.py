@@ -661,14 +661,10 @@ def _render_article_chat(st: Any, settings: Settings, ready: bool, item: Statute
     st.caption("이 조문은 질문마다 근거에 항상 포함됩니다. 대화 기록은 조문별로 따로 보관되며 세션을 닫으면 사라집니다.")
 
     history = chat_history(st.session_state, item.item_id)
-    for message in history:
-        with st.chat_message(message["role"]):
-            if message["role"] == "assistant":
-                presentation = STATUS_PRESENTATIONS[AnswerStatus(message["status"])]
-                st.caption(f"{presentation.icon} {presentation.title} · 상태 코드 `{message['status']}`")
-            st.markdown(message["content"])
-            if message.get("redaction_count"):
-                st.caption(f"개인정보 {message['redaction_count']}건을 가린 문장입니다.")
+    # 입력창보다 먼저 대화 영역을 만들어, 방금 보낸 질문과 답변도 입력창 위에 그려지게 한다.
+    messages_area = st.container()
+    with messages_area:
+        _render_chat_messages(st, history)
 
     prompt = st.chat_input(
         "이 조문에 대해 궁금한 상황을 질문하세요",
@@ -686,12 +682,12 @@ def _render_article_chat(st: Any, settings: Settings, ready: bool, item: Statute
         "redaction_count": privacy.redaction_count,
     }
     history.append(user_message)
-    with st.chat_message("user"):
+    with messages_area, st.chat_message("user"):
         st.markdown(user_message["content"])
         if privacy.redaction_count:
             st.caption(f"개인정보 {privacy.redaction_count}건을 가린 문장입니다.")
 
-    with st.chat_message("assistant"):
+    with messages_area, st.chat_message("assistant"):
         try:
             if "safelaw_pipeline" not in st.session_state:
                 st.session_state.safelaw_pipeline = build_pipeline(settings, INDEX_PATH)
@@ -714,6 +710,17 @@ def _render_article_chat(st: Any, settings: Settings, ready: bool, item: Statute
         st.caption(f"{presentation.icon} {presentation.title} · 상태 코드 `{answer.status.value}`")
         st.markdown(answer.content)
     history.append({"role": "assistant", "content": answer.content, "status": answer.status.value})
+
+
+def _render_chat_messages(st: Any, history: list[dict[str, Any]]) -> None:
+    for message in history:
+        with st.chat_message(message["role"]):
+            if message["role"] == "assistant":
+                presentation = STATUS_PRESENTATIONS[AnswerStatus(message["status"])]
+                st.caption(f"{presentation.icon} {presentation.title} · 상태 코드 `{message['status']}`")
+            st.markdown(message["content"])
+            if message.get("redaction_count"):
+                st.caption(f"개인정보 {message['redaction_count']}건을 가린 문장입니다.")
 
 
 def _render_article_explorer(st: Any, settings: Settings, ready: bool) -> None:

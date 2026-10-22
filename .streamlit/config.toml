@@ -8,5 +8,9 @@ font = "sans-serif"
 [server]
 headless = true
 
+[client]
+# NF2004: 처리하지 못한 예외가 생겨도 화면에는 일반 오류 문구만 보이고 추적 정보는 콘솔에만 남긴다.
+showErrorDetails = "none"
+
 [browser]
 gatherUsageStats = false
