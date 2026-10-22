@@ -622,6 +622,23 @@ def _choose_category(state: Any, category: LegalCategory) -> None:
     state["consult_category"] = category
 
 
+def _return_to_start(state: Any) -> None:
+    """분야 선택 화면으로 돌아간다. 진행 중이던 대화는 지난 상담 목록에 그대로 남는다."""
+
+    if state.get(CONSULT_MESSAGES_KEY):
+        _start_new_consultation(state)
+    state["consult_category"] = None
+
+
+def _go_to_view(state: Any, view: str) -> None:
+    state["safelaw_view"] = view
+
+
+def _close_article(state: Any, picker_key: str) -> None:
+    state.pop(SELECTED_ARTICLE_KEY, None)
+    state[picker_key] = None
+
+
 def _render_intake(st: Any, ready: bool) -> None:
     """상담 분야를 사이드바까지 가지 않고 상담실 안에서 바로 고르게 한다."""
 
@@ -676,6 +693,15 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
             _render_checklist_panel(st, messages, focused)
         sheet = chat_area.container(key="consult_sheet")
     with sheet:
+        if options.category is not None or messages:
+            st.button(
+                "← 처음으로",
+                key="consult_home",
+                on_click=_return_to_start,
+                args=(st.session_state,),
+                type="tertiary",
+                help="상담 분야를 다시 고릅니다. 지금 상담은 왼쪽 지난 상담에 남아요.",
+            )
         conversation = st.container()
     with conversation:
         with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
@@ -1012,6 +1038,13 @@ def _render_chat_messages(st: Any, history: list[dict[str, Any]]) -> None:
 
 def _render_article_explorer(st: Any, settings: Settings, ready: bool, sensitive_terms: tuple[str, ...]) -> None:
     _render_nameplate(st, "조문 열람실", "조건으로 조문을 찾고, 그 조문을 고정 근거로 두고 질문합니다")
+    st.button(
+        "← 상담실로",
+        key="back_to_consult",
+        on_click=_go_to_view,
+        args=(st.session_state, VIEW_CONSULT),
+        type="tertiary",
+    )
     category = st.selectbox(
         "상담 분야",
         options=[None, *list(LegalCategory)],
@@ -1055,4 +1088,12 @@ def _render_article_explorer(st: Any, settings: Settings, ready: bool, sensitive
         )
         return
     st.divider()
+    st.button(
+        "← 다른 조문 고르기",
+        key="article_back",
+        on_click=_close_article,
+        args=(st.session_state, picker_key),
+        type="tertiary",
+        help="조문별 대화 기록은 그대로 남아 같은 조문을 다시 고르면 이어집니다.",
+    )
     _render_article_chat(st, settings, ready, selected, sensitive_terms)

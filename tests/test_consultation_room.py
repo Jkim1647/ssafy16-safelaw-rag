@@ -183,6 +183,59 @@ class IntakeTests(ConsultationAppTestCase):
         self.assertEqual(len(invites), 1)
 
 
+class NavigationTests(ConsultationAppTestCase):
+    def intake_buttons(self):
+        return [button for button in self.app.button if button.key and button.key.startswith("intake_")]
+
+    def test_no_home_button_on_the_first_screen(self):
+        self.assertEqual([button for button in self.app.button if button.key == "consult_home"], [])
+
+    def test_home_goes_back_to_category_choice(self):
+        self.app.button(key="intake_labor").click().run()
+        self.assertEqual(self.intake_buttons(), [])
+
+        self.app.button(key="consult_home").click().run()
+
+        self.assertIsNone(self.app.sidebar.selectbox(key="consult_category").value)
+        self.assertEqual(len(self.intake_buttons()), 3)
+
+    def test_home_keeps_the_conversation_in_the_history(self):
+        self.start_labor()
+        self.ask("카톡으로 해고 통보를 받았어요")
+        thread = self.pipeline.calls[0][1]
+
+        self.app.button(key="consult_home").click().run()
+
+        self.assertEqual(self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY], [])
+        self.assertNotEqual(self.app.session_state[streamlit_app.CONSULT_THREAD_KEY], thread)
+        self.assertEqual(len(self.intake_buttons()), 3)
+        self.app.sidebar.button(key=f"open_{thread}").click().run()
+        self.assertEqual(len(self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY]), 2)
+
+
+class ArticleNavigationTests(ConsultationAppTestCase):
+    def setUp(self):
+        super().setUp()
+        self.app.sidebar.radio(key="safelaw_view").set_value(streamlit_app.VIEW_ARTICLES).run()
+
+    def test_back_to_the_consultation_room(self):
+        self.app.button(key="back_to_consult").click().run()
+
+        self.assertEqual(self.app.sidebar.radio(key="safelaw_view").value, streamlit_app.VIEW_CONSULT)
+        self.assertEqual(len([b for b in self.app.button if b.key and b.key.startswith("intake_")]), 3)
+
+    def test_back_from_an_article_to_the_list(self):
+        self.app.selectbox(key="article_category").set_value(LegalCategory.LABOR).run()
+        picker = self.app.selectbox(key="article_picker_labor")
+        picker.set_value(picker.options[1]).run()
+        self.assertEqual(len(self.app.chat_input), 1)
+
+        self.app.button(key="article_back").click().run()
+
+        self.assertEqual(len(self.app.chat_input), 0)
+        self.assertIsNone(self.app.selectbox(key="article_picker_labor").value)
+
+
 class ChecklistPanelTests(ConsultationAppTestCase):
     def setUp(self):
         super().setUp()
