@@ -27,6 +27,12 @@
 11. 법령/판례 별도 Chroma 색인 및 통합 근거 답변
 12. 데이터 출처·API 요청 규격·산출물·이용 조건 현황 문서
 
+## 전체 시스템 아키텍처
+
+![SafeLaw 개인정보 보호형 법률 RAG 전체 아키텍처](docs/assets/safelaw-hd-system-architecture.png)
+
+원본은 4K(`3840×2160`) PNG로 저장되어 확대해도 각 단계와 연결 관계를 확인할 수 있습니다. 세부 처리 규칙과 계층별 책임은 [`docs/architecture.md`](docs/architecture.md)에 정리했습니다.
+
 ## 프로젝트 구조
 
 ```text
@@ -38,6 +44,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ search-quality.md           # 평가셋·Recall@5·MRR 결과
 │  ├─ model-routing.md            # 단계별 모델 분리 기준
 │  ├─ legal-retrieval-policy.md   # 법령·판례 검색 정책과 검수 항목
+│  ├─ case-evaluation-label-audit.md # 판례 평가 라벨 자동 사전 감사
 │  ├─ data-source-inventory.md    # 데이터 출처·API·모델·산출물 현황
 │  └─ troubleshooting.md          # 검색 문제·원인·해결 기록
 ├─ src/legal_rag/
@@ -68,6 +75,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ answer_statutes.py          # 근거 제한 답변 생성·검증
 │  ├─ evaluate_statute_retrieval.py # 고정 평가셋 검색 품질 측정
 │  ├─ evaluate_end_to_end_rag.py # 검색-생성-검증 전체 품질 측정
+│  ├─ audit_case_evaluation_labels.py # 판례 평가 라벨·원문 링크 일관성 검사
 │  ├─ inspect_chroma.py           # Chroma 문서·메타데이터 조회
 │  ├─ capture_ui_screenshots.py   # README 제출용 UI 캡처 자동 생성
 │  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
@@ -240,6 +248,14 @@ python scripts/evaluate_statute_retrieval.py
 현재 30문항 결과는 전체 `Recall@5 1.000`, `MRR 0.781`입니다. 이 수치는 자체 작성한 고정 평가셋에 대한 검색 성능이며, 실제 법률 판단의 정확도나 새로운 질문에 대한 일반화 성능을 뜻하지 않습니다.
 
 RRF와 MRR의 계산 방식, 검색 품질이 악화됐던 시도와 해결 과정은 [`docs/troubleshooting.md`](docs/troubleshooting.md)에 정리했습니다. 판례 30문항의 사건번호 단위 평가, 기준 성능과 동적 API 보강 구조는 [`docs/case-retrieval-evaluation.md`](docs/case-retrieval-evaluation.md)에 기록합니다. 정답 라벨의 법률 검수 절차는 [`docs/case-evaluation-review-checklist.md`](docs/case-evaluation-review-checklist.md)를 따르며, 외부 검수자는 [`docs/case-evaluation-review-sheet.md`](docs/case-evaluation-review-sheet.md)에 결과를 기록합니다.
+
+판례 평가셋은 제출 전 다음 명령으로 사전 감사합니다. 30개 문항·도메인별 10개 구성, ID 중복, 기대·허용 사건번호 존재 여부, 공식 원문 URL 및 카테고리 연결을 검사하고 JSON과 Markdown 보고서를 함께 갱신합니다.
+
+```powershell
+python scripts/audit_case_evaluation_labels.py
+```
+
+현재 자동 감사는 오류 `0건`으로 통과했습니다. 다만 이는 파일과 출처의 기계적 일관성 검사이며, 법률적 관련성·후속 판례·최신성에 대한 외부 전문가 승인을 대신하지 않습니다. 상세 결과와 사건별 공식 원문 링크는 [`docs/case-evaluation-label-audit.md`](docs/case-evaluation-label-audit.md)에서 확인합니다.
 
 검색부터 답변 생성·인용 검증·답변 거부까지 연결한 30문항 평가는 [`docs/end-to-end-rag-evaluation.md`](docs/end-to-end-rag-evaluation.md)에 정리했습니다.
 
