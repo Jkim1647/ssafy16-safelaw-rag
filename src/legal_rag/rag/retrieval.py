@@ -159,6 +159,12 @@ def _rule_terms(query: str, category: LegalCategory) -> tuple[str, ...]:
             terms.extend(("상속포기", "상속의 승인과 포기", "신고기간"))
         if re.search(r"유언|유산|재산", query):
             terms.extend(("상속재산", "유언", "유류분"))
+        if re.search(r"유류분", query) or (
+            re.search(r"전\s*재산|모든\s*재산|재산을?\s*전부", query)
+            and re.search(r"줬|주었|증여|넘겼|남겼|유증", query)
+        ):
+            # 누가 유류분을 청구할 수 있는지는 제1112조(유류분의 권리자와 유류분)가 정한다.
+            terms.extend(("유류분의 권리자와 유류분", "유류분권리자", "유류분 반환청구"))
         if re.search(r"생전|미리", query) and re.search(r"증여|재산|돈|큰돈|받", query):
             terms.extend(("특별수익", "특별수익자의 상속분", "상속분 산정"))
         if re.search(r"누가\s*먼저|순서|순위", query):

@@ -163,6 +163,15 @@ class QueryExpansionTests(unittest.TestCase):
         self.assertIn("특별수익", plan.legal_terms)
         self.assertIn("특별수익자의 상속분", plan.legal_terms)
 
+    def test_rules_translate_forced_share_question_to_rights_holder_article(self):
+        plan = LegalQueryExpander().expand(
+            "돌아가신 형이 전 재산을 지인에게 줬어요. 동생인 제가 유류분을 청구할 수 있나요?",
+            LegalCategory.INHERITANCE,
+        )
+
+        self.assertIn("유류분의 권리자와 유류분", plan.legal_terms)
+        self.assertIn("유류분권리자", plan.legal_terms)
+
     def test_multi_query_fusion_promotes_expanded_match(self):
         retriever = ExpandedStatuteRetriever(
             FakeEmbedder(),
