@@ -3,13 +3,19 @@
   "source_dataset": "data/processed/statutes.json",
   "source_dataset_sha256": "1817cc9544b12eac3bb7ccb9b846a4b3a665b97cd23a2fc0573bd291fa6855be",
   "document_count": 381,
-  "chunk_count": 386,
+  "excluded_deleted_articles": [
+    "근로기준법 제35조",
+    "주택임대차보호법 제5조",
+    "민법 제651조",
+    "민법 제1002조"
+  ],
+  "chunk_count": 382,
   "category_counts": {
-    "housing_lease": 99,
-    "inheritance": 127,
-    "labor": 160
+    "housing_lease": 97,
+    "inheritance": 126,
+    "labor": 159
   },
   "max_chars": 1200,
   "overlap_chars": 150,
-  "dataset_sha256": "79474bd9ee44121cd66b0b6f0e3e36517abab9e008953fee5b23325263f1ee11"
+  "dataset_sha256": "2fa3e00061dd8fec4b5ed3844a4294249e8671601a89adaf0dcc88cd895b27b1"
 }

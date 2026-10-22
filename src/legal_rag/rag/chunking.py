@@ -152,6 +152,15 @@ def chunk_statute(
     return chunks
 
 
+DELETED_ARTICLE = re.compile(r"제\s*\d+\s*조(?:\s*의\s*\d+)?\s*삭제\s*<[^>]*>")
+
+
+def is_deleted_article(document: StatuteDocument) -> bool:
+    """본문 전체가 "제N조 삭제 <개정일>"뿐인 조문. 근거로 쓸 내용이 없어 색인하지 않는다."""
+
+    return DELETED_ARTICLE.fullmatch(document.text.strip()) is not None
+
+
 def chunk_statutes(
     documents: Iterable[StatuteDocument],
     *,
@@ -161,6 +170,8 @@ def chunk_statutes(
     chunks: list[StatuteChunk] = []
     seen_ids: set[str] = set()
     for document in documents:
+        if is_deleted_article(document):
+            continue
         for chunk in chunk_statute(
             document,
             max_chars=max_chars,

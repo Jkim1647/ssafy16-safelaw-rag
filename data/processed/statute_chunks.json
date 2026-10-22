@@ -714,27 +714,6 @@
     ]
   },
   {
-    "chunk_id": "labor:001872:0035001:000",
-    "category": "labor",
-    "law_id": "001872:0035001",
-    "law_name": "근로기준법",
-    "article_no": "제35조",
-    "article_title": "제목 없음",
-    "content": "제35조 삭제 <2019.1.15>",
-    "embedding_text": "도메인: 근로계약·부당해고\n법령: 근로기준법\n조문: 제35조 (제목 없음)\n관련 쟁점: 근로계약, 해고, 임금, 근로시간, 직장 내 괴롭힘\n본문:\n제35조 삭제 <2019.1.15>",
-    "chunk_index": 0,
-    "chunk_count": 1,
-    "effective_date": "2026-10-08",
-    "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C35%EC%A1%B0",
-    "issue_tags": [
-      "근로계약",
-      "해고",
-      "임금",
-      "근로시간",
-      "직장 내 괴롭힘"
-    ]
-  },
-  {
     "chunk_id": "labor:001872:0036001:000",
     "category": "labor",
     "law_id": "001872:0036001",
@@ -3586,27 +3565,6 @@
     ]
   },
   {
-    "chunk_id": "housing_lease:001248:0005001:000",
-    "category": "housing_lease",
-    "law_id": "001248:0005001",
-    "law_name": "주택임대차보호법",
-    "article_no": "제5조",
-    "article_title": "제목 없음",
-    "content": "제5조 삭제 <1989.12.30>",
-    "embedding_text": "도메인: 전세·임대차 보증금\n법령: 주택임대차보호법\n조문: 제5조 (제목 없음)\n관련 쟁점: 주택임대차, 보증금, 대항력, 우선변제권, 계약갱신\n본문:\n제5조 삭제 <1989.12.30>",
-    "chunk_index": 0,
-    "chunk_count": 1,
-    "effective_date": "2026-01-02",
-    "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C5%EC%A1%B0",
-    "issue_tags": [
-      "주택임대차",
-      "보증금",
-      "대항력",
-      "우선변제권",
-      "계약갱신"
-    ]
-  },
-  {
     "chunk_id": "housing_lease:001248:0006001:000",
     "category": "housing_lease",
     "law_id": "001248:0006001",
@@ -5279,26 +5237,6 @@
     ]
   },
   {
-    "chunk_id": "housing_lease:001706:0651001:000",
-    "category": "housing_lease",
-    "law_id": "001706:0651001",
-    "law_name": "민법",
-    "article_no": "제651조",
-    "article_title": "제목 없음",
-    "content": "제651조 삭제 <2016.1.6>",
-    "embedding_text": "도메인: 전세·임대차 보증금\n법령: 민법\n조문: 제651조 (제목 없음)\n관련 쟁점: 임대차, 전세, 보증금, 계약해지\n본문:\n제651조 삭제 <2016.1.6>",
-    "chunk_index": 0,
-    "chunk_count": 1,
-    "effective_date": "2026-03-17",
-    "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C651%EC%A1%B0",
-    "issue_tags": [
-      "임대차",
-      "전세",
-      "보증금",
-      "계약해지"
-    ]
-  },
-  {
     "chunk_id": "housing_lease:001706:0652001:000",
     "category": "housing_lease",
     "law_id": "001706:0652001",
@@ -5476,27 +5414,6 @@
     "chunk_count": 1,
     "effective_date": "2026-03-17",
     "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1001%EC%A1%B0",
-    "issue_tags": [
-      "상속",
-      "유언",
-      "상속포기",
-      "한정승인",
-      "유류분"
-    ]
-  },
-  {
-    "chunk_id": "inheritance:001706:1002001:000",
-    "category": "inheritance",
-    "law_id": "001706:1002001",
-    "law_name": "민법",
-    "article_no": "제1002조",
-    "article_title": "제목 없음",
-    "content": "제1002조 삭제 <1990.1.13>",
-    "embedding_text": "도메인: 상속\n법령: 민법\n조문: 제1002조 (제목 없음)\n관련 쟁점: 상속, 유언, 상속포기, 한정승인, 유류분\n본문:\n제1002조 삭제 <1990.1.13>",
-    "chunk_index": 0,
-    "chunk_count": 1,
-    "effective_date": "2026-03-17",
-    "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1002%EC%A1%B0",
     "issue_tags": [
       "상속",
       "유언",
