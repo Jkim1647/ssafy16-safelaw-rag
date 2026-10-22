@@ -28,6 +28,25 @@
 12. 데이터 출처·API 요청 규격·산출물·이용 조건 현황 문서
 13. LangGraph `retrieve` → `generate` 노드 기반 RAG 파이프라인
 14. 법령 조문 항목의 조건 기반 탐색 카드와 조문별 채팅
+15. 판례 후보 선별 프롬프트, 청크·Top-k `.env` 설정, 내 상황 쟁점 체크리스트, MMR 검색, RAG 전후 비교
+
+## 제출 문서
+
+| 문서 | 내용 |
+|---|---|
+| [요구사항 정의서](docs/requirements-definition.md) | 도메인 선택 조건 충족 근거, 기능·비기능 요구사항 표(F2001~F2016, NF2001~NF2007) |
+| [RAG 파이프라인 설계문서](docs/rag-pipeline-design.md) | 컬렉션·메타데이터, 수집·청킹·색인, 병합·중복 제거, 프롬프트 3개, 청크·Top-k 선택 이유, 근거 표시, 특화 기능, 문제 해결 |
+| [검증 결과](docs/verification-results.md) | 명세서 4장 항목별 실행 결과, 요구사항 대조표, 테스트 결과표, 응답 시간, 남은 항목 |
+| [RAG 사용 전후 비교](docs/rag-before-after.md) | 심화 F2015 대표 질문 6개 비교 |
+| [데이터 출처·이용 조건](docs/data-source-inventory.md) | API·수집 범위·건수·해시·이용 조건 |
+| [제출 체크리스트](docs/submission-checklist.md) | 제출물과 점검 현황 |
+
+### 필수·심화 기능 구분
+
+| 구분 | 기능 |
+|---|---|
+| 필수 (F2001~F2012) | 법령 조문 메타데이터 색인(RAG 1), 검색어 추출(프롬프트1), 판례 후보 선별·수집(프롬프트2), 판례 색인(RAG 2), 근거 병합·중복 제거, LangGraph 근거 기반 답변(프롬프트3), 근거 표시, 조문 선택·채팅, 쟁점 체크리스트(특화), 조건 기반 조문 탐색, 진행 상태·면책 안내 |
+| 심화 | F2014 MMR 검색, F2015 RAG 전후 비교, F2016 법령·판례 출처 결합(부분). F2013 HTML/JS 화면은 미구현 |
 
 ## 전체 시스템 아키텍처
 
@@ -130,12 +149,24 @@ streamlit run app.py
 
 ![법률과 무관한 질문의 근거 부족 답변 거부](docs/assets/safelaw-refusal.png)
 
-화면 자료는 다음 명령으로 다시 생성할 수 있습니다. 로컬 Streamlit이 `8501` 포트에서 실행 중이어야 하며 실제 개인정보를 사용하지 않습니다.
+### 내 상황 쟁점 체크리스트 (도메인 특화 기능)
+
+![판단 요소별 상황 대응과 근거 번호를 보여 주는 쟁점 체크리스트](docs/assets/safelaw-issue-checklist.png)
+
+### 조건 기반 조문 탐색
+
+![자연어 조건으로 찾은 조문 카드](docs/assets/safelaw-condition-search.png)
+
+### 조문별 채팅
+
+![선택 조문을 고정 근거로 둔 채팅](docs/assets/safelaw-article-chat.png)
+
+화면 자료는 다음 명령으로 다시 생성할 수 있습니다. 로컬 Streamlit이 실행 중이어야 하며(기본 `8501`, `--url`로 변경) 실제 개인정보를 사용하지 않습니다.
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\capture_ui_screenshots.py
-# 마스킹 비교 화면만 다시 생성
-.\.venv\Scripts\python.exe scripts\capture_ui_screenshots.py --scenario privacy
+# 조건 탐색·조문별 채팅 화면만 다시 생성
+.\.venv\Scripts\python.exe scripts\capture_ui_screenshots.py --scenario article
 ```
 
 ## 법령 데이터셋
