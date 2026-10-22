@@ -77,6 +77,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ evaluate_end_to_end_rag.py # 검색-생성-검증 전체 품질 측정
 │  ├─ audit_case_evaluation_labels.py # 판례 평가 라벨·원문 링크 일관성 검사
 │  ├─ inspect_chroma.py           # Chroma 문서·메타데이터 조회
+│  ├─ show_rag_graph.py           # LangGraph retrieve/generate 구조 출력
 │  ├─ capture_ui_screenshots.py   # README 제출용 UI 캡처 자동 생성
 │  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
 └─ tests/                          # 보안·도메인·RAG 검증
@@ -262,6 +263,12 @@ python scripts/audit_case_evaluation_labels.py
 최종 End-to-End 평가는 답변 가능 24문항과 거부 대상 6문항으로 구성합니다. 3회 인용 교정 적용 후 답변 성공률 `0.7500`, 인용 정확성 `1.0000`, 근거 없는 주장 차단률 `1.0000`, 답변 거부 정확성 `1.0000`을 기록했습니다. 남은 6건은 `invalid_citations`로 안전하게 차단됐으며, 법률적 정답률이 아니라 개발자 작성 평가셋에 대한 시스템 지표입니다.
 
 ## 근거 제한 답변 생성
+
+검색과 생성은 LangGraph `StateGraph`의 `retrieve` → `generate` 두 노드로 구성합니다. `retrieve`는 법령·판례 근거 목록을, `generate`는 근거 제한 답변과 인용 검증 결과를 상태에 기록합니다. 노드별 입출력은 [`docs/architecture.md`](docs/architecture.md#langgraph-노드-구성)에 정리했고, 그래프 구조는 다음 명령으로 출력합니다.
+
+```powershell
+python scripts/show_rag_graph.py
+```
 
 검색된 법령을 CONTEXT로 전달하고 모든 주장에 근거 번호와 법령 원문의 인용문을 요구합니다. 생성 결과는 바로 표시하지 않고 다음 조건을 모두 검사합니다.
 
