@@ -15,6 +15,7 @@ from legal_rag.adapters.gms_llm import GmsChatClient
 from legal_rag.adapters.vector_store import ChromaCaseVectorStore, ChromaStatuteVectorStore
 from legal_rag.config import Settings
 from legal_rag.collectors.court_cases import CourtCaseOpenApiClient
+from legal_rag.domain.glossary import find_terms
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.pipeline import AnswerStatus, StatuteRagPipeline
 from legal_rag.rag.case_enrichment import IncrementalCaseEnricher
@@ -692,6 +693,7 @@ def _render_issue_checklist(st: Any, checklist: IssueChecklist, token: str) -> N
         return
 
     checked = 0
+    explained: set[str] = set()
     for index, item in enumerate(checklist.items):
         icon, label = CHECK_STATUSES[item.status]
         citations = " ".join(f"[근거 {citation_id}]" for citation_id in item.claim.citation_ids)
@@ -703,7 +705,18 @@ def _render_issue_checklist(st: Any, checklist: IssueChecklist, token: str) -> N
                 f"[근거 {quote.citation_id}] “{quote.quote}”" for quote in item.claim.evidence_quotes
             )
             st.caption(f"근거 문구: {quotes}")
+            # 같은 용어는 처음 나온 항목에서만 풀어 준다.
+            terms = [
+                (term, meaning)
+                for term, meaning in find_terms(f"{item.claim.text} {item.check_question} {quotes}")
+                if term not in explained
+            ]
+            if terms:
+                explained.update(term for term, _ in terms)
+                st.caption("  \n".join(f"📖 **{term}**: {meaning}" for term, meaning in terms))
     st.progress(checked / len(checklist.items), text=f"확인한 항목 {checked}/{len(checklist.items)}")
+    if explained:
+        st.caption("📖 용어 풀이는 이해를 돕는 일반적인 설명이에요. 내 상황에 어떻게 적용되는지는 근거 원문과 함께 확인하세요.")
     if checklist.dropped_count:
         st.caption(f"근거 문구를 검증하지 못한 {checklist.dropped_count}개 항목은 표시하지 않았습니다.")
     with st.expander("체크리스트 근거 보기"):
