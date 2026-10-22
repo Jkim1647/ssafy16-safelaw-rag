@@ -10,12 +10,10 @@ from legal_rag.rag.citations import CaseEvidence, LegalEvidence
 from legal_rag.rag.retrieval import CATEGORY_LABELS
 
 
-def build_grounded_answer_messages(
-    sanitized_question: str,
-    category: LegalCategory,
-    evidence: Sequence[LegalEvidence],
-) -> list[dict[str, str]]:
-    context = []
+def evidence_context(evidence: Sequence[LegalEvidence]) -> list[dict[str, object]]:
+    """근거를 문서 유형과 citation_id가 붙은 CONTEXT 항목으로 바꾼다."""
+
+    context: list[dict[str, object]] = []
     for item in evidence:
         if isinstance(item, CaseEvidence):
             context.append({
@@ -41,6 +39,15 @@ def build_grounded_answer_messages(
                 "article_title": item.article_title,
                 "text": item.text,
             })
+    return context
+
+
+def build_grounded_answer_messages(
+    sanitized_question: str,
+    category: LegalCategory,
+    evidence: Sequence[LegalEvidence],
+) -> list[dict[str, str]]:
+    context = evidence_context(evidence)
     schema = {
         "answerable": True,
         "summary": {

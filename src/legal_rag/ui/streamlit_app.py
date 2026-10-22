@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,7 @@ from legal_rag.rag.case_enrichment import IncrementalCaseEnricher
 from legal_rag.rag.case_selection import CaseCandidateSelector
 from legal_rag.rag.citations import CaseEvidence
 from legal_rag.rag.condition_search import ConditionSearchError, StatuteConditionSearch
+from legal_rag.rag.issue_checklist import CHECK_STATUSES, IssueChecklist, IssueChecklistBuilder
 from legal_rag.rag.retrieval import CombinedLegalRetriever, ExpandedStatuteRetriever, LegalQueryExpander
 from legal_rag.rag.statute_catalog import StatuteCatalog, StatuteItem
 from legal_rag.security.redaction import PrivacyGuard
@@ -78,8 +80,17 @@ EXAMPLE_CONDITIONS = {
 }
 
 CHAT_STATE_KEY = "article_chats"
+SITUATION_RESULT_KEY = "situation_result"
 SELECTED_ARTICLE_KEY = "selected_article_id"
 CONDITION_RESULT_KEY = "article_condition_result"
+
+
+CHECKLIST_BLOCKED_MESSAGES = {
+    AnswerStatus.NO_EVIDENCE: "관련 근거를 찾지 못해 체크리스트를 만들지 않았습니다.",
+    AnswerStatus.INSUFFICIENT_EVIDENCE: "검색된 근거만으로는 체크리스트를 만들 수 없어 표시하지 않습니다.",
+    AnswerStatus.INVALID_CITATIONS: "체크리스트 항목의 근거를 검증하지 못해 표시하지 않습니다.",
+    AnswerStatus.GENERATION_FAILED: "체크리스트 생성 중 오류가 발생해 표시하지 않습니다.",
+}
 
 
 class UiConfigurationError(RuntimeError):
@@ -194,6 +205,16 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
                 answer_llm,
             )
     return StatuteRagPipeline(statute_retriever, answer_llm)
+
+
+def build_checklist_builder(settings: Settings) -> IssueChecklistBuilder:
+    if not settings.has_gms_key:
+        raise UiConfigurationError(".env에 GMS_KEY를 설정해 주세요.")
+    assert settings.gms_key is not None
+    # 체크리스트도 인용 검증을 통과해야 하므로 답변 생성 모델을 사용한다.
+    return IssueChecklistBuilder(
+        GmsChatClient(settings.gms_key, model_name=settings.answer_model, base_url=settings.gms_base_url)
+    )
 
 
 def build_condition_search(
@@ -418,6 +439,11 @@ def _render_situation_review(st: Any, settings: Settings, ready: bool) -> None:
                 label_visibility="collapsed",
             )
             st.caption("입력한 단어는 `[CUSTOM_N]`으로 바뀐 뒤 검색과 답변 생성에 사용됩니다.")
+        include_checklist = st.checkbox(
+            "내 상황 쟁점 체크리스트도 함께 만들기",
+            value=True,
+            help="검색된 법령·판례가 요구하는 판단 요소를 뽑아 상황에 나와 있는지 근거 번호와 함께 보여줍니다.",
+        )
         submitted = st.form_submit_button(
             "관련 법령·판례 검토하기",
             type="primary",
@@ -425,12 +451,34 @@ def _render_situation_review(st: Any, settings: Settings, ready: bool) -> None:
             disabled=not ready,
         )
 
-    if not submitted:
+    if submitted:
+        _run_situation_review(st, settings, category, question, sensitive_terms, include_checklist)
+
+    stored = st.session_state.get(SITUATION_RESULT_KEY)
+    if stored is None:
         st.divider()
         st.caption(
             "SafeLaw는 법률정보 검색 보조 도구입니다. 변호사의 법률 자문을 대체하거나 승소 가능성을 예측하지 않습니다."
         )
         return
+
+    st.divider()
+    _render_result(
+        st,
+        stored["answer"],
+        original_text=stored["original_text"],
+        sanitized_text=stored["sanitized_text"],
+        redaction_count=stored["redaction_count"],
+    )
+    if stored["checklist"] is not None:
+        st.divider()
+        _render_issue_checklist(st, stored["checklist"], stored["token"])
+
+
+def _run_situation_review(st: Any, settings: Settings, category: LegalCategory | None, question: str,
+                          sensitive_terms: str, include_checklist: bool) -> None:
+    # 새 요청이 실패했을 때 이전 결과가 새 결과처럼 보이지 않게 먼저 지운다.
+    st.session_state.pop(SITUATION_RESULT_KEY, None)
     if category is None:
         st.warning("상담 받으실 분야를 선택해 주세요.")
         return
@@ -447,11 +495,19 @@ def _render_situation_review(st: Any, settings: Settings, ready: bool) -> None:
             st.session_state.safelaw_pipeline = build_pipeline(settings, INDEX_PATH)
         pipeline = st.session_state.safelaw_pipeline
         with st.spinner("개인정보를 가린 뒤 관련 법령·판례와 근거 문구를 검증하고 있습니다..."):
-            answer = pipeline.answer(
+            answer, evidence = pipeline.answer_with_evidence(
                 privacy.sanitized_text,
                 category=category,
                 top_k=settings.rag_top_k,
             )
+        checklist = None
+        if include_checklist:
+            if "safelaw_checklist_builder" not in st.session_state:
+                st.session_state.safelaw_checklist_builder = build_checklist_builder(settings)
+            with st.spinner("같은 근거로 내 상황 쟁점 체크리스트를 만들고 인용을 검증하고 있습니다..."):
+                checklist = st.session_state.safelaw_checklist_builder.build(
+                    privacy.sanitized_text, category, evidence
+                )
     except UiConfigurationError as exc:
         st.error(str(exc))
         return
@@ -459,15 +515,45 @@ def _render_situation_review(st: Any, settings: Settings, ready: bool) -> None:
         st.error("요청을 처리하지 못했습니다. 설정과 네트워크 상태를 확인한 뒤 다시 시도해 주세요.")
         return
 
-    st.divider()
-    _render_result(
-        st,
-        answer,
-        original_text=question,
-        sanitized_text=privacy.sanitized_text,
-        redaction_count=privacy.redaction_count,
-    )
+    # 체크 상태를 바꿀 때마다 화면이 다시 그려지므로 결과를 세션 메모리에만 보관한다.
+    st.session_state[SITUATION_RESULT_KEY] = {
+        "answer": answer,
+        "checklist": checklist,
+        "original_text": question,
+        "sanitized_text": privacy.sanitized_text,
+        "redaction_count": privacy.redaction_count,
+        "token": uuid.uuid4().hex,
+    }
 
+
+def _render_issue_checklist(st: Any, checklist: IssueChecklist, token: str) -> None:
+    st.subheader("내 상황 쟁점 체크리스트")
+    st.caption(
+        "검색된 법령·판례가 요구하는 판단 요소마다 입력한 상황에 그 사실이 나와 있는지만 표시합니다. "
+        "요건 충족이나 결과를 판단한 것이 아니며, 확인한 항목은 직접 체크해 보세요."
+    )
+    if not checklist.is_ready:
+        st.info(CHECKLIST_BLOCKED_MESSAGES[checklist.status])
+        return
+
+    checked = 0
+    for index, item in enumerate(checklist.items):
+        icon, label = CHECK_STATUSES[item.status]
+        citations = " ".join(f"[근거 {citation_id}]" for citation_id in item.claim.citation_ids)
+        with st.container(border=True):
+            st.markdown(f"{icon} **{label}** · {item.claim.text} {citations}")
+            if st.checkbox(item.check_question, key=f"issue_check_{token}_{index}"):
+                checked += 1
+            quotes = " / ".join(
+                f"[근거 {quote.citation_id}] “{quote.quote}”" for quote in item.claim.evidence_quotes
+            )
+            st.caption(f"근거 문구: {quotes}")
+    st.progress(checked / len(checklist.items), text=f"확인한 항목 {checked}/{len(checklist.items)}")
+    if checklist.dropped_count:
+        st.caption(f"근거 문구를 검증하지 못한 {checklist.dropped_count}개 항목은 표시하지 않았습니다.")
+    with st.expander("체크리스트 근거 보기"):
+        for source in checklist.sources:
+            st.markdown(f"- [근거 {source.citation_id}] [{source.label}]({source.source_url})")
 
 
 def _load_catalog(st: Any) -> StatuteCatalog:

@@ -11,6 +11,7 @@ from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.pipeline import AnswerStatus
 from legal_rag.ui.streamlit_app import (
     CATEGORY_LABELS,
+    CHECKLIST_BLOCKED_MESSAGES,
     EXAMPLE_QUESTIONS,
     STATUS_PRESENTATIONS,
     article_question,
@@ -61,6 +62,11 @@ class StreamlitUiTests(unittest.TestCase):
 
         self.assertEqual([m["content"] for m in chat_history(state, "labor:A")], ["A 질문", "A 답변"])
         self.assertEqual([m["content"] for m in chat_history(state, "labor:B")], ["B 질문"])
+
+    def test_every_blocked_checklist_status_has_a_message(self):
+        blocked = set(AnswerStatus) - {AnswerStatus.ANSWERED}
+
+        self.assertEqual(set(CHECKLIST_BLOCKED_MESSAGES), blocked)
 
     def test_article_question_names_the_selected_article(self):
         question = article_question("근로기준법 제27조 (해고사유 등의 서면통지)", "[PERSON_1]이 카톡으로 해고했어요")
