@@ -171,10 +171,16 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
             model_name=settings.gms_embedding_model,
             base_url=settings.gms_base_url,
         )
+    search_options = {
+        "search_mode": settings.rag_search_mode,
+        "mmr_fetch_k": settings.rag_mmr_fetch_k,
+        "mmr_lambda": settings.rag_mmr_lambda,
+    }
     statute_retriever = ExpandedStatuteRetriever(
         embedder,
         store,
         LegalQueryExpander(query_llm),
+        **search_options,
     )
     if CASE_INDEX_PATH.exists():
         case_store = ChromaCaseVectorStore(CASE_INDEX_PATH)
@@ -185,6 +191,7 @@ def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> Statute
                 LegalQueryExpander(query_llm),
                 candidate_pool_factor=10,
                 deduplicate_metadata_key="case_number",
+                **search_options,
             )
             enricher = None
             if settings.has_law_api_key and STATIC_CASE_DATASET.exists():

@@ -78,6 +78,22 @@ class RagState(TypedDict, total=False):
     answer: GroundedAnswer
 
 
+def evidence_from_retrieval(
+    retrieval: RetrievalResult,
+    pinned: Sequence[RetrievedChunk] = (),
+) -> tuple[int, tuple[LegalEvidence, ...]]:
+    """검색 결과를 [근거 N] 번호가 붙은 근거 목록으로 바꾼다. 고정 청크는 맨 앞에 한 번만 둔다."""
+
+    pinned_ids = {hit.chunk_id for hit in pinned}
+    statute_hits = (*pinned, *(hit for hit in retrieval.hits if hit.chunk_id not in pinned_ids))
+    statute_evidence = build_statute_evidence(statute_hits)
+    case_evidence = build_case_evidence(
+        retrieval.case_hits,
+        start_id=len(statute_evidence) + 1,
+    )
+    return len(statute_hits), (*statute_evidence, *case_evidence)
+
+
 class StatuteRagPipeline:
     """마스킹된 질문만 받아 검증을 통과한 답변만 반환한다.
 
@@ -105,6 +121,12 @@ class StatuteRagPipeline:
         """컴파일된 LangGraph. 구조 출력과 노드 단위 검증에 사용한다."""
 
         return self._graph
+
+    @property
+    def retriever(self) -> StatuteRetriever:
+        """검색 방식 비교처럼 같은 검색 계획을 재사용해야 할 때 사용한다."""
+
+        return self._retriever
 
     def answer(
         self,
@@ -176,14 +198,7 @@ class StatuteRagPipeline:
         pinned: tuple[RetrievedChunk, ...],
     ) -> tuple[int, tuple[LegalEvidence, ...]]:
         retrieval = self._retriever.retrieve(question.strip(), category=category, top_k=top_k)
-        pinned_ids = {hit.chunk_id for hit in pinned}
-        statute_hits = (*pinned, *(hit for hit in retrieval.hits if hit.chunk_id not in pinned_ids))
-        statute_evidence = build_statute_evidence(statute_hits)
-        case_evidence = build_case_evidence(
-            retrieval.case_hits,
-            start_id=len(statute_evidence) + 1,
-        )
-        return len(statute_hits), (*statute_evidence, *case_evidence)
+        return evidence_from_retrieval(retrieval, pinned)
 
     def _retrieve_node(self, state: RagState) -> RagState:
         retrieved_count, evidence = self._collect_evidence(

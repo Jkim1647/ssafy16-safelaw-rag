@@ -201,6 +201,7 @@ python scripts/build_statute_index.py
 | `STATUTE_CHUNK_SIZE` / `STATUTE_CHUNK_OVERLAP` | 1200 / 150 | `build_statute_chunks.py` |
 | `CASE_CHUNK_SIZE` / `CASE_CHUNK_OVERLAP` | 1400 / 180 | `build_case_chunks.py`, 질문 시 판례 증분 색인 |
 | `RAG_TOP_K` | 5 | Streamlit 두 탭, `answer_statutes.py`, `search_statutes.py`, `show_evidence.py` |
+| `RAG_SEARCH_MODE` / `RAG_MMR_FETCH_K` / `RAG_MMR_LAMBDA` | similarity / 30 / 0.5 | Streamlit 답변 파이프라인의 법령·판례 검색 |
 
 청크 설정을 바꾸면 청크 생성과 색인 스크립트를 다시 실행해야 검색에 반영됩니다. 스크립트의 `--max-chars`, `--overlap-chars`, `--top-k` 옵션은 `.env`보다 우선합니다. 평가 스크립트는 기준선 재현을 위해 기존 고정값을 유지합니다.
 
@@ -226,6 +227,25 @@ python scripts/show_evidence.py "회사에서 카카오톡으로 내일부터 �
 ```
 
 같은 질문에서 Top-k 1은 법령 1건·판례 1건, 3은 3·3건, 5는 5·5건, 8은 법령 8건·판례 7건(중복 사건번호 제거)으로 근거가 늘었습니다. 해고 서면통지 조문(제27조)은 Top-k 3부터 근거에 들어왔고, Top-k 8에서는 제35조·제59조·제104조처럼 질문과 관련이 약한 조문도 함께 들어왔습니다. 검색어 변환 LLM의 출력이 실행마다 조금씩 달라 같은 Top-k에서도 순서는 바뀔 수 있습니다. 근거가 너무 적으면 핵심 조문을 놓치고, 너무 많으면 생성 모델에 관련 없는 근거가 섞이므로 기본값 5를 유지합니다.
+
+### MMR 검색 (심화 F2014)
+
+`RAG_SEARCH_MODE=mmr`이면 법령·판례 검색기가 후보를 `RAG_MMR_FETCH_K`(기본 30)개까지 넉넉히 모아 기존 RRF·법률어 재정렬을 마친 뒤, Maximal Marginal Relevance로 Top-k를 고릅니다. 관련성은 재정렬 점수를 후보 풀 안에서 0~1로 정규화한 값, 중복도는 Chroma에 저장된 청크 임베딩의 코사인 유사도이며 `RAG_MMR_LAMBDA`(기본 0.5)로 둘의 비중을 정합니다. 판례는 기존처럼 사건번호 중복을 먼저 제거한 풀에서 고릅니다.
+
+검색어 변환을 한 번만 실행해 같은 검색 계획으로 두 방식을 비교합니다.
+
+```powershell
+python scripts/show_evidence.py "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요" --category labor --top-k 5 --compare-search
+```
+
+2026-10-22 Top-k 5 비교 결과입니다.
+
+| 질문 | 유사도 검색 | MMR(풀 30, λ 0.5) |
+|---|---|---|
+| 카카오톡 해고 통보 | 법령 5번째: 근로기준법 제104조(감독 기관에 대한 신고) | 제104조 대신 제76조의3(직장 내 괴롭힘 발생 시 조치). 판례 5건은 같고 순서만 바뀜 |
+| 경매 시 보증금 우선변제 | 판례 5번째: 2025다213466 보증금 | 대신 2022다247378(파산 면책이 우선변제권 있는 보증금반환청구권에 미치는지) — 우선변제권의 다른 측면을 다룬 판례가 들어옴 |
+
+두 질문 모두 상위 근거(제27조, 제3조의2·3조의3 등)는 그대로 유지되고, 끝 순위의 근거만 서로 다른 쟁점으로 바뀌었습니다. 이미 법률어 재정렬과 판례 사건번호 중복 제거가 적용돼 있어 차이가 크지 않으므로 기본값은 `similarity`로 두고, 근거가 한 쟁점에 몰리는 질문에서 `mmr`을 비교용으로 사용합니다. 법령은 같은 조문의 여러 청크가 한 근거로 합쳐지므로 Top-k 5에서도 근거가 3건만 나올 수 있습니다.
 
 ### Chroma DB 내용 확인
 

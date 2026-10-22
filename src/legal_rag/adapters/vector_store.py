@@ -65,6 +65,20 @@ class ChromaStatuteVectorStore:
     def count(self) -> int:
         return self._collection.count()
 
+    def embeddings(self, ids: Sequence[str]) -> dict[str, list[float]]:
+        """MMR 다양성 계산을 위해 저장된 청크 임베딩을 ID별로 읽는다."""
+
+        if not ids:
+            return {}
+        result = self._collection.get(ids=list(ids), include=["embeddings"])
+        vectors = result.get("embeddings")
+        if vectors is None:
+            return {}
+        return {
+            chunk_id: [float(value) for value in vector]
+            for chunk_id, vector in zip(result.get("ids", []), vectors, strict=True)
+        }
+
     def search(
         self,
         query_vector: Sequence[float],
@@ -143,6 +157,20 @@ class ChromaCaseVectorStore:
     @property
     def count(self) -> int:
         return self._collection.count()
+
+    def embeddings(self, ids: Sequence[str]) -> dict[str, list[float]]:
+        """MMR 다양성 계산을 위해 저장된 청크 임베딩을 ID별로 읽는다."""
+
+        if not ids:
+            return {}
+        result = self._collection.get(ids=list(ids), include=["embeddings"])
+        vectors = result.get("embeddings")
+        if vectors is None:
+            return {}
+        return {
+            chunk_id: [float(value) for value in vector]
+            for chunk_id, vector in zip(result.get("ids", []), vectors, strict=True)
+        }
 
     def search(self, query_vector: Sequence[float], *, category: LegalCategory,
                top_k: int) -> list[VectorSearchHit]:
