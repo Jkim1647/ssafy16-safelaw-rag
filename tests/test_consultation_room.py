@@ -20,6 +20,10 @@ from legal_rag.ui import streamlit_app
 class FakePipeline:
     def __init__(self):
         self.calls = []
+        self.forgotten = []
+
+    def forget_conversation(self, thread_id):
+        self.forgotten.append(thread_id)
 
     def converse(self, question, *, thread_id, category, top_k):
         self.calls.append((question, thread_id, category))
@@ -27,7 +31,7 @@ class FakePipeline:
         return answer, ()
 
 
-class ConsultationRoomTests(unittest.TestCase):
+class ConsultationAppTestCase(unittest.TestCase):
     def setUp(self):
         self.index = tempfile.TemporaryDirectory()
         patches = [
@@ -46,6 +50,12 @@ class ConsultationRoomTests(unittest.TestCase):
     def ask(self, text):
         self.app.chat_input(key="consult_chat_input").set_value(text).run()
 
+    def start_labor(self):
+        self.app.sidebar.selectbox(key="consult_category").set_value(LegalCategory.LABOR).run()
+        self.app.sidebar.toggle[0].set_value(False).run()
+
+
+class ConsultationRoomTests(ConsultationAppTestCase):
     def test_greets_and_asks_for_category_first(self):
         self.app.run()
 
@@ -75,11 +85,47 @@ class ConsultationRoomTests(unittest.TestCase):
         self.app.sidebar.toggle[0].set_value(False).run()
         self.ask("첫 상담")
 
-        self.app.sidebar.button[0].click().run()
+        self.app.sidebar.button(key="new_consultation").click().run()
         self.ask("새 상담")
 
         self.assertNotEqual(self.pipeline.calls[0][1], self.pipeline.calls[1][1])
         self.assertEqual(len(self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY]), 2)
+
+
+class ConsultationHistoryTests(ConsultationAppTestCase):
+    def history_buttons(self):
+        return [button for button in self.app.sidebar.button if button.key and button.key.startswith("open_")]
+
+    def test_past_consultations_are_listed_newest_first_and_can_be_restored(self):
+        self.start_labor()
+        self.ask("첫 번째 상담 질문")
+        self.app.sidebar.button(key="new_consultation").click().run()
+        self.ask("두 번째 상담 질문")
+        first_thread = self.pipeline.calls[0][1]
+
+        labels = [button.label for button in self.history_buttons()]
+        self.assertEqual(len(labels), 2)
+        self.assertIn("두 번째 상담 질문", labels[0])
+        self.assertIn("첫 번째 상담 질문", labels[1])
+
+        self.history_buttons()[1].click().run()
+        self.ask("첫 상담 이어서 질문")
+
+        self.assertEqual(self.pipeline.calls[-1][1], first_thread)
+        restored = self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY]
+        self.assertEqual([m["content"] for m in restored if m["role"] == "user"],
+                         ["첫 번째 상담 질문", "첫 상담 이어서 질문"])
+
+    def test_deleting_a_consultation_removes_it_and_its_thread(self):
+        self.start_labor()
+        self.ask("삭제할 상담")
+        thread = self.pipeline.calls[0][1]
+
+        self.app.sidebar.button(key=f"delete_{thread}").click().run()
+
+        self.assertEqual(self.history_buttons(), [])
+        self.assertEqual(self.pipeline.forgotten, [thread])
+        self.assertEqual(self.app.session_state[streamlit_app.CONSULT_MESSAGES_KEY], [])
 
 
 if __name__ == "__main__":

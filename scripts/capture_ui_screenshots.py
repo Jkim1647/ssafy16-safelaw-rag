@@ -105,84 +105,74 @@ def _wait_for_text(client: CdpClient, text: str, timeout: float = 120) -> None:
 
 def _load_fresh(client: CdpClient, url: str) -> None:
     client.call("Page.navigate", {"url": url})
-    _wait_for_text(client, "상황을 적으면 관련 법령과 판례를 확인합니다", timeout=30)
+    _wait_for_text(client, "SafeLaw 생활법률 상담실", timeout=30)
     _wait_until(
-        lambda: bool(client.evaluate("Boolean(document.querySelector('input[aria-label=\"상담 분야\"]'))")),
+        lambda: bool(client.evaluate(
+            "Boolean(document.querySelector('[data-testid=stSidebar] input[aria-label=\"상담 분야\"]'))"
+        )),
         timeout=15,
         message="상담 분야 입력이 준비되지 않았습니다.",
     )
 
 
-def _submit(client: CdpClient, *, category: str, query: str) -> None:
-    category_json = json.dumps(category, ensure_ascii=False)
-    query_json = json.dumps(query, ensure_ascii=False)
-    selected = client.evaluate(
-        """
-        (() => {
-          const button = document.querySelector('button[aria-label="Open"]');
-          if (!button) return false;
-          button.click();
-          return true;
-        })()
-        """
-    )
-    if not selected:
-        raise RuntimeError("상담 분야 입력을 찾지 못했습니다.")
+def _choose_option(client: CdpClient, open_button: str, label: str) -> None:
+    """open_button은 선택 목록을 여는 버튼을 반환하는 JS 식이다."""
+    if not client.evaluate(f"(() => {{ const b = {open_button}; if (!b) return false; b.click(); return true; }})()"):
+        raise RuntimeError("선택 목록 버튼을 찾지 못했습니다.")
     _wait_until(
         lambda: bool(client.evaluate("Boolean(document.querySelector('[role=option]'))")),
         timeout=5,
-        message="상담 분야 선택 목록이 열리지 않았습니다.",
+        message="선택 목록이 열리지 않았습니다.",
     )
-    clicked = client.evaluate(
-        f"""
-        (() => {{
-          const option = Array.from(document.querySelectorAll('[role=option]'))
-            .find(el => el.textContent.trim() === {category_json});
-          if (!option) return false;
-          option.click();
-          return true;
-        }})()
-        """
-    )
-    if not clicked:
-        raise RuntimeError(f"상담 분야 항목을 찾지 못했습니다: {category}")
-    _wait_until(
-        lambda: client.evaluate(
-            f"document.querySelector('input[aria-label=\"상담 분야\"]')?.value === {category_json}"
-        ),
-        timeout=5,
-        message=f"상담 분야를 선택하지 못했습니다: {category}",
-    )
+    label_json = json.dumps(label, ensure_ascii=False)
+    if not client.evaluate(
+        f"(() => {{ const o = Array.from(document.querySelectorAll('[role=option]'))"
+        f".find(el => el.textContent.trim() === {label_json}); if (!o) return false; o.click(); return true; }})()"
+    ):
+        raise RuntimeError(f"선택 항목을 찾지 못했습니다: {label}")
     time.sleep(1)
+
+
+def _send_chat(client: CdpClient, text: str, *, expected_messages: int, timeout: float = 180) -> None:
+    """채팅 입력창에 질문을 보내고 마지막 답변에 상태 코드가 나타날 때까지 기다린다."""
+    text_json = json.dumps(text, ensure_ascii=False)
     filled = client.evaluate(
         f"""
         (() => {{
-          const area = document.querySelector('textarea[aria-label="상황을 구체적으로 적어주세요"]');
+          const area = document.querySelector('[data-testid=stChatInput] textarea');
           if (!area) return false;
-          const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
-          setter.call(area, {query_json});
+          Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set.call(area, {text_json});
           area.dispatchEvent(new Event('input', {{bubbles: true}}));
-          area.dispatchEvent(new Event('change', {{bubbles: true}}));
           return true;
         }})()
         """
     )
     if not filled:
-        raise RuntimeError("질문 입력창을 찾지 못했습니다.")
+        raise RuntimeError("채팅 입력창을 찾지 못했습니다.")
     time.sleep(0.5)
-    submitted = client.evaluate(
-        """
-        (() => {
-          const button = Array.from(document.querySelectorAll('button'))
-            .find(el => el.textContent.includes('관련 법령·판례 검토하기'));
-          if (!button) return false;
-          button.click();
-          return true;
-        })()
-        """
+    client.evaluate("document.querySelector('[data-testid=stChatInputSubmitButton]').click()")
+    _wait_until(
+        lambda: bool(client.evaluate(
+            f"(() => {{ const m = document.querySelectorAll('[data-testid=stChatMessage]');"
+            f" const last = m[m.length - 1];"
+            f" return m.length >= {expected_messages} && Boolean(last)"
+            f" && (last.innerText.includes('상태 코드') || last.innerText.includes('처리하지 못했습니다'))"
+            f" && !document.body.innerText.includes('확인하고 있어요'); }})()"
+        )),
+        timeout=timeout,
+        message="상담 답변을 확인하지 못했습니다.",
     )
-    if not submitted:
-        raise RuntimeError("검토 버튼을 찾지 못했습니다.")
+    time.sleep(1.5)
+
+
+def _ask_consultation(client: CdpClient, *, category: str, query: str) -> None:
+    _choose_option(client, "document.querySelector('[data-testid=stSidebar] button[aria-label=\"Open\"]')", category)
+    # 첫 화면의 상담 안내 메시지 1개 + 질문 + 답변
+    _send_chat(client, query, expected_messages=3)
+
+
+def _scroll_to_message(client: CdpClient, index: int) -> None:
+    _scroll_to(client, f"document.querySelectorAll('[data-testid=stChatMessage]')[{index}]")
 
 
 def _capture(client: CdpClient, output: Path, *, anchor_text: str) -> None:
@@ -192,7 +182,7 @@ def _capture(client: CdpClient, output: Path, *, anchor_text: str) -> None:
         (() => {{
           const node = Array.from(document.querySelectorAll('h1,h2,h3,div,p'))
             .find(el => el.textContent.trim() === {anchor_json});
-          if (node) node.scrollIntoView({{block: 'start'}});
+          if (node) {{ node.scrollIntoView({{block: 'start'}}); let box = node.parentElement; while (box && box.scrollHeight <= box.clientHeight) box = box.parentElement; if (box) box.scrollBy(0, -90); }}
           return Boolean(node);
         }})()
         """
@@ -208,7 +198,7 @@ def _scroll_to(client: CdpClient, finder: str) -> None:
         f"""
         (() => {{
           const node = {finder};
-          if (node) node.scrollIntoView({{block: 'start'}});
+          if (node) {{ node.scrollIntoView({{block: 'start'}}); let box = node.parentElement; while (box && box.scrollHeight <= box.clientHeight) box = box.parentElement; if (box) box.scrollBy(0, -90); }}
           return Boolean(node);
         }})()
         """
@@ -223,10 +213,7 @@ def _screenshot(client: CdpClient, output: Path) -> None:
     output.write_bytes(base64.b64decode(result["data"]))
 
 
-ACTIVE_PANEL = (
-    "Array.from(document.querySelectorAll('[role=tabpanel]'))"
-    ".find(panel => panel.offsetParent !== null)"
-)
+ACTIVE_PANEL = "document.querySelector('[data-testid=stMain]')"
 
 
 def _set_value(client: CdpClient, selector: str, value: str) -> None:
@@ -270,20 +257,11 @@ def _click_button(client: CdpClient, text: str) -> None:
 def _run_article_scenario(client: CdpClient, url: str, output_dir: Path) -> None:
     _load_fresh(client, url)
     client.evaluate(
-        "Array.from(document.querySelectorAll('[role=tab]'))"
-        ".find(tab => tab.textContent.includes('조문 찾기')).click()"
+        "Array.from(document.querySelectorAll('[data-testid=stSidebar] label'))"
+        ".find(label => label.textContent.includes('조문 찾아보기')).click()"
     )
-    time.sleep(1)
-    category = json.dumps("근로계약·부당해고", ensure_ascii=False)
-    client.evaluate(f"{ACTIVE_PANEL}.querySelector('button[aria-label=\"Open\"]').click()")
-    _wait_until(
-        lambda: bool(client.evaluate("Boolean(document.querySelector('[role=option]'))")),
-        timeout=5,
-        message="조문 탭 상담 분야 목록이 열리지 않았습니다.",
-    )
-    client.evaluate(
-        f"Array.from(document.querySelectorAll('[role=option]')).find(el => el.textContent.trim() === {category}).click()"
-    )
+    _wait_for_text(client, "조건으로 조문을 찾고", timeout=15)
+    _choose_option(client, f"{ACTIVE_PANEL}.querySelector('button[aria-label=\"Open\"]')", "근로계약·부당해고")
     _wait_for_text(client, "또는 목록에서 직접 선택", timeout=15)
     _set_value(
         client,
@@ -299,19 +277,12 @@ def _run_article_scenario(client: CdpClient, url: str, output_dir: Path) -> None
     _screenshot(client, output_dir / "safelaw-condition-search.png")
 
     _click_button(client, "이 조문으로 상담하기")
-    _wait_for_text(client, "💬", timeout=15)
-    _set_value(client, "textarea", "팀장이 카카오톡으로만 해고를 알렸어요. 이 통보도 효력이 있나요?")
-    client.evaluate("document.querySelector('[data-testid=stChatInputSubmitButton]').click()")
     _wait_until(
-        lambda: bool(client.evaluate(
-            "(() => { const messages = document.querySelectorAll('[data-testid=stChatMessage]');"
-            " const last = messages[messages.length - 1];"
-            " return messages.length >= 2 && Boolean(last)"
-            " && (last.innerText.includes('상태 코드') || last.innerText.includes('처리하지 못했습니다')); })()"
-        )),
-        timeout=180,
-        message="조문별 채팅 답변을 확인하지 못했습니다.",
+        lambda: bool(client.evaluate("Boolean(document.querySelector('[data-testid=stChatInput] textarea'))")),
+        timeout=15,
+        message="조문별 채팅 입력창이 나타나지 않았습니다.",
     )
+    _send_chat(client, "팀장이 카카오톡으로만 해고를 알렸어요. 이 통보도 효력이 있나요?", expected_messages=2)
     _scroll_to(client, "Array.from(document.querySelectorAll('h3')).find(el => el.textContent.startsWith('💬'))")
     _screenshot(client, output_dir / "safelaw-article-chat.png")
 
@@ -398,33 +369,26 @@ def main() -> None:
 
         if args.scenario in ("all", "grounded"):
             _load_fresh(client, args.url)
-            _submit(
+            _ask_consultation(
                 client,
                 category="근로계약·부당해고",
                 query=(
-                    "회사에서 카카오톡으로 내일부터 나오지 말라고 했습니다. "
-                    "해고 사유와 시기를 적은 서면 통지를 받지 못했는데 해고 효력은 어떻게 되나요?"
+                    "5명 이상 회사에서 8개월 일했는데 팀장이 카카오톡으로 내일부터 나오지 말라고 했어요. "
+                    "해고 사유와 날짜가 적힌 문서는 받지 못했어요. 이런 해고도 효력이 있나요?"
                 ),
             )
-            _wait_for_text(client, "근거 검증 완료")
-            # 같은 제출에서 도메인 특화 기능인 쟁점 체크리스트도 함께 생성된다.
-            # 화면이 모두 그려진 뒤 찍어야 스크롤 위치가 밀리지 않는다.
-            _wait_until(
-                lambda: bool(client.evaluate(
-                    "document.body.innerText.includes('확인한 항목')"
-                    " || document.body.innerText.includes('체크리스트를 만들')"
-                    " || document.body.innerText.includes('표시하지 않습니다')"
-                )),
-                timeout=120,
-                message="쟁점 체크리스트 결과를 확인하지 못했습니다.",
-            )
-            time.sleep(1)
-            _capture(client, args.output_dir / "safelaw-grounded-answer.png", anchor_text="검토 결과")
-            _capture(client, args.output_dir / "safelaw-issue-checklist.png", anchor_text="내 상황 쟁점 체크리스트")
+            _scroll_to_message(client, 1)
+            _screenshot(client, args.output_dir / "safelaw-grounded-answer.png")
+            if client.evaluate("document.body.innerText.includes('확인한 항목')"):
+                _capture(client, args.output_dir / "safelaw-issue-checklist.png", anchor_text="내 상황 쟁점 체크리스트")
+            # 앞선 상담을 이어받는 질문: LangGraph 상담 스레드가 맥락을 붙인다.
+            _send_chat(client, "그럼 회사가 나중에 서면으로 다시 보내면 효력이 생기나요?", expected_messages=5)
+            _scroll_to_message(client, 3)
+            _screenshot(client, args.output_dir / "safelaw-consult-followup.png")
 
         if args.scenario in ("all", "privacy"):
             _load_fresh(client, args.url)
-            _submit(
+            _ask_consultation(
                 client,
                 category="전세·임대차 보증금",
                 query=(
@@ -433,19 +397,23 @@ def main() -> None:
                     "전입신고와 확정일자를 마친 세입자인데 집이 경매로 넘어갔습니다."
                 ),
             )
-            _wait_for_text(client, "개인정보 마스킹 5건")
-            _wait_for_text(client, "외부 모델 전달문")
-            _capture(client, args.output_dir / "safelaw-privacy-mask.png", anchor_text="검토 결과")
+            client.evaluate(
+                "Array.from(document.querySelectorAll('summary'))"
+                ".find(el => el.textContent.includes('원문과 외부 모델 전달문 비교')).click()"
+            )
+            time.sleep(1)
+            _scroll_to_message(client, 1)
+            _screenshot(client, args.output_dir / "safelaw-privacy-mask.png")
 
         if args.scenario in ("all", "refusal"):
             _load_fresh(client, args.url)
-            _submit(
+            _ask_consultation(
                 client,
                 category="근로계약·부당해고",
                 query="오늘 점심 메뉴로 김치찌개와 샌드위치 중 무엇이 더 좋을까요?",
             )
-            _wait_for_text(client, "근거 부족")
-            _capture(client, args.output_dir / "safelaw-refusal.png", anchor_text="검토 결과")
+            _scroll_to_message(client, 1)
+            _screenshot(client, args.output_dir / "safelaw-refusal.png")
 
         if args.scenario in ("all", "article"):
             _run_article_scenario(client, args.url, args.output_dir)

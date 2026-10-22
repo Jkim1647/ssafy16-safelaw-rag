@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import time
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
@@ -80,6 +81,7 @@ EXAMPLE_CONDITIONS = {
 
 CHAT_STATE_KEY = "article_chats"
 CONSULT_MESSAGES_KEY = "consult_messages"
+CONSULTATIONS_KEY = "consultations"
 CONSULT_THREAD_KEY = "consult_thread_id"
 PENDING_PROMPT_KEY = "consult_pending_prompt"
 VIEW_CONSULT = "💬 상담실"
@@ -292,8 +294,64 @@ class SidebarOptions:
 
 
 def _start_new_consultation(state: Any) -> None:
-    state[CONSULT_MESSAGES_KEY] = []
-    state[CONSULT_THREAD_KEY] = uuid.uuid4().hex
+    thread_id = uuid.uuid4().hex
+    if CONSULTATIONS_KEY not in state:
+        state[CONSULTATIONS_KEY] = {}
+    state[CONSULTATIONS_KEY][thread_id] = {"title": "", "category": None, "messages": [], "updated": time.time()}
+    _open_consultation(state, thread_id)
+
+
+def _open_consultation(state: Any, thread_id: str) -> None:
+    """지난 상담을 다시 연다. 같은 thread_id라 LangGraph 체크포인터의 맥락도 이어진다."""
+
+    entry = state[CONSULTATIONS_KEY][thread_id]
+    state[CONSULT_THREAD_KEY] = thread_id
+    state[CONSULT_MESSAGES_KEY] = entry["messages"]
+    if entry["category"]:
+        state["consult_category"] = LegalCategory(entry["category"])
+
+
+def _delete_consultation(state: Any, thread_id: str) -> None:
+    state.get(CONSULTATIONS_KEY, {}).pop(thread_id, None)
+    pipeline = state.get("safelaw_pipeline")
+    if pipeline is not None:
+        pipeline.forget_conversation(thread_id)
+    if state.get(CONSULT_THREAD_KEY) == thread_id:
+        _start_new_consultation(state)
+
+
+def _render_consultation_history(st: Any) -> None:
+    consultations = st.session_state.get(CONSULTATIONS_KEY, {})
+    past = sorted(
+        ((thread_id, entry) for thread_id, entry in consultations.items() if entry["messages"]),
+        key=lambda item: item[1]["updated"],
+        reverse=True,
+    )
+    if not past:
+        return
+    st.markdown("**지난 상담**")
+    current = st.session_state.get(CONSULT_THREAD_KEY)
+    for thread_id, entry in past:
+        turns = sum(1 for message in entry["messages"] if message["role"] == "user")
+        category = CATEGORY_LABELS[LegalCategory(entry["category"])] if entry["category"] else ""
+        open_column, delete_column = st.columns([5, 1], vertical_alignment="center")
+        open_column.button(
+            entry["title"],
+            key=f"open_{thread_id}",
+            on_click=_open_consultation,
+            args=(st.session_state, thread_id),
+            type="primary" if thread_id == current else "secondary",
+            help=f"{category} · 질문 {turns}개",
+            use_container_width=True,
+        )
+        delete_column.button(
+            "🗑️",
+            key=f"delete_{thread_id}",
+            on_click=_delete_consultation,
+            args=(st.session_state, thread_id),
+            type="tertiary",
+            help="이 상담 기록을 지웁니다",
+        )
 
 
 def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message: str) -> SidebarOptions:
@@ -323,6 +381,7 @@ def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message:
             turns = sum(1 for item in st.session_state.get(CONSULT_MESSAGES_KEY, []) if item["role"] == "user")
             st.button(
                 "🆕 새 상담 시작",
+                key="new_consultation",
                 on_click=_start_new_consultation,
                 args=(st.session_state,),
                 use_container_width=True,
@@ -330,6 +389,7 @@ def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message:
             )
             if turns:
                 st.caption(f"이번 상담에서 {turns}번 질문했어요. 이어서 묻는 질문은 앞선 상담 내용을 함께 고려해요.")
+            _render_consultation_history(st)
 
         terms = st.text_input(
             "추가로 가릴 이름·회사명 (쉼표로 구분)",
@@ -520,6 +580,13 @@ def _run_consultation_turn(st: Any, settings: Settings, options: SidebarOptions,
             _render_answer(st, assistant_message)
     # 대화 기록은 현재 세션 메모리에만 둔다. 원문은 화면 비교용으로만 보관한다.
     messages.extend((user_message, assistant_message))
+    entry = st.session_state[CONSULTATIONS_KEY][st.session_state[CONSULT_THREAD_KEY]]
+    if not entry["title"]:
+        # 목록 제목도 마스킹된 첫 질문으로 만든다.
+        first = user_message["content"]
+        entry["title"] = first if len(first) <= 24 else first[:24] + "…"
+    entry["category"] = options.category.value
+    entry["updated"] = time.time()
     # 사이드바(질문 수, 새 상담 버튼)는 이 턴보다 먼저 그려졌으므로 기록을 반영해 다시 그린다.
     st.rerun()
 
@@ -696,12 +763,12 @@ def _render_article_chat(st: Any, settings: Settings, ready: bool, item: Statute
         "redaction_count": privacy.redaction_count,
     }
     history.append(user_message)
-    with messages_area, st.chat_message("user"):
+    with messages_area, st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(user_message["content"])
         if privacy.redaction_count:
             st.caption(f"개인정보 {privacy.redaction_count}건을 가린 문장입니다.")
 
-    with messages_area, st.chat_message("assistant"):
+    with messages_area, st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
         try:
             if "safelaw_pipeline" not in st.session_state:
                 st.session_state.safelaw_pipeline = build_pipeline(settings, INDEX_PATH)
@@ -728,7 +795,7 @@ def _render_article_chat(st: Any, settings: Settings, ready: bool, item: Statute
 
 def _render_chat_messages(st: Any, history: list[dict[str, Any]]) -> None:
     for message in history:
-        with st.chat_message(message["role"]):
+        with st.chat_message(message["role"], avatar=USER_AVATAR if message["role"] == "user" else ASSISTANT_AVATAR):
             if message["role"] == "assistant":
                 presentation = STATUS_PRESENTATIONS[AnswerStatus(message["status"])]
                 st.caption(f"{presentation.icon} {presentation.title} · 상태 코드 `{message['status']}`")
