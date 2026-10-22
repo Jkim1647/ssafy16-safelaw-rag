@@ -63,3 +63,19 @@
 - 최초 결과: `data/evaluation/end_to_end_results.json`
 - 개선 결과: `data/evaluation/end_to_end_results_optimized.json`
 - 최종 결과: `data/evaluation/end_to_end_results_final.json`
+
+## 2026-10-22 재평가
+
+삭제 조문 제외, 민법 제1112조 검색어 규칙, 검색어 변환 모델 `gpt-5.4-mini` 변경 후 같은 30문항을 다시 측정했다(`data/evaluation/end_to_end_results_fast_query.json`).
+
+| 지표 | 이전 (검색어 변환 nano) | 현재 (검색어 변환 5.4-mini) |
+|---|---:|---:|
+| 답변 성공률 | 0.7500 | 0.6667 |
+| 인용 정확성 | 1.0000 | 1.0000 |
+| 근거 없는 주장 차단률 | 1.0000 | 1.0000 |
+| 답변 거부 정확성 | 1.0000 | 1.0000 |
+| 오거부율 | 0.2500 | 0.3333 |
+| 기대 판례 인용률 | 0.8333 | 0.6875 |
+
+상태는 `answered 16`, `insufficient_evidence 8`, `invalid_citations 6`이다. 안전 지표(인용 정확성·차단률·거부 정확성)는 그대로이고, 답변 가능 질문 2개가 근거 부족으로 더 거절됐다. 한 질문당 처리 시간은 31.8~64.0초에서 8.3~16.7초로 줄었다. LLM 생성은 실행마다 달라지므로 2문항 차이는 일부 실행 편차일 수 있다.
+

@@ -1,0 +1,2278 @@
+{
+  "evaluator_version": "4",
+  "generated_at": "2026-10-22T03:03:13.577909+00:00",
+  "embedding_model": "text-embedding-3-small",
+  "chat_model": "gpt-5.4-mini",
+  "case_file": "data/evaluation/statute_retrieval_cases.json",
+  "metrics": {
+    "labor": {
+      "case_count": 10,
+      "recall_at_5": 1.0,
+      "mrr": 0.6916666666666667,
+      "hit_at_5": 1.0
+    },
+    "housing_lease": {
+      "case_count": 10,
+      "recall_at_5": 1.0,
+      "mrr": 0.675,
+      "hit_at_5": 1.0
+    },
+    "inheritance": {
+      "case_count": 10,
+      "recall_at_5": 1.0,
+      "mrr": 0.8533333333333333,
+      "hit_at_5": 1.0
+    },
+    "overall": {
+      "case_count": 30,
+      "recall_at_5": 1.0,
+      "mrr": 0.74,
+      "hit_at_5": 1.0
+    }
+  },
+  "results": [
+    {
+      "id": "labor-01",
+      "category": "labor",
+      "query": "회사에 입사했는데 월급과 근무시간을 말로만 알려주고 계약서를 주지 않았어요.",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제17조"
+        }
+      ],
+      "rewritten_query": "근로계약서 미교부와 임금 및 근로시간 고지 관련 근로계약 및 부당해고 법령 검색 임금 임금 지급 체불 근로조건의 명시 근로계약서 교부 근로계약서 미교부 근로시간",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불",
+        "근로조건의 명시",
+        "근로계약서 교부",
+        "근로계약서",
+        "미교부",
+        "근로시간"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제43조",
+          "article_title": "임금 지급",
+          "score": 0.08779643,
+          "distance": 0.40732282,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C43%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제50조",
+          "article_title": "근로시간",
+          "score": 0.08756029,
+          "distance": 0.39605242,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C50%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제17조",
+          "article_title": "근로조건의 명시",
+          "score": 0.06839344,
+          "distance": 0.53862536,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C17%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제69조",
+          "article_title": "근로시간",
+          "score": 0.06692537,
+          "distance": 0.71044028,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C69%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제59조",
+          "article_title": "근로시간 및 휴게시간의 특례",
+          "score": 0.05769712,
+          "distance": 0.39958709,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C59%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-02",
+      "category": "labor",
+      "query": "특별한 이유도 설명하지 않고 사장이 마음에 안 든다며 저를 잘랐어요.",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제23조"
+        }
+      ],
+      "rewritten_query": "근로계약 및 부당해고 관련, 사용자가 특별한 이유 설명 없이 마음에 안 든다는 이유로 해고한 경우의 법령 해고 해고 통보 정당한 이유 해고 등의 제한 부당해고 근로계약 사용자",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "정당한 이유",
+        "해고 등의 제한",
+        "부당해고",
+        "근로계약",
+        "사용자"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제23조",
+          "article_title": "해고 등의 제한",
+          "score": 0.08902836,
+          "distance": 0.43100101,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C23%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제67조",
+          "article_title": "근로계약",
+          "score": 0.08751109,
+          "distance": 0.43936104,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C67%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제28조",
+          "article_title": "부당해고등의 구제신청",
+          "score": 0.05839344,
+          "distance": 0.43687004,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C28%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제76조의3",
+          "article_title": "직장 내 괴롭힘 발생 시 조치",
+          "score": 0.04579092,
+          "distance": 0.44643182,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C76%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제20조",
+          "article_title": "위약 예정의 금지",
+          "score": 0.03918449,
+          "distance": 0.42014575,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C20%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-03",
+      "category": "labor",
+      "query": "아무런 예고 없이 오늘 당장 그만 나오라고 하는데 한 달 전에 알려줘야 하는 것 아닌가요?",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제26조"
+        }
+      ],
+      "rewritten_query": "근로계약에서 해고 예고 없이 즉시 출근 중단을 지시한 경우 해고예고 의무 및 해고 관련 근로기준법 검색 해고예고 해고예고 의무 즉시해고 근로기준법 근로계약 부당해고",
+      "legal_terms": [
+        "해고예고",
+        "해고예고 의무",
+        "즉시해고",
+        "근로기준법",
+        "근로계약",
+        "부당해고"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제67조",
+          "article_title": "근로계약",
+          "score": 0.06839344,
+          "distance": 0.51838624,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C67%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제28조",
+          "article_title": "부당해고등의 구제신청",
+          "score": 0.05870594,
+          "distance": 0.40225703,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C28%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제15조",
+          "article_title": "이 법을 위반한 근로계약",
+          "score": 0.05266667,
+          "distance": 0.41037047,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C15%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제26조",
+          "article_title": "해고의 예고",
+          "score": 0.04831098,
+          "distance": 0.38090605,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C26%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제23조",
+          "article_title": "해고 등의 제한",
+          "score": 0.03809041,
+          "distance": 0.40262318,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C23%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        4
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.25,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-04",
+      "category": "labor",
+      "query": "회사에서 카카오톡으로 내일부터 나오지 말라고 했어요.",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제27조"
+        }
+      ],
+      "rewritten_query": "근로계약 해지 통보 카카오톡 문자 통지 부당해고 관련 법령 해고 해고 통보 서면통지 해고사유 해고시기 해고 효력 근로계약 해고 통지",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지",
+        "해고사유",
+        "해고시기",
+        "해고 효력",
+        "근로계약",
+        "해고 통지"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제67조",
+          "article_title": "근로계약",
+          "score": 0.08902836,
+          "distance": 0.51834559,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C67%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제27조",
+          "article_title": "해고사유 등의 서면통지",
+          "score": 0.05970492,
+          "distance": 0.50207102,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C27%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제104조",
+          "article_title": "감독 기관에 대한 신고",
+          "score": 0.03844153,
+          "distance": 0.52257711,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C104%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제20조",
+          "article_title": "위약 예정의 금지",
+          "score": 0.03756999,
+          "distance": 0.52603519,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C20%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "기간제 및 단시간근로자 보호 등에 관한 법률",
+          "article_no": "제17조",
+          "article_title": "근로조건의 서면명시",
+          "score": 0.03646558,
+          "distance": 0.52820927,
+          "source_url": "https://www.law.go.kr/법령/%EA%B8%B0%EA%B0%84%EC%A0%9C%20%EB%B0%8F%20%EB%8B%A8%EC%8B%9C%EA%B0%84%EA%B7%BC%EB%A1%9C%EC%9E%90%20%EB%B3%B4%ED%98%B8%20%EB%93%B1%EC%97%90%20%EA%B4%80%ED%95%9C%20%EB%B2%95%EB%A5%A0/%EC%A0%9C17%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-05",
+      "category": "labor",
+      "query": "부당하게 잘린 것 같은데 노동위원회에 언제까지 구제를 신청할 수 있나요?",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제28조"
+        }
+      ],
+      "rewritten_query": "부당해고 구제신청 기간 노동위원회 부당해고 구제신청 노동위원회 제소기간",
+      "legal_terms": [
+        "부당해고",
+        "구제신청",
+        "노동위원회",
+        "제소기간"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제28조",
+          "article_title": "부당해고등의 구제신청",
+          "score": 0.06757093,
+          "distance": 0.55210507,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C28%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제89조",
+          "article_title": "노동위원회의 심사와 중재",
+          "score": 0.06713516,
+          "distance": 0.5285641,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C89%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "기간제 및 단시간근로자 보호 등에 관한 법률",
+          "article_no": "제11조",
+          "article_title": "조정ㆍ중재",
+          "score": 0.05099524,
+          "distance": 0.47860551,
+          "source_url": "https://www.law.go.kr/법령/%EA%B8%B0%EA%B0%84%EC%A0%9C%20%EB%B0%8F%20%EB%8B%A8%EC%8B%9C%EA%B0%84%EA%B7%BC%EB%A1%9C%EC%9E%90%20%EB%B3%B4%ED%98%B8%20%EB%93%B1%EC%97%90%20%EA%B4%80%ED%95%9C%20%EB%B2%95%EB%A5%A0/%EC%A0%9C11%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제31조",
+          "article_title": "구제명령 등의 확정",
+          "score": 0.04960999,
+          "distance": 0.49902713,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C31%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "기간제 및 단시간근로자 보호 등에 관한 법률",
+          "article_no": "제10조",
+          "article_title": "조사ㆍ심문 등",
+          "score": 0.04960444,
+          "distance": 0.50977641,
+          "source_url": "https://www.law.go.kr/법령/%EA%B8%B0%EA%B0%84%EC%A0%9C%20%EB%B0%8F%20%EB%8B%A8%EC%8B%9C%EA%B0%84%EA%B7%BC%EB%A1%9C%EC%9E%90%20%EB%B3%B4%ED%98%B8%20%EB%93%B1%EC%97%90%20%EA%B4%80%ED%95%9C%20%EB%B2%95%EB%A5%A0/%EC%A0%9C10%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-06",
+      "category": "labor",
+      "query": "퇴사한 지 한 달이 지났는데 마지막 월급과 정산금을 아직 받지 못했어요.",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제36조"
+        }
+      ],
+      "rewritten_query": "퇴사 후 1개월 경과, 마지막 월급 및 정산금 미지급 임금 임금 지급 체불 금품 청산 퇴직 후 지급기한 퇴직금 임금체불 체불임금",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불",
+        "금품 청산",
+        "퇴직 후 지급기한",
+        "퇴직금",
+        "임금체불",
+        "체불임금"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제36조",
+          "article_title": "금품 청산",
+          "score": 0.09807598,
+          "distance": 0.5812645,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C36%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제43조",
+          "article_title": "임금 지급",
+          "score": 0.09674312,
+          "distance": 0.50613999,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C43%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제44조의2",
+          "article_title": "건설업에서의 임금 지급 연대책임",
+          "score": 0.06328555,
+          "distance": 0.60603988,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C44%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제43조의8",
+          "article_title": "체불 임금등에 대한 손해배상청구",
+          "score": 0.05724668,
+          "distance": 0.57058549,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C43%EC%A1%B0%EC%9D%988"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제44조",
+          "article_title": "도급 사업에 대한 임금 지급",
+          "score": 0.05543322,
+          "distance": 0.57776308,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C44%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-07",
+      "category": "labor",
+      "query": "사장이 임금을 제 계좌가 아니라 가족에게 대신 주겠다고 합니다.",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제43조"
+        }
+      ],
+      "rewritten_query": "근로계약상 임금을 근로자 본인 계좌가 아닌 가족에게 대리 지급하는 경우의 적법성 및 임금 직접 지급 원칙 임금 임금 지급 체불 임금 직접지급의 원칙 임금 대리수령 근로기준법 임금 지급 방법 근로자 본인 명의 계좌",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불",
+        "임금 직접지급의 원칙",
+        "임금 대리수령",
+        "근로기준법",
+        "임금 지급 방법",
+        "근로자 본인 명의 계좌"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제43조",
+          "article_title": "임금 지급",
+          "score": 0.1004723,
+          "distance": 0.37699187,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C43%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제44조",
+          "article_title": "도급 사업에 대한 임금 지급",
+          "score": 0.06792803,
+          "distance": 0.41624075,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C44%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제44조의2",
+          "article_title": "건설업에서의 임금 지급 연대책임",
+          "score": 0.06643064,
+          "distance": 0.41196764,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C44%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제48조",
+          "article_title": "임금대장 및 임금명세서",
+          "score": 0.05118033,
+          "distance": 0.37410718,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C48%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제37조",
+          "article_title": "미지급 임금에 대한 지연이자",
+          "score": 0.04979759,
+          "distance": 0.40109324,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C37%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-08",
+      "category": "labor",
+      "query": "회사가 매주 20시간씩 추가 근무를 시키는데 연장근로에도 한도가 있나요?",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제53조"
+        }
+      ],
+      "rewritten_query": "연장근로 한도 및 주 20시간 추가근무의 근로기준법상 제한 여부 연장근로 근로시간 근로기준법 연장근로 한도 주당 근로시간",
+      "legal_terms": [
+        "연장근로",
+        "근로시간",
+        "근로기준법",
+        "연장근로 한도",
+        "주당 근로시간"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제69조",
+          "article_title": "근로시간",
+          "score": 0.09987506,
+          "distance": 0.44444704,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C69%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제50조",
+          "article_title": "근로시간",
+          "score": 0.09712106,
+          "distance": 0.45413816,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C50%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제53조",
+          "article_title": "연장 근로의 제한",
+          "score": 0.07118033,
+          "distance": 0.41178882,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C53%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제59조",
+          "article_title": "근로시간 및 휴게시간의 특례",
+          "score": 0.06999627,
+          "distance": 0.44478494,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C59%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제52조",
+          "article_title": "선택적 근로시간제",
+          "score": 0.06637012,
+          "distance": 0.4749794,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C52%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-09",
+      "category": "labor",
+      "query": "일 년 동안 거의 빠짐없이 일했는데 연차휴가는 며칠 받을 수 있나요?",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제60조"
+        }
+      ],
+      "rewritten_query": "근로계약 기간 1년간 출근율이 높은 경우 연차유급휴가 발생일수 및 부여기준 연차유급휴가 출근율 휴가일수 근로기준법",
+      "legal_terms": [
+        "연차유급휴가",
+        "출근율",
+        "휴가일수",
+        "근로기준법"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제60조",
+          "article_title": "연차 유급휴가",
+          "score": 0.09899524,
+          "distance": 0.34376603,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C60%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제61조",
+          "article_title": "연차 유급휴가의 사용 촉진",
+          "score": 0.06695593,
+          "distance": 0.41535109,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C61%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제61조",
+          "article_title": "연차 유급휴가의 사용 촉진",
+          "score": 0.05376595,
+          "distance": 0.43607193,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C61%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제55조",
+          "article_title": "휴일",
+          "score": 0.04617871,
+          "distance": 0.44240069,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C55%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제46조",
+          "article_title": "휴업수당",
+          "score": 0.04532197,
+          "distance": 0.43338627,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C46%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "labor-10",
+      "category": "labor",
+      "query": "상사가 계속 모욕적인 말을 하고 다른 직원들 앞에서 따돌립니다.",
+      "expected": [
+        {
+          "law_name": "근로기준법",
+          "article_no": "제76조의2"
+        }
+      ],
+      "rewritten_query": "상사가 반복적으로 모욕적인 발언을 하고 다른 직원들 앞에서 따돌리는 행위의 근로계약 및 부당해고 관련 법령 직장 내 괴롭힘 모욕 따돌림 사용자 지휘감독 근로관계 부당해고",
+      "legal_terms": [
+        "직장 내 괴롭힘",
+        "모욕",
+        "따돌림",
+        "사용자 지휘감독",
+        "근로관계",
+        "부당해고"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "근로기준법",
+          "article_no": "제76조의3",
+          "article_title": "직장 내 괴롭힘 발생 시 조치",
+          "score": 0.07091592,
+          "distance": 0.47026825,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C76%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 2,
+          "law_name": "근로기준법",
+          "article_no": "제76조의2",
+          "article_title": "직장 내 괴롭힘의 금지",
+          "score": 0.0482526,
+          "distance": 0.62182689,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C76%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 3,
+          "law_name": "근로기준법",
+          "article_no": "제105조",
+          "article_title": "사법경찰권 행사자의 제한",
+          "score": 0.0453408,
+          "distance": 0.52163827,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C105%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "근로기준법",
+          "article_no": "제104조",
+          "article_title": "감독 기관에 대한 신고",
+          "score": 0.04399971,
+          "distance": 0.51935244,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C104%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "근로기준법",
+          "article_no": "제28조",
+          "article_title": "부당해고등의 구제신청",
+          "score": 0.03839344,
+          "distance": 0.60247219,
+          "source_url": "https://www.law.go.kr/법령/%EA%B7%BC%EB%A1%9C%EA%B8%B0%EC%A4%80%EB%B2%95/%EC%A0%9C28%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-01",
+      "category": "housing_lease",
+      "query": "집을 인도받고 전입신고까지 했는데 집주인이 바뀌어도 계속 살 수 있나요?",
+      "expected": [
+        {
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조"
+        }
+      ],
+      "rewritten_query": "전세·임대차 보증금 집을 인도받고 전입신고를 한 임차인이 집주인 변경 후에도 계속 거주할 수 있는지 대항력 우선변제권 임차권등기명령 전세 임대차 보증금 목적물 인도 전입신고",
+      "legal_terms": [
+        "대항력",
+        "우선변제권",
+        "임차권등기명령",
+        "전세",
+        "임대차",
+        "보증금",
+        "목적물 인도",
+        "전입신고"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의3",
+          "article_title": "임차권등기명령",
+          "score": 0.086449,
+          "distance": 0.45646811,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의3",
+          "article_title": "임차권등기명령",
+          "score": 0.06812903,
+          "distance": 0.48043334,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 3,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조",
+          "article_title": "대항력 등",
+          "score": 0.05118033,
+          "distance": 0.4178322,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제623조",
+          "article_title": "임대인의 의무",
+          "score": 0.04795187,
+          "distance": 0.42534786,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C623%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제317조",
+          "article_title": "전세권의 소멸과 동시이행",
+          "score": 0.04781263,
+          "distance": 0.44555056,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C317%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-02",
+      "category": "housing_lease",
+      "query": "살던 집이 경매로 넘어가면 제 전세보증금을 다른 채권자보다 먼저 받을 수 있나요?",
+      "expected": [
+        {
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의2"
+        }
+      ],
+      "rewritten_query": "전세·임대차 보증금 경매 배당순위와 우선변제권 임대차보증금 보증금 반환 보증금 회수 보증금의 회수 우선변제권 전세보증금 경매 배당순위",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "보증금의 회수",
+        "우선변제권",
+        "전세보증금",
+        "경매",
+        "배당순위"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의2",
+          "article_title": "보증금의 회수",
+          "score": 0.06839344,
+          "distance": 0.52585775,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의2",
+          "article_title": "보증금의 회수",
+          "score": 0.06839344,
+          "distance": 0.55742478,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제318조",
+          "article_title": "전세권자의 경매청구권",
+          "score": 0.05065151,
+          "distance": 0.36140066,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C318%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제316조",
+          "article_title": "원상회복의무, 매수청구권",
+          "score": 0.04761905,
+          "distance": 0.36759186,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C316%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제312조의2",
+          "article_title": "전세금 증감청구권",
+          "score": 0.04627376,
+          "distance": 0.37423038,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C312%EC%A1%B0%EC%9D%982"
+        }
+      ],
+      "relevant_ranks": [
+        1,
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-03",
+      "category": "housing_lease",
+      "query": "계약이 끝나 이사해야 하는데 집주인이 보증금을 주지 않습니다. 먼저 이사해도 권리를 지키려면 어떻게 하나요?",
+      "expected": [
+        {
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의3"
+        }
+      ],
+      "rewritten_query": "전세보증금 반환 지연 후 이사 전 권리보전을 위한 임대차보증금 반환 관련 법령 임대차보증금 보증금 반환 보증금 회수 대항력 우선변제권 임차권등기명령 전세보증금 반환 보증금 반환 지연",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "대항력",
+        "우선변제권",
+        "임차권등기명령",
+        "전세보증금 반환",
+        "보증금 반환 지연"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의3",
+          "article_title": "임차권등기명령",
+          "score": 0.08751109,
+          "distance": 0.39618993,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의3",
+          "article_title": "임차권등기명령",
+          "score": 0.08670046,
+          "distance": 0.40161896,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 3,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의2",
+          "article_title": "보증금의 회수",
+          "score": 0.04659393,
+          "distance": 0.40237945,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제636조",
+          "article_title": "기간의 약정있는 임대차의 해지통고",
+          "score": 0.04654378,
+          "distance": 0.37698162,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C636%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "주택임대차보호법",
+          "article_no": "제10조의2",
+          "article_title": "초과 차임 등의 반환청구",
+          "score": 0.03676395,
+          "distance": 0.37799037,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C10%EC%A1%B0%EC%9D%982"
+        }
+      ],
+      "relevant_ranks": [
+        1,
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-04",
+      "category": "housing_lease",
+      "query": "주택 임대차 계약을 1년으로 썼는데 세입자가 2년 동안 살 수 있다는 말이 맞나요?",
+      "expected": [
+        {
+          "law_name": "주택임대차보호법",
+          "article_no": "제4조"
+        }
+      ],
+      "rewritten_query": "주택 임대차 계약기간 1년 기재 시 임차인의 2년 거주 가능 여부와 주택임대차보호법상 최단기간 관련 규정 주택임대차계약 계약기간 1년 임차인 2년 거주 주택임대차보호법 최단임대차기간",
+      "legal_terms": [
+        "주택임대차계약",
+        "계약기간 1년",
+        "임차인 2년 거주",
+        "주택임대차보호법",
+        "최단임대차기간"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제30조",
+          "article_title": "주택임대차표준계약서 사용",
+          "score": 0.05013947,
+          "distance": 0.36604738,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C30%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제4조",
+          "article_title": "임대차기간 등",
+          "score": 0.04883659,
+          "distance": 0.38746941,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C4%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "주택임대차보호법",
+          "article_no": "제6조",
+          "article_title": "계약의 갱신",
+          "score": 0.04873083,
+          "distance": 0.37577438,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C6%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "주택임대차보호법",
+          "article_no": "제2조",
+          "article_title": "적용 범위",
+          "score": 0.04673393,
+          "distance": 0.35733336,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C2%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의4",
+          "article_title": "「민법」에 따른 주택임대차등기의 효력 등",
+          "score": 0.04627396,
+          "distance": 0.3707695,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%984"
+        }
+      ],
+      "relevant_ranks": [
+        2
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.5,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-05",
+      "category": "housing_lease",
+      "query": "전세 계약이 곧 끝나는데 집주인이 갱신 요구를 거절할 수 있는 사유가 무엇인가요?",
+      "expected": [
+        {
+          "law_name": "주택임대차보호법",
+          "article_no": "제6조의3"
+        }
+      ],
+      "rewritten_query": "전세 계약 갱신 거절 사유, 임대인 계약갱신 거절 가능 사유, 주택임대차보호법 계약갱신요구권 계약갱신요구권 묵시적 갱신 주택임대차보호법 계약갱신 거절 사유 임대인 전세 계약 주택 임대차",
+      "legal_terms": [
+        "계약갱신요구권",
+        "묵시적 갱신",
+        "주택임대차보호법",
+        "계약갱신 거절 사유",
+        "임대인",
+        "전세 계약",
+        "주택 임대차"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제6조의2",
+          "article_title": "묵시적 갱신의 경우 계약의 해지",
+          "score": 0.07050377,
+          "distance": 0.3706153,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C6%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제30조",
+          "article_title": "주택임대차표준계약서 사용",
+          "score": 0.06377363,
+          "distance": 0.36604738,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C30%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의4",
+          "article_title": "「민법」에 따른 주택임대차등기의 효력 등",
+          "score": 0.05702799,
+          "distance": 0.3707695,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%984"
+        },
+        {
+          "rank": 4,
+          "law_name": "주택임대차보호법",
+          "article_no": "제6조의3",
+          "article_title": "계약갱신 요구 등",
+          "score": 0.05064242,
+          "distance": 0.33923167,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C6%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 5,
+          "law_name": "주택임대차보호법",
+          "article_no": "제6조",
+          "article_title": "계약의 갱신",
+          "score": 0.05020789,
+          "distance": 0.35494417,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C6%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        4
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.25,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-06",
+      "category": "housing_lease",
+      "query": "집주인이 갑자기 월세를 크게 올리겠다고 하는데 인상할 수 있는 범위가 있나요?",
+      "expected": [
+        {
+          "law_name": "주택임대차보호법",
+          "article_no": "제7조"
+        }
+      ],
+      "rewritten_query": "전세·임대차 보증금 관련 월세 인상 한도 및 임대료 증액 가능 범위 임대료 증액 월세 인상 증액 한도 주택임대차보호법 차임 증감청구",
+      "legal_terms": [
+        "임대료 증액",
+        "월세 인상",
+        "증액 한도",
+        "주택임대차보호법",
+        "차임 증감청구"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제7조",
+          "article_title": "차임 등의 증감청구권",
+          "score": 0.04758544,
+          "distance": 0.29009712,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C7%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제30조",
+          "article_title": "주택임대차표준계약서 사용",
+          "score": 0.04601591,
+          "distance": 0.3595953,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C30%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "주택임대차보호법",
+          "article_no": "제6조의3",
+          "article_title": "계약갱신 요구 등",
+          "score": 0.045276,
+          "distance": 0.35859179,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C6%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 4,
+          "law_name": "주택임대차보호법",
+          "article_no": "제7조의2",
+          "article_title": "월차임 전환 시 산정률의 제한",
+          "score": 0.04305556,
+          "distance": 0.36634171,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C7%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제628조",
+          "article_title": "차임증감청구권",
+          "score": 0.03639344,
+          "distance": 0.55903649,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C628%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-07",
+      "category": "housing_lease",
+      "query": "소액 임차인은 집이 경매돼도 보증금 일부를 우선해서 받을 수 있나요?",
+      "expected": [
+        {
+          "law_name": "주택임대차보호법",
+          "article_no": "제8조"
+        }
+      ],
+      "rewritten_query": "소액임차인 경매 보증금 우선변제 임대차보증금 보증금 반환 보증금 회수 보증금의 회수 우선변제권 보증금 중 일정액의 보호 소액보증금 최우선변제 소액임차인",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수",
+        "보증금의 회수",
+        "우선변제권",
+        "보증금 중 일정액의 보호",
+        "소액보증금 최우선변제",
+        "소액임차인"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의2",
+          "article_title": "보증금의 회수",
+          "score": 0.08970492,
+          "distance": 0.42259473,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의2",
+          "article_title": "보증금의 회수",
+          "score": 0.08902836,
+          "distance": 0.44673586,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 3,
+          "law_name": "주택임대차보호법",
+          "article_no": "제8조",
+          "article_title": "보증금 중 일정액의 보호",
+          "score": 0.08809041,
+          "distance": 0.42883128,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C8%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "주택임대차보호법",
+          "article_no": "제13조",
+          "article_title": "「소액사건심판법」의 준용",
+          "score": 0.04883659,
+          "distance": 0.44355845,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C13%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "주택임대차보호법",
+          "article_no": "제7조",
+          "article_title": "차임 등의 증감청구권",
+          "score": 0.04654356,
+          "distance": 0.46145135,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C7%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-08",
+      "category": "housing_lease",
+      "query": "세입자가 임대차 내용을 등기하고 싶은데 집주인에게 협조를 요구할 수 있나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제621조"
+        }
+      ],
+      "rewritten_query": "임차인이 임대차등기명령 또는 임차권등기 관련 협조를 임대인에게 요구할 수 있는지 대항력 우선변제권 임차권등기명령 임대차의 등기 임대인의 등기 협력 임대차등기 임차인 임대인",
+      "legal_terms": [
+        "대항력",
+        "우선변제권",
+        "임차권등기명령",
+        "임대차의 등기",
+        "임대인의 등기 협력",
+        "임대차등기",
+        "임차인",
+        "임대인"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의3",
+          "article_title": "임차권등기명령",
+          "score": 0.09973463,
+          "distance": 0.38856614,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의3",
+          "article_title": "임차권등기명령",
+          "score": 0.09950611,
+          "distance": 0.41917545,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%983"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제621조",
+          "article_title": "임대차의 등기",
+          "score": 0.09747253,
+          "distance": 0.49287736,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C621%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조",
+          "article_title": "대항력 등",
+          "score": 0.04968377,
+          "distance": 0.46661007,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "주택임대차보호법",
+          "article_no": "제6조의3",
+          "article_title": "계약갱신 요구 등",
+          "score": 0.04961905,
+          "distance": 0.45551026,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C6%EC%A1%B0%EC%9D%983"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-09",
+      "category": "housing_lease",
+      "query": "임대주택 보일러가 고장 났는데 집주인이 수리를 거부합니다. 집주인에게 수선 의무가 있나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제623조"
+        }
+      ],
+      "rewritten_query": "임대주택 보일러 고장 집주인 수리 거부 수선의무 임대인의 수선의무 여부 임대인의 의무 목적물 사용수익 상태 유지 수선의무 임대주택 보일러 고장 집주인 수리 거부 임대인의 수선의무",
+      "legal_terms": [
+        "임대인의 의무",
+        "목적물 사용수익 상태 유지",
+        "수선의무",
+        "임대주택",
+        "보일러 고장",
+        "집주인",
+        "수리 거부",
+        "임대인의 수선의무"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제623조",
+          "article_title": "임대인의 의무",
+          "score": 0.06839344,
+          "distance": 0.5761677,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C623%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조",
+          "article_title": "대항력 등",
+          "score": 0.05091592,
+          "distance": 0.53147209,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "주택임대차보호법",
+          "article_no": "제3조의4",
+          "article_title": "「민법」에 따른 주택임대차등기의 효력 등",
+          "score": 0.0466222,
+          "distance": 0.5197953,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C3%EC%A1%B0%EC%9D%984"
+        },
+        {
+          "rank": 4,
+          "law_name": "주택임대차보호법",
+          "article_no": "제14조",
+          "article_title": "주택임대차분쟁조정위원회",
+          "score": 0.04590774,
+          "distance": 0.57251829,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C14%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "주택임대차보호법",
+          "article_no": "제27조",
+          "article_title": "집행력의 부여",
+          "score": 0.04549198,
+          "distance": 0.55396831,
+          "source_url": "https://www.law.go.kr/법령/%EC%A3%BC%ED%83%9D%EC%9E%84%EB%8C%80%EC%B0%A8%EB%B3%B4%ED%98%B8%EB%B2%95/%EC%A0%9C27%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "housing-10",
+      "category": "housing_lease",
+      "query": "세입자인 제가 급해서 누수 수리비를 먼저 냈습니다. 집주인에게 돌려달라고 할 수 있나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제626조"
+        }
+      ],
+      "rewritten_query": "전세·임대차 보증금 관련 세입자가 누수 수리비를 먼저 지출한 경우 임대인에게 비용 상환을 청구할 수 있는지 임차인의 상환청구권 필요비 상환 임대차 전세 보증금 누수 수리비 비용상환청구",
+      "legal_terms": [
+        "임차인의 상환청구권",
+        "필요비 상환",
+        "임대차",
+        "전세",
+        "보증금",
+        "누수",
+        "수리비",
+        "비용상환청구"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제626조",
+          "article_title": "임차인의 상환청구권",
+          "score": 0.08970492,
+          "distance": 0.33342087,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C626%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제310조",
+          "article_title": "전세권자의 상환청구권",
+          "score": 0.03936118,
+          "distance": 0.34416461,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C310%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제644조",
+          "article_title": "전차인의 임대청구권, 매수청구권",
+          "score": 0.0373408,
+          "distance": 0.38024116,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C644%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제634조",
+          "article_title": "임차인의 통지의무",
+          "score": 0.03618552,
+          "distance": 0.38261753,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C634%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제637조",
+          "article_title": "임차인의 파산과 해지통고",
+          "score": 0.03608451,
+          "distance": 0.38565654,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C637%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-01",
+      "category": "inheritance",
+      "query": "상속은 사람이 사망한 날부터 시작되는 건가요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제997조"
+        }
+      ],
+      "rewritten_query": "상속 개시 시기 사망한 날부터인지 검색 상속 개시 사망 상속 개시 시기",
+      "legal_terms": [
+        "상속 개시",
+        "사망",
+        "상속 개시 시기"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제997조",
+          "article_title": "상속개시의 원인",
+          "score": 0.07055162,
+          "distance": 0.59372169,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C997%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제998조",
+          "article_title": "상속개시의 장소",
+          "score": 0.05496487,
+          "distance": 0.59580207,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C998%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1089조",
+          "article_title": "유증효력발생전의 수증자의 사망",
+          "score": 0.04973533,
+          "distance": 0.59901881,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1089%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1010조",
+          "article_title": "대습상속분",
+          "score": 0.04947584,
+          "distance": 0.60152054,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1010%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1097조",
+          "article_title": "유언집행자의 승낙, 사퇴",
+          "score": 0.04533333,
+          "distance": 0.65441746,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1097%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-02",
+      "category": "inheritance",
+      "query": "부모님이 돌아가시면 자녀와 부모, 형제자매 중 누가 먼저 상속받나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1000조"
+        }
+      ],
+      "rewritten_query": "상속 순위 부모 사망 시 자녀와 부모 형제자매 중 법정상속인과 상속순위 상속의 순위 법정상속순위 상속순위 법정상속인 직계비속 직계존속 형제자매 상속",
+      "legal_terms": [
+        "상속의 순위",
+        "법정상속순위",
+        "상속순위",
+        "법정상속인",
+        "직계비속",
+        "직계존속",
+        "형제자매",
+        "상속"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1000조",
+          "article_title": "상속의 순위",
+          "score": 0.08902836,
+          "distance": 0.48020887,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1000%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1003조",
+          "article_title": "배우자의 상속순위",
+          "score": 0.05970492,
+          "distance": 0.49409658,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1003%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1004조의2",
+          "article_title": "상속권 상실 선고",
+          "score": 0.04966093,
+          "distance": 0.54203904,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1004%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1001조",
+          "article_title": "대습상속",
+          "score": 0.04936118,
+          "distance": 0.49741709,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1001%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1064조",
+          "article_title": "유언과 태아, 상속결격자",
+          "score": 0.04645793,
+          "distance": 0.5506196,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1064%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-03",
+      "category": "inheritance",
+      "query": "아버지가 할아버지보다 먼저 돌아가셨으면 손자인 제가 아버지 대신 상속받을 수 있나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1001조"
+        }
+      ],
+      "rewritten_query": "상속에서 피상속인보다 먼저 사망한 자녀의 직계비속이 대습상속할 수 있는지 상속 대습상속 피상속인 직계비속 상속인",
+      "legal_terms": [
+        "상속",
+        "대습상속",
+        "피상속인",
+        "직계비속",
+        "상속인"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1001조",
+          "article_title": "대습상속",
+          "score": 0.09916438,
+          "distance": 0.5508855,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1001%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1010조",
+          "article_title": "대습상속분",
+          "score": 0.05835236,
+          "distance": 0.55293292,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1010%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1004조의2",
+          "article_title": "상속권 상실 선고",
+          "score": 0.04791267,
+          "distance": 0.59888065,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1004%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1008조",
+          "article_title": "특별수익자의 상속분",
+          "score": 0.04730652,
+          "distance": 0.54691815,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1008%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1008조의2",
+          "article_title": "기여분",
+          "score": 0.04638262,
+          "distance": 0.57943487,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1008%EC%A1%B0%EC%9D%982"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-04",
+      "category": "inheritance",
+      "query": "배우자가 사망하면 남은 배우자는 자녀와 함께 상속인이 되나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1003조"
+        }
+      ],
+      "rewritten_query": "배우자 사망 시 생존 배우자와 자녀의 상속인 지위 및 공동상속 여부 상속 상속인 배우자 자녀 공동상속 법정상속분",
+      "legal_terms": [
+        "상속",
+        "상속인",
+        "배우자",
+        "자녀",
+        "공동상속",
+        "법정상속분"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1009조",
+          "article_title": "법정상속분",
+          "score": 0.09738547,
+          "distance": 0.51487434,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1009%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1018조",
+          "article_title": "무자력공동상속인의 담보책임의 분담",
+          "score": 0.05596101,
+          "distance": 0.59332812,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1018%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1003조",
+          "article_title": "배우자의 상속순위",
+          "score": 0.05118033,
+          "distance": 0.48718071,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1003%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1008조",
+          "article_title": "특별수익자의 상속분",
+          "score": 0.04848618,
+          "distance": 0.54685223,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1008%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1064조",
+          "article_title": "유언과 태아, 상속결격자",
+          "score": 0.04811715,
+          "distance": 0.57675803,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1064%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        3
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-05",
+      "category": "inheritance",
+      "query": "상속을 받으면 돌아가신 분의 재산뿐 아니라 빚도 모두 이어받게 되나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1005조"
+        }
+      ],
+      "rewritten_query": "상속 시 피상속인의 재산과 채무 승계 여부 상속채무 상속포기 한정승인 상속재산 유언 유류분 상속과 포괄적 권리의무의 승계 포괄승계",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인",
+        "상속재산",
+        "유언",
+        "유류분",
+        "상속과 포괄적 권리의무의 승계",
+        "포괄승계"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1005조",
+          "article_title": "상속과 포괄적 권리의무의 승계",
+          "score": 0.08936118,
+          "distance": 0.41867226,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1005%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1029조",
+          "article_title": "공동상속인의 한정승인",
+          "score": 0.06929966,
+          "distance": 0.40882039,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1029%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1087조",
+          "article_title": "상속재산에 속하지 아니한 권리의 유증",
+          "score": 0.05495218,
+          "distance": 0.43445063,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1087%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1045조",
+          "article_title": "상속재산의 분리청구권",
+          "score": 0.04839423,
+          "distance": 0.53011549,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1045%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1023조",
+          "article_title": "상속재산보존에 필요한 처분",
+          "score": 0.04731194,
+          "distance": 0.53874862,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1023%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-06",
+      "category": "inheritance",
+      "query": "형제가 생전에 부모님에게 큰돈을 미리 받았다면 상속분을 계산할 때 반영되나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1008조"
+        }
+      ],
+      "rewritten_query": "상속에서 형제가 생전에 부모로부터 받은 큰돈이 특별수익에 해당하는지, 상속분 계산 시 이를 반영하는지 특별수익 특별수익자의 상속분 상속분 산정 상속 상속분 생전증여 유류분",
+      "legal_terms": [
+        "특별수익",
+        "특별수익자의 상속분",
+        "상속분 산정",
+        "상속",
+        "상속분",
+        "생전증여",
+        "유류분"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1008조",
+          "article_title": "특별수익자의 상속분",
+          "score": 0.10118033,
+          "distance": 0.3964293,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1008%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1008조의2",
+          "article_title": "기여분",
+          "score": 0.0503871,
+          "distance": 0.46115887,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1008%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제998조의2",
+          "article_title": "상속비용",
+          "score": 0.04987506,
+          "distance": 0.51353014,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C998%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1107조",
+          "article_title": "유언집행의 비용",
+          "score": 0.04796549,
+          "distance": 0.54171711,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1107%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1113조",
+          "article_title": "유류분의 산정",
+          "score": 0.04656246,
+          "distance": 0.55401504,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1113%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-07",
+      "category": "inheritance",
+      "query": "제가 오랫동안 부모님을 간병하고 재산 유지에 기여했는데 상속 때 더 인정받을 수 있나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1008조의2"
+        }
+      ],
+      "rewritten_query": "상속에서 장기간 부모 간병 및 재산 유지 기여를 한 경우 상속분 또는 기여분 인정 여부 상속재산 유언 유류분 상속분 기여분 부양 간병 재산 유지",
+      "legal_terms": [
+        "상속재산",
+        "유언",
+        "유류분",
+        "상속분",
+        "기여분",
+        "부양",
+        "간병",
+        "재산 유지"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1008조의2",
+          "article_title": "기여분",
+          "score": 0.10091592,
+          "distance": 0.37980133,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1008%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1045조",
+          "article_title": "상속재산의 분리청구권",
+          "score": 0.06661051,
+          "distance": 0.49109846,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1045%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1087조",
+          "article_title": "상속재산에 속하지 아니한 권리의 유증",
+          "score": 0.05140299,
+          "distance": 0.48970938,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1087%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1008조",
+          "article_title": "특별수익자의 상속분",
+          "score": 0.0503871,
+          "distance": 0.41037869,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1008%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1113조",
+          "article_title": "유류분의 산정",
+          "score": 0.049114,
+          "distance": 0.47083271,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1113%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-08",
+      "category": "inheritance",
+      "query": "아버지가 돌아가셨는데 빚이 더 많아요. 상속을 안 받으려면 언제까지 해야 하나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1019조"
+        }
+      ],
+      "rewritten_query": "상속에서 피상속인의 채무가 적극재산보다 많은 경우 상속포기 또는 한정승인의 신고기간과 신고방법 상속채무 상속포기 한정승인 상속재산 신고기간",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인",
+        "상속재산",
+        "신고기간"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1030조",
+          "article_title": "한정승인의 방식",
+          "score": 0.06738547,
+          "distance": 0.46132457,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1030%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1029조",
+          "article_title": "공동상속인의 한정승인",
+          "score": 0.05909677,
+          "distance": 0.43211043,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1029%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1045조",
+          "article_title": "상속재산의 분리청구권",
+          "score": 0.05674265,
+          "distance": 0.46268231,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1045%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1028조",
+          "article_title": "한정승인의 효과",
+          "score": 0.05495973,
+          "distance": 0.47693437,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1028%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1019조",
+          "article_title": "승인, 포기의 기간",
+          "score": 0.05064242,
+          "distance": 0.4014765,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1019%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        5
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 0.2,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-09",
+      "category": "inheritance",
+      "query": "상속받은 재산 범위 안에서만 빚을 갚는 한정승인을 하면 어떤 효과가 있나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1028조"
+        }
+      ],
+      "rewritten_query": "상속 한정승인의 효과와 상속재산 범위 내 채무변제 상속채무 상속포기 한정승인 상속재산 유언 유류분 상속과 포괄적 권리의무의 승계 포괄승계",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인",
+        "상속재산",
+        "유언",
+        "유류분",
+        "상속과 포괄적 권리의무의 승계",
+        "포괄승계"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1028조",
+          "article_title": "한정승인의 효과",
+          "score": 0.06959467,
+          "distance": 0.37193394,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1028%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1029조",
+          "article_title": "공동상속인의 한정승인",
+          "score": 0.06937903,
+          "distance": 0.40545404,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1029%EC%A1%B0"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1005조",
+          "article_title": "상속과 포괄적 권리의무의 승계",
+          "score": 0.06839344,
+          "distance": 0.44723296,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1005%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1030조",
+          "article_title": "한정승인의 방식",
+          "score": 0.06811715,
+          "distance": 0.4254216,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1030%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1031조",
+          "article_title": "한정승인과 재산상 권리의무의 불소멸",
+          "score": 0.05512629,
+          "distance": 0.42671794,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1031%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    },
+    {
+      "id": "inheritance-10",
+      "category": "inheritance",
+      "query": "상속을 포기하려면 말로 가족에게 알리면 되나요, 아니면 법원에 신고해야 하나요?",
+      "expected": [
+        {
+          "law_name": "민법",
+          "article_no": "제1041조"
+        }
+      ],
+      "rewritten_query": "상속포기 신고 방법 및 가정법원 신고 필요 여부 상속포기 상속의 승인과 포기 신고기간 상속포기 신고 가정법원 상속",
+      "legal_terms": [
+        "상속포기",
+        "상속의 승인과 포기",
+        "신고기간",
+        "상속포기 신고",
+        "가정법원",
+        "상속"
+      ],
+      "used_llm": true,
+      "top_k": [
+        {
+          "rank": 1,
+          "law_name": "민법",
+          "article_no": "제1041조",
+          "article_title": "포기의 방식",
+          "score": 0.05118033,
+          "distance": 0.42455858,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1041%EC%A1%B0"
+        },
+        {
+          "rank": 2,
+          "law_name": "민법",
+          "article_no": "제1057조의2",
+          "article_title": "특별연고자에 대한 분여",
+          "score": 0.04889755,
+          "distance": 0.48766446,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1057%EC%A1%B0%EC%9D%982"
+        },
+        {
+          "rank": 3,
+          "law_name": "민법",
+          "article_no": "제1057조",
+          "article_title": "상속인수색의 공고",
+          "score": 0.04804523,
+          "distance": 0.51608205,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1057%EC%A1%B0"
+        },
+        {
+          "rank": 4,
+          "law_name": "민법",
+          "article_no": "제1076조",
+          "article_title": "수증자의 상속인의 승인, 포기",
+          "score": 0.04790711,
+          "distance": 0.51962876,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1076%EC%A1%B0"
+        },
+        {
+          "rank": 5,
+          "law_name": "민법",
+          "article_no": "제1039조",
+          "article_title": "신고하지 않은 채권자 등",
+          "score": 0.04759524,
+          "distance": 0.50525481,
+          "source_url": "https://www.law.go.kr/법령/%EB%AF%BC%EB%B2%95/%EC%A0%9C1039%EC%A1%B0"
+        }
+      ],
+      "relevant_ranks": [
+        1
+      ],
+      "recall_at_5": 1.0,
+      "reciprocal_rank": 1.0,
+      "hit_at_5": true
+    }
+  ]
+}
