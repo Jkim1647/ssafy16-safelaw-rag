@@ -59,10 +59,10 @@
 | 산출물 | 건수 | 생성 기준 | 무결성 |
 |---|---|---|---|
 | `data/processed/statutes.json` | 381개 조문 | 2026-10-21 | SHA-256 `1817cc9544b12eac3bb7ccb9b846a4b3a665b97cd23a2fc0573bd291fa6855be` |
-| `data/processed/statute_chunks.json` | 386개 청크 | 최대 1200자 / 중첩 150자 | SHA-256 `79474bd9ee44121cd66b0b6f0e3e36517abab9e008953fee5b23325263f1ee11` |
+| `data/processed/statute_chunks.json` | 382개 청크 | 최대 1200자 / 중첩 150자 | SHA-256 `2fa3e00061dd8fec4b5ed3844a4294249e8671601a89adaf0dcc88cd895b27b1` |
 | `data/processed/cases.json` | 50건 | 2023-08-17~2026-06-24 선고 | SHA-256 `eda97ce49a30d993a7429796936a81cc9d10c6f36d316d52e632722771aa6343` |
 | `data/processed/case_chunks.json` | 652개 청크 | 최대 1400자 / 중첩 180자 | SHA-256 `8d92761c3f4a179cad283f3a984e4988b8537c2121eba4c90f2194001e0c352a` |
-| 법령 Chroma | 386개 벡터 | `data/indexes/statutes/` | 재생성 가능·Git 제외 |
+| 법령 Chroma | 382개 벡터 | `data/indexes/statutes/` | 재생성 가능·Git 제외 |
 | 판례 Chroma | 652개 벡터 | `data/indexes/cases/` | 재생성 가능·Git 제외 |
 
 - 법령 카테고리: 노동 158개, 임대차 96개, 상속 127개

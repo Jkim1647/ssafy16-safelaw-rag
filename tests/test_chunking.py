@@ -1,5 +1,6 @@
 import sys
 import unittest
+from dataclasses import replace
 from datetime import date
 from pathlib import Path
 
@@ -7,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from legal_rag.domain.models import LegalCategory, StatuteDocument
-from legal_rag.rag.chunking import chunk_statute
+from legal_rag.rag.chunking import chunk_statute, chunk_statutes, is_deleted_article
 
 
 def make_document(text: str) -> StatuteDocument:
@@ -32,6 +33,21 @@ class StatuteChunkingTests(unittest.TestCase):
         self.assertIn("법령: 근로기준법", chunks[0].embedding_text)
         self.assertIn("관련 쟁점: 해고, 서면통지", chunks[0].embedding_text)
         self.assertEqual(chunks[0].content.count("서면"), 2)
+
+    def test_deleted_articles_are_not_chunked(self):
+        deleted = replace(make_document("제35조 삭제 <2019.1.15>"), law_id="001872:0035001", article_no="제35조")
+        kept = make_document("제27조(해고사유 등의 서면통지)\n① 사용자는 서면으로 통지하여야 한다.")
+
+        chunks = chunk_statutes([deleted, kept])
+
+        self.assertTrue(is_deleted_article(deleted))
+        self.assertFalse(is_deleted_article(kept))
+        self.assertEqual([chunk.article_no for chunk in chunks], ["제27조"])
+
+    def test_article_mentioning_deletion_inside_text_is_kept(self):
+        document = make_document("제27조(해고사유 등의 서면통지)\n① 사용자는 통지하여야 한다.\n② 삭제 <2014.3.24>")
+
+        self.assertFalse(is_deleted_article(document))
 
     def test_splits_at_paragraph_boundaries_and_has_unique_ids(self):
         text = "\n".join(f"{number}항 " + ("법률 문장 " * 18) for number in range(1, 8))

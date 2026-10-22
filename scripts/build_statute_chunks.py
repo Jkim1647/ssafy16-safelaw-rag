@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import LegalCategory, StatuteDocument  # noqa: E402
-from legal_rag.rag.chunking import chunk_statutes  # noqa: E402
+from legal_rag.rag.chunking import chunk_statutes, is_deleted_article  # noqa: E402
 
 
 def load_documents(path: Path) -> list[StatuteDocument]:
@@ -76,6 +76,10 @@ def main() -> int:
         "source_dataset": args.input.relative_to(ROOT).as_posix(),
         "source_dataset_sha256": hashlib.sha256(args.input.read_bytes()).hexdigest(),
         "document_count": len(documents),
+        # 본문이 "제N조 삭제 <개정일>"뿐인 조문은 근거가 될 수 없어 청크에서 제외한다.
+        "excluded_deleted_articles": [
+            f"{item.law_name} {item.article_no}" for item in documents if is_deleted_article(item)
+        ],
         "chunk_count": len(chunks),
         "category_counts": dict(sorted(Counter(item.category.value for item in chunks).items())),
         "max_chars": args.max_chars,
