@@ -2,6 +2,19 @@
 
 평가셋의 `review_status: developer_labeled`는 정답 확정이 아니라 검수 대기 상태다. 법률 전문가 또는 지도 리뷰어는 각 문항을 다음 기준으로 확인한다.
 
+## 검수 전 자동 감사
+
+```powershell
+python scripts/audit_case_evaluation_labels.py
+```
+
+이 명령은 30문항 구성, ID 중복, 사건번호의 원본 데이터 존재 여부, 카테고리, 국가법령정보 공식 URL을 검사하고 다음 파일을 갱신한다.
+
+- `data/evaluation/case_label_audit.json`: 프로그램이 읽을 수 있는 상세 결과
+- `docs/case-evaluation-label-audit.md`: 검수자가 공식 원문을 바로 열 수 있는 보고서
+
+현재 자동 감사는 오류 0건으로 통과했다. `housing-02`의 `2025다220329`는 상속으로 분류된 판례를 임대차 질문에서도 정답으로 사용하는 교차 도메인 사례이므로 외부 검수자가 관련성을 별도로 확인한다. 자동 감사 통과는 아래의 법률 검수를 대신하지 않는다.
+
 - 질문의 사실관계만으로 해당 법적 쟁점을 도출할 수 있는가
 - `expected_case_numbers`가 질문의 핵심 쟁점을 직접 판단한 판례인가
 - `acceptable_case_numbers`가 Top-5에 포함돼도 관련 결과로 볼 수 있는가
