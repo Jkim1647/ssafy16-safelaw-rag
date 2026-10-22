@@ -16,6 +16,9 @@ RAG_KEYS = (
     "CASE_CHUNK_SIZE",
     "CASE_CHUNK_OVERLAP",
     "RAG_TOP_K",
+    "RAG_SEARCH_MODE",
+    "RAG_MMR_FETCH_K",
+    "RAG_MMR_LAMBDA",
 )
 
 
@@ -47,6 +50,17 @@ class RagSettingsTests(unittest.TestCase):
         self.assertEqual((settings.statute_chunk_size, settings.statute_chunk_overlap), (600, 80))
         self.assertEqual((settings.case_chunk_size, settings.case_chunk_overlap), (900, 0))
         self.assertEqual(settings.rag_top_k, 3)
+
+    def test_search_mode_settings(self):
+        defaults = load()
+        mmr = load(RAG_SEARCH_MODE="MMR", RAG_MMR_FETCH_K="20", RAG_MMR_LAMBDA="0.7")
+
+        self.assertEqual((defaults.rag_search_mode, defaults.rag_mmr_fetch_k, defaults.rag_mmr_lambda),
+                         ("similarity", 30, 0.5))
+        self.assertEqual((mmr.rag_search_mode, mmr.rag_mmr_fetch_k, mmr.rag_mmr_lambda), ("mmr", 20, 0.7))
+        for values in ({"RAG_SEARCH_MODE": "random"}, {"RAG_MMR_LAMBDA": "1.5"}, {"RAG_MMR_FETCH_K": "0"}):
+            with self.subTest(values=values), self.assertRaises(ValueError):
+                load(**values)
 
     def test_blank_value_uses_default(self):
         self.assertEqual(load(RAG_TOP_K="").rag_top_k, 5)

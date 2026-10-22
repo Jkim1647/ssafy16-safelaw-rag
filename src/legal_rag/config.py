@@ -25,6 +25,26 @@ def _int_env(name: str, default: int, *, minimum: int, below: int | None = None)
     return value
 
 
+def _search_mode_env() -> str:
+    value = (os.getenv("RAG_SEARCH_MODE") or "similarity").strip().lower()
+    if value not in {"similarity", "mmr"}:
+        raise ValueError("RAG_SEARCH_MODE는 similarity 또는 mmr이어야 합니다.")
+    return value
+
+
+def _unit_float_env(name: str, default: float) -> float:
+    raw = (os.getenv(name) or "").strip()
+    if not raw:
+        return default
+    try:
+        value = float(raw)
+    except ValueError as exc:
+        raise ValueError(f"{name}는 숫자여야 합니다.") from exc
+    if not 0.0 <= value <= 1.0:
+        raise ValueError(f"{name}는 0 이상 1 이하여야 합니다.")
+    return value
+
+
 @dataclass(frozen=True, slots=True)
 class Settings:
     app_env: str
@@ -41,6 +61,9 @@ class Settings:
     case_chunk_size: int = 1400
     case_chunk_overlap: int = 180
     rag_top_k: int = 5
+    rag_search_mode: str = "similarity"
+    rag_mmr_fetch_k: int = 30
+    rag_mmr_lambda: float = 0.5
 
     @classmethod
     def from_environment(cls) -> "Settings":
@@ -70,6 +93,9 @@ class Settings:
             case_chunk_size=case_chunk_size,
             case_chunk_overlap=_int_env("CASE_CHUNK_OVERLAP", 180, minimum=0, below=case_chunk_size),
             rag_top_k=_int_env("RAG_TOP_K", 5, minimum=1),
+            rag_search_mode=_search_mode_env(),
+            rag_mmr_fetch_k=_int_env("RAG_MMR_FETCH_K", 30, minimum=1),
+            rag_mmr_lambda=_unit_float_env("RAG_MMR_LAMBDA", 0.5),
         )
 
     @property

@@ -10,6 +10,7 @@ from typing import Any, Protocol
 
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.indexing import EmbeddingProvider
+from legal_rag.rag.mmr import mmr_select
 
 
 CATEGORY_LABELS = {
@@ -87,6 +88,9 @@ class VectorSearcher(Protocol):
         category: LegalCategory,
         top_k: int,
     ) -> list[VectorSearchHit]: ...
+
+
+SEARCH_MODES = ("similarity", "mmr")
 
 
 class LanguageModel(Protocol):
@@ -233,14 +237,31 @@ class ExpandedStatuteRetriever:
         *,
         candidate_pool_factor: int = 3,
         deduplicate_metadata_key: str | None = None,
+        search_mode: str = "similarity",
+        mmr_fetch_k: int = 30,
+        mmr_lambda: float = 0.5,
     ) -> None:
         if candidate_pool_factor < 1:
             raise ValueError("candidate_pool_factor는 1 이상이어야 합니다.")
+        if search_mode not in SEARCH_MODES:
+            raise ValueError(f"search_mode는 {', '.join(SEARCH_MODES)} 중 하나여야 합니다.")
+        if mmr_fetch_k < 1 or not 0.0 <= mmr_lambda <= 1.0:
+            raise ValueError("mmr_fetch_k는 1 이상, mmr_lambda는 0~1이어야 합니다.")
         self._embedder = embedder
         self._store = store
         self._expander = expander
         self._candidate_pool_factor = candidate_pool_factor
         self._deduplicate_metadata_key = deduplicate_metadata_key
+        self._search_mode = search_mode
+        self._mmr_fetch_k = mmr_fetch_k
+        self._mmr_lambda = mmr_lambda
+
+    @property
+    def search_mode(self) -> str:
+        return self._search_mode
+
+    def plan(self, sanitized_query: str, category: LegalCategory) -> SearchPlan:
+        return self._expander.expand(sanitized_query, category)
 
     def retrieve(
         self,
@@ -271,7 +292,9 @@ class ExpandedStatuteRetriever:
 
         fused: dict[str, RetrievedChunk] = {}
         best_term_scores: dict[str, float] = {}
-        candidate_count = max(top_k * self._candidate_pool_factor, 10)
+        # MMR은 최종 개수보다 넉넉한 후보 풀에서 다양성을 고르므로 검색 후보도 그만큼 늘린다.
+        final_count = max(top_k, self._mmr_fetch_k) if self._search_mode == "mmr" else top_k
+        candidate_count = max(final_count * self._candidate_pool_factor, 10)
         for (query, weight, kind), vector in zip(variants, vectors, strict=True):
             hits = self._store.search(vector, category=category, top_k=candidate_count)
             for rank, hit in enumerate(hits, start=1):
@@ -374,7 +397,7 @@ class ExpandedStatuteRetriever:
                     continue
                 seen_values.add(key)
                 deduplicated.append(item)
-                if len(deduplicated) == top_k:
+                if len(deduplicated) == final_count:
                     break
             ranked = deduplicated
         if normalized_specific_terms and any(case_specific_matches.get(item.chunk_id, 0) for item in ranked):
@@ -384,6 +407,13 @@ class ExpandedStatuteRetriever:
                 item for item in ranked
                 if case_specific_matches.get(item.chunk_id, 0) > 0
             ]
+        if self._search_mode == "mmr":
+            pool = ranked[:final_count]
+            embeddings = self._store.embeddings([item.chunk_id for item in pool])  # type: ignore[attr-defined]
+            return RetrievalResult(
+                plan=plan,
+                hits=mmr_select(pool, embeddings, top_k, lambda_mult=self._mmr_lambda),
+            )
         return RetrievalResult(plan=plan, hits=tuple(ranked[:top_k]))
 
 
@@ -397,19 +427,26 @@ class CombinedLegalRetriever:
         self._case_retriever = case_retriever
         self._case_enricher = case_enricher
 
+    def plan(self, sanitized_query: str, category: LegalCategory) -> SearchPlan:
+        return self._statute_retriever.plan(sanitized_query, category)
+
     def retrieve(self, sanitized_query: str, *, category: LegalCategory,
                  top_k: int = 5) -> RetrievalResult:
-        statutes = self._statute_retriever.retrieve(
-            sanitized_query, category=category, top_k=top_k
-        )
+        plan = self.plan(sanitized_query, category)
         if self._case_enricher is not None:
             try:
-                self._case_enricher.enrich(statutes.plan, category=category)  # type: ignore[attr-defined]
+                self._case_enricher.enrich(plan, category=category)  # type: ignore[attr-defined]
             except Exception:
                 # 실시간 보강 실패가 기존 정적 판례 검색까지 중단시키지 않게 한다.
                 pass
+        return self.retrieve_with_plan(plan, category=category, top_k=top_k)
+
+    def retrieve_with_plan(self, plan: SearchPlan, *, category: LegalCategory,
+                           top_k: int = 5) -> RetrievalResult:
+        """판례 실시간 보강 없이 같은 검색 계획으로 법령·판례를 검색한다."""
+        statutes = self._statute_retriever.retrieve_with_plan(plan, category=category, top_k=top_k)
         cases = self._case_retriever.retrieve_with_plan(
-            statutes.plan, category=category, top_k=max(top_k * 3, 10)
+            plan, category=category, top_k=max(top_k * 3, 10)
         )
         unique_cases: list[RetrievedChunk] = []
         seen_case_numbers: set[str] = set()
