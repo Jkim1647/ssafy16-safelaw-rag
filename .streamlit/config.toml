@@ -1,9 +1,21 @@
+# 로펌 상담실 테마: 상담 기록지(본문), 호두나무 벽판(사이드바), 황동 장식, 짙은 남색 버튼.
 [theme]
-primaryColor = "#316B52"
-backgroundColor = "#F7F8F5"
-secondaryBackgroundColor = "#EEF2ED"
-textColor = "#17231D"
-font = "sans-serif"
+base = "light"
+primaryColor = "#1F2C3D"
+backgroundColor = "#FCFBF8"
+secondaryBackgroundColor = "#EEF0F2"
+textColor = "#1D232B"
+borderColor = "#D8D4CA"
+baseRadius = "4px"
+font = "IBM Plex Sans KR:https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap, sans-serif"
+headingFont = "Nanum Myeongjo:https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap, serif"
+
+[theme.sidebar]
+backgroundColor = "#2C1F18"
+secondaryBackgroundColor = "#3B2A20"
+textColor = "#EFE6D8"
+primaryColor = "#C9A46A"
+borderColor = "#5A4334"
 
 [server]
 headless = true

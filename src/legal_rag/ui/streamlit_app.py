@@ -263,37 +263,77 @@ def build_condition_search(
 
 
 def _inject_styles(st: Any) -> None:
+    # 로펌 상담실: 호두나무 벽판(사이드바)과 책상(입력창), 석회암 벽, 그 위에 놓인 상담 기록지, 황동 문패.
     st.markdown(
         """
         <style>
-        .stApp { background: #f6f4ee; }
-        .block-container { max-width: 900px; padding-top: 1.6rem; padding-bottom: 7rem; }
-        [data-testid="stSidebar"] { background: #ebe7dc; }
-        .office-sign { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.2rem;
-            background: #1f3a30; color: #f6f4ee; border-radius: 16px; margin-bottom: 1rem; }
-        .office-sign .seal { font-size: 1.9rem; line-height: 1; }
-        .office-sign .name { font-size: 1.45rem; font-weight: 800; letter-spacing: -.02em; }
-        .office-sign .desc { font-size: .9rem; opacity: .85; }
-        .office-steps { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1rem; }
-        .office-steps span { background: #fffdf8; border: 1px solid #dcd5c4; border-radius: 999px;
-            padding: .3rem .8rem; font-size: .85rem; color: #3c4a40; }
-        .privacy-box { background: #eef5f0; border: 1px solid #cfe0d5; border-radius: 12px;
-            padding: .7rem 1rem; color: #294536; margin: 0 0 1rem; font-size: .92rem; }
+        :root { --walnut: #2c1f18; --walnut-light: #3b2a20; --brass: #b08a52; --brass-dark: #8a6a38;
+            --counsel: #1f2c3d; --paper: #fcfbf8; --wall: #d5d9dc; --ink-soft: #4b5560; }
+        .stApp, [data-testid="stHeader"] { background: var(--wall); }
+        .block-container { max-width: 900px; padding-top: 1.4rem; padding-bottom: 7rem; }
+        [data-testid="stSidebar"] { background:
+            repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 2px, transparent 2px 11px),
+            linear-gradient(180deg, var(--walnut-light), var(--walnut)); }
+        [data-testid="stBottom"], [data-testid="stBottom"] > div { background: var(--walnut); }
+        [data-testid="stBottom"] { border-top: 3px solid var(--brass-dark); }
+
+        .nameplate { display: flex; flex-direction: column; align-items: center; margin: .2rem 0 1.4rem; }
+        .nameplate .plate { position: relative; padding: .8rem 2.8rem .75rem; border-radius: 3px; text-align: center;
+            background: linear-gradient(180deg, #dcc08a 0%, #b8925a 50%, #9a7642 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -1px 0 rgba(0,0,0,.25),
+                0 8px 16px -8px rgba(20,14,8,.6); }
+        .nameplate .plate::before, .nameplate .plate::after { content: ""; position: absolute; top: 50%;
+            width: 7px; height: 7px; border-radius: 50%; transform: translateY(-50%);
+            background: radial-gradient(circle at 35% 35%, #f3e2bb, #6f5226); }
+        .nameplate .plate::before { left: .95rem; }
+        .nameplate .plate::after { right: .95rem; }
+        .nameplate .firm, .nameplate .room { display: block; font-family: "Nanum Myeongjo", serif;
+            color: #3a2912; text-shadow: 0 1px 0 rgba(255,240,210,.55); }
+        .nameplate .firm { font-size: 1.6rem; font-weight: 800; letter-spacing: .06em; line-height: 1.2; }
+        .nameplate .room { font-size: .95rem; font-weight: 700; letter-spacing: .3em; margin-top: .2rem; }
+        .nameplate .note { margin: .75rem 0 0; font-size: .88rem; color: var(--ink-soft); text-align: center; }
+
+        .st-key-consult_sheet, .st-key-checklist_panel { background: var(--paper); border-radius: 4px;
+            box-shadow: 0 1px 0 rgba(31,44,61,.06), 0 22px 40px -22px rgba(31,44,61,.45); }
+        .st-key-consult_sheet { padding: 1.6rem 2rem 1.2rem; }
+        .office-steps { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 0 .9rem;
+            border-top: 1px solid #e3ded2; border-bottom: 1px solid #e3ded2; }
+        .office-steps span { padding: .55rem .5rem; font-size: .84rem; color: var(--ink-soft); line-height: 1.35; }
+        .office-steps b { font-family: "Nanum Myeongjo", serif; font-size: 1rem; color: var(--brass-dark);
+            margin-right: .35rem; }
+        .privacy-box { background: #f1f2ef; border-radius: 4px; padding: .6rem .85rem; color: #34404b;
+            margin: 0 0 1rem; font-size: .88rem; }
+        [data-testid="stChatMessage"] { background: transparent; }
+        [data-testid="stChatMessage"]:has([aria-label="Chat message from user"]) { background: #edf0f4;
+            border-radius: 4px; }
         [data-testid="stChatMessage"] h2 { font-size: 1.2rem; margin-top: .2rem; }
         [data-testid="stChatMessage"] h3 { font-size: 1.02rem; }
-        div.stButton > button { border-radius: 10px; font-weight: 600; }
+        div.stButton > button { font-weight: 600; }
+        :focus-visible { outline: 2px solid var(--brass) !important; outline-offset: 2px; }
+
         /* 체크리스트가 있으면 본문을 넓히고 오른쪽 패널을 화면에 고정한다. */
         .block-container:has(.st-key-checklist_panel) { max-width: 1280px; }
         [data-testid="stColumn"]:has(.st-key-checklist_panel) { position: sticky; top: 3.75rem;
             align-self: flex-start; max-height: calc(100vh - 10rem); overflow-y: auto; }
-        .st-key-checklist_panel { background: #fffdf8; border: 1px solid #dcd5c4; border-radius: 14px;
-            padding: 1rem 1.1rem; }
+        .st-key-checklist_panel { border-top: 3px solid var(--brass); padding: 1rem 1.1rem; }
         .st-key-checklist_panel h3 { font-size: 1.05rem; }
         @media (max-width: 640px) {
             [data-testid="stColumn"]:has(.st-key-checklist_panel) { position: static; max-height: none; }
+            .st-key-consult_sheet { padding: 1.1rem 1rem .8rem; }
+            .office-steps { grid-template-columns: repeat(2, 1fr); }
+            .nameplate .plate { padding: .7rem 2.2rem .65rem; }
+            .nameplate .firm { font-size: 1.35rem; }
         }
         </style>
         """,
+        unsafe_allow_html=True,
+    )
+
+
+def _render_nameplate(st: Any, room: str, note: str) -> None:
+    st.markdown(
+        f'<div class="nameplate"><div class="plate"><span class="firm">SafeLaw</span>'
+        f'<span class="room">{room}</span></div><p class="note">{note}</p></div>',
         unsafe_allow_html=True,
     )
 
@@ -525,22 +565,7 @@ def _queue_prompt(state: Any, prompt: str) -> None:
 
 
 def _render_consultation_room(st: Any, settings: Settings, ready: bool, options: SidebarOptions) -> None:
-    st.markdown(
-        '<div class="office-sign"><span class="seal">⚖️</span><div>'
-        '<div class="name">SafeLaw 생활법률 상담실</div>'
-        '<div class="desc">법령과 공개 판례 원문으로 확인되는 내용만 안내합니다</div></div></div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="office-steps"><span>① 상담 분야 선택</span><span>② 상황 말씀하기 · 개인정보 자동 가림</span>'
-        '<span>③ 법령·판례 근거와 함께 안내</span><span>④ 이어서 질문하기</span></div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="privacy-box">🔒 정확한 이름·전화번호·상세 주소는 가능하면 적지 마세요. '
-        '적더라도 외부 모델에 보내기 전에 가립니다.</div>',
-        unsafe_allow_html=True,
-    )
+    _render_nameplate(st, "생활법률 상담실", "법령과 공개 판례 원문으로 확인되는 내용만 안내합니다")
 
     if CONSULT_THREAD_KEY not in st.session_state:
         _start_new_consultation(st.session_state)
@@ -549,13 +574,26 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
     focused_token = focused["token"] if focused else None
 
     # 입력창보다 먼저 대화 영역을 만들어 새 질문과 답변도 대화 흐름 안에 쌓이게 한다.
+    # 대화는 벽 위에 놓인 상담 기록지(sheet) 안에 쌓인다.
     if focused is None:
-        conversation = st.container()
+        sheet = st.container(key="consult_sheet")
     else:
         chat_area, panel_area = st.columns([3, 2], gap="large")
         with panel_area:
             _render_checklist_panel(st, messages, focused)
-        conversation = chat_area.container()
+        sheet = chat_area.container(key="consult_sheet")
+    with sheet:
+        st.markdown(
+            '<div class="office-steps"><span><b>1</b>상담 분야 선택</span><span><b>2</b>상황 말씀하기</span>'
+            '<span><b>3</b>근거와 함께 안내</span><span><b>4</b>이어서 질문하기</span></div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            '<div class="privacy-box">🔒 정확한 이름·전화번호·상세 주소는 가능하면 적지 마세요. '
+            '적더라도 외부 모델에 보내기 전에 자동으로 가립니다.</div>',
+            unsafe_allow_html=True,
+        )
+        conversation = st.container()
     with conversation:
         with st.chat_message("assistant", avatar=ASSISTANT_AVATAR):
             st.markdown(_consult_greeting(options.category))
@@ -885,12 +923,7 @@ def _render_chat_messages(st: Any, history: list[dict[str, Any]]) -> None:
 
 
 def _render_article_explorer(st: Any, settings: Settings, ready: bool, sensitive_terms: tuple[str, ...]) -> None:
-    st.markdown(
-        '<div class="office-sign"><span class="seal">📚</span><div>'
-        '<div class="name">조문 찾아보기</div>'
-        '<div class="desc">조건으로 조문을 찾고, 그 조문을 고정 근거로 두고 질문합니다</div></div></div>',
-        unsafe_allow_html=True,
-    )
+    _render_nameplate(st, "조문 열람실", "조건으로 조문을 찾고, 그 조문을 고정 근거로 두고 질문합니다")
     category = st.selectbox(
         "상담 분야",
         options=[None, *list(LegalCategory)],
