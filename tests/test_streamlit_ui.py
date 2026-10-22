@@ -16,6 +16,7 @@ from legal_rag.ui.streamlit_app import (
     STATUS_PRESENTATIONS,
     article_question,
     chat_history,
+    load_library_facts,
     parse_sensitive_terms,
     runtime_readiness,
 )
@@ -73,6 +74,22 @@ class StreamlitUiTests(unittest.TestCase):
 
         self.assertTrue(question.startswith("[선택 조문: 근로기준법 제27조 (해고사유 등의 서면통지)]"))
         self.assertIn("[PERSON_1]이 카톡으로 해고했어요", question)
+
+
+
+class LibraryFactsTests(unittest.TestCase):
+    def test_reads_counts_and_dates_from_the_dataset_manifests(self):
+        facts = load_library_facts()
+
+        self.assertEqual(facts.statute_articles, 381)
+        self.assertEqual(facts.law_count, 4)
+        self.assertEqual(facts.case_count, 50)
+        self.assertEqual(facts.collected, "2026-10-21")
+        self.assertEqual((facts.oldest_decision, facts.latest_decision), ("2023-08-17", "2026-06-24"))
+
+    def test_missing_manifest_gives_no_numbers(self):
+        with tempfile.TemporaryDirectory() as folder:
+            self.assertIsNone(load_library_facts(Path(folder) / "none.json", Path(folder) / "none.json"))
 
 
 if __name__ == "__main__":
