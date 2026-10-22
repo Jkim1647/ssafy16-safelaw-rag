@@ -64,6 +64,22 @@ class PrivacyGuardTests(unittest.TestCase):
             self.guard.redact("   ")
 
 
+class CustomTermAmplificationTests(unittest.TestCase):
+    def test_custom_terms_do_not_rewrite_existing_placeholders(self):
+        terms = ["C", "U", "S", "T", "O", "M", "_", "1", "2", "[", "]", "PHONE"]
+
+        result = PrivacyGuard().redact("C 010-1234-5678", terms)
+
+        self.assertLess(len(result.sanitized_text), 40)
+        self.assertIn("[PHONE_1]", result.sanitized_text)
+        self.assertTrue(result.sanitized_text.startswith("[CUSTOM_1]"))
+
+    def test_longer_custom_term_wins_over_its_substring(self):
+        result = PrivacyGuard().redact("세이프로 주식회사와 세이프로", ["세이프로", "세이프로 주식회사"])
+
+        self.assertEqual(result.sanitized_text, "[CUSTOM_1]와 [CUSTOM_2]")
+
+
 if __name__ == "__main__":
     unittest.main()
 
