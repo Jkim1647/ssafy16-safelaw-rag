@@ -173,7 +173,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 
 ## 실행 방법
 
-Python 3.12 환경에서 프로젝트 의존성을 설치하고 `.env`에 `GMS_KEY`를 설정합니다. 법령 색인이 없다면 먼저 아래 색인 생성 단계까지 실행해야 합니다.
+Python 3.12 환경에서 프로젝트 의존성을 설치하고 `.env`에 `GMS_KEY`를 설정합니다(판례 실시간 보강까지 쓰려면 `LAW_API_OC`도). 법령·판례 Chroma 색인(`data/indexes/`)과 판례 보강 캐시(`data/cache/`)는 저장소에 들어 있어 clone 후 바로 실행·검증할 수 있습니다. 색인을 새로 만들 때만 아래 색인 생성 단계를 실행합니다.
 
 ```powershell
 python -m pip install -e .
@@ -310,7 +310,7 @@ python scripts/build_statute_index.py
 - 청크 중첩: 최대 150자
 - 임베딩 모델: `text-embedding-3-small`
 - Vector Store: Chroma, cosine 거리
-- 법령 색인 위치: `data/indexes/statutes/` — 재생성 가능한 산출물이므로 Git 제외
+- 법령 색인 위치: `data/indexes/statutes/` — 재생성 가능하지만 다른 사람이 바로 검증할 수 있도록 Git에 포함
 
 현재 데이터에서는 381개 조문 중 본문이 "제N조 삭제 <개정일>"뿐인 4개(근로기준법 제35조, 주택임대차보호법 제5조, 민법 제651조·제1002조)를 빼고 377개 조문이 382개 청크로 변환됩니다. 길이가 기준을 넘은 5개 조문만 각각 2개로 분할됩니다. 임베딩 모델을 변경하면 기존 벡터와 차원·의미 공간이 달라지므로 전체 색인을 다시 생성합니다.
 

@@ -135,17 +135,19 @@ def c21_secrets() -> str:
     def git(*args: str) -> str:
         return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, encoding="utf-8").stdout
 
-    tracked = git("ls-files", ".env", "data/indexes", "data/raw", "data/cache").strip()
+    tracked = git("ls-files", ".env").strip()
+    data_files = git("ls-files", "data/indexes", "data/cache").split()
     values = [value for key, value in dotenv_values(ROOT / ".env").items()
               if key in {"GMS_KEY", "LAW_API_OC"} and value and len(value) > 3]
     found = sum(git("grep", "-c", "-F", value).count(":") for value in values)
     patterns = git("grep", "-n", "-E", r"sk-[A-Za-z0-9]{16,}|S[0-9]{2}P[0-9A-Z]{6,}|BEGIN (RSA|OPENSSH) PRIVATE").strip()
     config = (ROOT / ".streamlit/config.toml").read_text(encoding="utf-8")
     return "\n".join([
-        "$ git ls-files .env data/indexes data/raw data/cache",
+        "$ git ls-files .env",
         tracked or "(추적 파일 없음)",
+        f"(검증용 데이터 data/indexes·data/cache는 {len(data_files)}개 파일을 Git에 포함하고 아래 키 검색 대상에 들어감)",
         "",
-        f"$ .env의 GMS_KEY·LAW_API_OC 실제 값({len(values)}개)을 추적 파일 전체에서 검색 → {found}건",
+        f"$ .env의 GMS_KEY·LAW_API_OC 실제 값({len(values)}개)을 추적 파일 전체(데이터 바이너리 포함)에서 검색 → {found}건",
         "$ 키 형태 패턴(sk-…, S..P…, 개인키) 검색 → " + (patterns or "0건"),
         "",
         "[.streamlit/config.toml] " + next(line for line in config.splitlines() if "showErrorDetails" in line),
