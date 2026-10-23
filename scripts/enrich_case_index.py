@@ -37,6 +37,7 @@ def main() -> int:
     sanitized = PrivacyGuard().redact(args.query).sanitized_text
     started = time.perf_counter()
     plan = LegalQueryExpander(GmsChatClient(gms_key, model_name=query_model, base_url=base_url)).expand(sanitized, category)
+    planned = time.perf_counter()
     result = IncrementalCaseEnricher(
         CourtCaseOpenApiClient(law_oc),
         GmsEmbeddingClient(gms_key, model_name=embedding_model, base_url=base_url),
@@ -47,9 +48,10 @@ def main() -> int:
         selector=CaseCandidateSelector(GmsChatClient(gms_key, model_name=answer_model, base_url=base_url)),
         chunk_max_chars=settings.case_chunk_size, chunk_overlap_chars=settings.case_chunk_overlap,
     ).enrich(plan, category=category)
-    elapsed = time.perf_counter() - started
-    # 프롬프트1이 뽑은 검색어와 처리 시간을 함께 남겨 재질문 시 수집이 생략되는지 비교한다.
-    print(json.dumps({"legal_terms": list(plan.legal_terms), "elapsed_seconds": round(elapsed, 2),
+    finished = time.perf_counter()
+    # 프롬프트1 검색어와 단계별 시간을 함께 남겨, 재질문 때 판례 수집 단계가 생략되는지 비교한다.
+    print(json.dumps({"legal_terms": list(plan.legal_terms), "elapsed_seconds": round(finished - started, 2),
+        "query_seconds": round(planned - started, 2), "collection_seconds": round(finished - planned, 2),
         "cache_hit": result.cache_hit, "candidate_count": result.candidate_count,
         "new_case_count": result.new_case_count, "new_chunk_count": result.new_chunk_count,
         "case_numbers": result.case_numbers, "selection_mode": result.selection_mode,

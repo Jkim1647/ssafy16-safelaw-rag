@@ -484,7 +484,9 @@ def main() -> None:
             _run_web_scenario(client, args.web_url, args.output_dir)
 
         for path in sorted(args.output_dir.glob("safelaw-*.png")):
-            print(f"{path.relative_to(ROOT)}: {path.stat().st_size:,} bytes")
+            # --output-dir가 저장소 밖이어도 출력이 깨지지 않게 절대 경로로 보여 준다.
+            shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+            print(f"{shown}: {path.stat().st_size:,} bytes")
     finally:
         if client is not None:
             client.close()

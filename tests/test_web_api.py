@@ -73,6 +73,12 @@ class WebApiTests(unittest.TestCase):
         self.assertIn('src="/static/app.js"', page.text)
         self.assertEqual(script.status_code, 200)
 
+    def test_hidden_elements_stay_hidden_even_with_display_rules(self):
+        # .progress { display: flex } 같은 규칙이 hidden 속성을 덮으면 처리 중 문구가 결과 뒤에도 남는다.
+        css = client().get("/static/styles.css").text
+
+        self.assertRegex(css, r"\[hidden\]\s*\{\s*display:\s*none\s*!important;?\s*\}")
+
     def test_status_reports_statute_only_search_without_case_index(self):
         body = client(case_index=(False, "판례 색인이 없어 법령만 검색합니다.")).get("/api/status").json()
 
