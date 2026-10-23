@@ -1,7 +1,7 @@
 """셀프·상호 체크리스트의 명령 출력 증빙을 실행한다.
 
 제출 증빙은 --print로 결과를 터미널에 출력하고 그 터미널 화면을 그대로 캡처한다
-(docs/checklist/*_터미널.png). --print 없이 실행하면 결과를 PNG로 그려 저장한다.
+(docs/self_check/screenshots/*_터미널.png). --print 없이 실행하면 결과를 PNG로 그려 저장한다.
 재색인(2·5번), 판례 수집(3·4번), Top-k·MMR 비교(6·16번)는 GMS를 실제로 호출하므로
 --with-gms를 줄 때만 실행한다.
 
@@ -33,7 +33,7 @@ from legal_rag.domain.models import CaseDocument  # noqa: E402
 from legal_rag.rag.case_chunking import chunk_cases  # noqa: E402
 from legal_rag.rag.chunking import is_deleted_article  # noqa: E402
 
-OUTPUT_DIR = ROOT / "docs" / "checklist"
+OUTPUT_DIR = ROOT / "docs" / "self_check" / "screenshots"
 PYTHON = sys.executable
 # 판례 수집 증빙용 질문. 기존 수집 이력에 없는 새 질문이어야 첫 실행에서 수집이 일어난다.
 ENRICH_CATEGORY = "inheritance"
