@@ -9,7 +9,7 @@
 | 필수 기능 F2001~F2012 | 12개 모두 통과 |
 | 심화 기능 | F2013 HTML/CSS/JS 화면 통과, F2014 MMR 통과, F2015 RAG 전후 비교 통과, F2016 부분 |
 | 비기능 NF2001~NF2007 | 7개 모두 통과 |
-| 자동 테스트 | 176개 통과 |
+| 자동 테스트 | 177개 통과 |
 | 남은 항목 | [7장](#7-남은-항목) 참고 |
 
 ## 2. 확인 항목별 결과 (명세서 4.1~4.7)
@@ -74,7 +74,7 @@
 
 | 번호 | 결과 | 증빙 |
 |---|---|---|
-| F2013 HTML/CSS/JS 화면 | 통과 | FastAPI(`/api/status`, `/api/review`)와 정적 HTML·CSS·JS 분리. 실제 질문에서 마스킹 2건, `answered`, 법령·판례 근거 링크, 체크리스트 5개 표시 확인, `test_web_api` 7개 ([web-api.md](web-api.md)) |
+| F2013 HTML/CSS/JS 화면 | 통과 | FastAPI(`/api/status`, `/api/review`)와 정적 HTML·CSS·JS 분리. 실제 질문에서 마스킹 2건, `answered`, 법령·판례 근거 링크, 체크리스트 5개 표시 확인, `test_web_api` 9개 ([web-api.md](web-api.md)) |
 | F2014 MMR | 통과 | 같은 검색 계획으로 비교: 카카오톡 해고 질문에서 법령 5번째 근거가 제104조 → 제76조의3, 경매 질문에서 판례 5번째가 2025다213466 → 2022다247378로 바뀜 (README MMR 절) |
 | F2015 RAG 전후 비교 | 통과 | 6문항 2회 비교. RAG 미사용은 형제자매 유류분(2024 삭제)을 두 번 모두 잘못 안내하고, 1차에서는 존재하지 않는 제200조를 지어냄. RAG는 2차에서 제1112조로 정확히 안내 ([rag-before-after.md](rag-before-after.md)) |
 | F2016 여러 출처 결합 | 부분 | 법령 조문·판례를 다른 청킹 방식으로 함께 색인하고 근거에 종류를 구분. 다만 두 문서 모두 국가법령정보 API 출처 |
@@ -140,7 +140,7 @@
 
 ### 4.1 자동 테스트
 
-`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **176개 통과** (2026-10-23). 빈 Python 3.12 venv에서 `pip install -e .` 후 통과한 확인은 2026-10-22(당시 125개)에 했고, 2026-10-23에는 `.env`·로컬 색인·캐시가 없는 깨끗한 checkout에서 전체 테스트를 다시 돌렸다(아래 7절).
+`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **177개 통과** (2026-10-23). 빈 Python 3.12 venv에서 `pip install -e .` 후 통과한 확인은 2026-10-22(당시 125개)에 했고, 2026-10-23에는 `.env`·로컬 색인·캐시가 없는 깨끗한 checkout에서 전체 테스트를 다시 돌렸다(아래 7절).
 
 | 모듈 | 개수 | 대상 |
 |---|---:|---|
@@ -151,7 +151,7 @@
 | test_issue_checklist | 11 | 체크리스트 파싱·항목 단위 검증·재시도 |
 | test_statute_items | 11 | 조문 카탈로그, 조건 탐색 |
 | test_redaction | 11 | 개인정보 마스킹, 추가 단어 증폭 방지, 하이픈 날짜는 남기고 계좌번호만 가림 |
-| test_web_api | 8 | F2013 API 요청·응답·오류 처리, 판례 색인 상태 응답 |
+| test_web_api | 9 | F2013 API 요청·응답·오류 처리, 판례 색인 상태 응답, hidden 요소 표시 규칙 |
 | test_mmr | 7 | MMR 선택, 검색 방식 |
 | test_config | 6 | `.env` 설정, 검색어 변환 모델 기본값 |
 | test_streamlit_ui | 9 | 화면 문구, 조문별 대화 분리, 데이터셋 manifest 숫자 읽기, 판례 색인 상태 |

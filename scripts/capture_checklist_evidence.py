@@ -1,22 +1,19 @@
 """셀프·상호 체크리스트의 명령 출력 증빙을 실행하고 PNG로 저장한다.
 
-기본 실행은 GMS를 부르지 않는 항목만 다룬다. GMS가 필요한 판례 수집(3·4번)과
-Top-k·MMR 비교(6·16번)는 --with-gms를 줄 때만 실행한다.
+재색인(2·5번), 판례 수집(3·4번), Top-k·MMR 비교(6·16번)는 GMS를 실제로 호출하므로
+--with-gms를 줄 때만 실행한다. 앱 화면 증빙은 실제 서버를 띄워 따로 캡처한다.
 
-    .\\.venv\\Scripts\\python.exe scripts\\capture_checklist_evidence.py
-    .\\.venv\\Scripts\\python.exe scripts\\capture_checklist_evidence.py --only c03 c06 --with-gms
+    .\\.venv\\Scripts\\python.exe scripts\\capture_checklist_evidence.py --with-gms
+    .\\.venv\\Scripts\\python.exe scripts\\capture_checklist_evidence.py --only c01 c07
 """
 
 from __future__ import annotations
 
 import argparse
-import contextlib
-import io
 import json
 import subprocess
 import sys
 import tempfile
-import unittest
 from collections.abc import Callable, Sequence
 from datetime import datetime
 from html import escape
@@ -32,13 +29,13 @@ from legal_rag.adapters.vector_store import ChromaCaseVectorStore, ChromaStatute
 from legal_rag.config import Settings  # noqa: E402
 from legal_rag.domain.models import CaseDocument  # noqa: E402
 from legal_rag.rag.case_chunking import chunk_cases  # noqa: E402
-from legal_rag.rag.chunking import chunk_statutes, is_deleted_article  # noqa: E402
-from legal_rag.rag.indexing import index_chunks  # noqa: E402
+from legal_rag.rag.chunking import is_deleted_article  # noqa: E402
 
 OUTPUT_DIR = ROOT / "docs" / "checklist"
 PYTHON = sys.executable
 # 판례 수집 증빙용 질문. 기존 수집 이력에 없는 새 질문이어야 첫 실행에서 수집이 일어난다.
-ENRICH_QUESTION = "수습기간 3개월째인데 회사가 수습이라 정당한 이유 없이 본채용을 거절할 수 있다고 합니다."
+ENRICH_CATEGORY = "inheritance"
+ENRICH_QUESTION = "아버지가 돌아가시기 전에 형에게만 아파트를 증여했는데 저도 유류분 반환을 청구할 수 있나요?"
 EVIDENCE_QUESTION = "팀장이 카카오톡으로 내일부터 나오지 말라고 했고 해고 사유가 적힌 문서는 받지 못했어요."
 
 
@@ -91,69 +88,41 @@ def c01_counts() -> str:
     return "\n".join(lines)
 
 
-class _FixedEmbedder:
-    """GMS를 부르지 않고 색인 경로만 실행하기 위한 고정 벡터."""
-
-    model_name = "fixed-test-vector"
-
-    def embed(self, texts):
-        return [[1.0, 0.0, 0.0, 0.0] for _ in texts]
-
-
 def c02_reindex() -> str:
-    from legal_rag.domain.models import LegalCategory
-    from legal_rag.rag.chunking import StatuteChunk
-
-    raw = json.loads((ROOT / "data/processed/statute_chunks.json").read_text(encoding="utf-8"))
-    chunks = [StatuteChunk(**{**item, "category": LegalCategory(item["category"]),
-                              "issue_tags": tuple(item.get("issue_tags", []))}) for item in raw]
-    lines = ["실제 index_chunks() 코드로 같은 청크 382개를 새 Chroma에 두 번 색인 (임베딩은 GMS 대신 고정 벡터)"]
+    lines = ["실제 색인 스크립트를 같은 임시 폴더에 두 번 실행 (GMS 임베딩 사용)", ""]
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
-        store = ChromaStatuteVectorStore(Path(folder))
         for run in (1, 2):
-            index_chunks(chunks, _FixedEmbedder(), store)
-            lines.append(f"{run}회 색인 후 컬렉션 청크 수: {store.count}")
-    lines.append("청크 ID가 분야·법령/조문 ID·청크 순번으로 고정되어 upsert가 덮어쓰므로 두 번 실행해도 늘지 않음")
+            output = _run(["scripts/build_statute_index.py", "--persist-dir", folder])
+            lines.append(f"[{run}회차] $ python scripts/build_statute_index.py --persist-dir <임시 폴더>")
+            lines.append(output)
+            lines.append("")
+    lines.append("색인 스크립트는 컬렉션을 새로 만들고, 청크 ID(분야·법령/조문 ID·청크 순번)로 저장해 다시 실행해도 청크 수가 늘지 않음")
     return "\n".join(lines)
 
 
 def c05_chunk_sizes() -> str:
-    statutes = [item for item in _load_statutes() if not is_deleted_article(item)]
-    cases = _load_cases(ROOT / "data/processed/cases.json")
-    lines = ["설정(STATUTE_CHUNK_SIZE/STATUTE_CHUNK_OVERLAP, CASE_CHUNK_SIZE/CASE_CHUNK_OVERLAP) 값별 청크 수"]
-    for size, overlap in ((1200, 150), (800, 150), (500, 100)):
-        lines.append(f"법령 {size}자 / 중복 {overlap}자 → {len(chunk_statutes(statutes, max_chars=size, overlap_chars=overlap))}개")
-    for size, overlap in ((1400, 180), (1000, 200), (700, 100)):
-        lines.append(f"판례 {size}자 / 중복 {overlap}자 → {len(chunk_cases(cases, max_chars=size, overlap_chars=overlap))}개")
-    lines.append("(청크 수는 임베딩 전에 정해지므로 GMS 호출 없이 청킹 단계까지 실행)")
-    return "\n".join(lines)
+    lines = ["설정값을 바꿔 실제 청킹·색인 스크립트를 실행 (원본 데이터 파일은 바꾸지 않도록 임시 폴더에 출력)", ""]
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
+        root = Path(folder)
+        for size, overlap in ((1200, 150), (800, 150)):
+            chunks = root / f"statute_{size}.json"
+            lines.append(f"$ python scripts/build_statute_chunks.py --max-chars {size} --overlap-chars {overlap}")
+            lines.append(_run(["scripts/build_statute_chunks.py", "--max-chars", str(size), "--overlap-chars", str(overlap),
+                               "--output", str(chunks), "--manifest", str(root / f"statute_{size}_manifest.json")]))
+            lines.append(f"$ python scripts/build_statute_index.py (위 청크로 재색인)")
+            lines.append(_run(["scripts/build_statute_index.py", "--input", str(chunks), "--persist-dir", str(root / f"index_{size}")]))
+            lines.append("")
+        for size, overlap in ((1400, 180), (1000, 200)):
+            lines.append(f"$ python scripts/build_case_chunks.py --max-chars {size} --overlap-chars {overlap}")
+            lines.append(_run(["scripts/build_case_chunks.py", "--max-chars", str(size), "--overlap-chars", str(overlap),
+                               "--output", str(root / f"case_{size}.json"), "--manifest", str(root / f"case_{size}_manifest.json")]))
+            lines.append("")
+    return "\n".join(lines).strip()
 
 
-def _unittest(names: Sequence[str]) -> str:
-    stream = io.StringIO()
-    suite = unittest.defaultTestLoader.loadTestsFromNames(list(names))
-    with contextlib.redirect_stderr(io.StringIO()):
-        result = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)
-    return stream.getvalue().strip() + f"\n\n성공 {result.testsRun - len(result.failures) - len(result.errors)} / 전체 {result.testsRun}"
-
-
-def c10_conversation_isolation() -> str:
-    sys.path.insert(0, str(ROOT / "tests"))
-    return _unittest([
-        "test_streamlit_ui.StreamlitUiTests.test_chat_history_is_kept_separately_per_article",
-        "test_consultation_room.ConsultationRoomTests.test_new_consultation_starts_a_new_thread",
-        "test_pipeline.StatuteRagPipelineTests.test_conversation_threads_are_isolated_and_single_answers_have_no_history",
-    ])
-
-
-def c13_guidance() -> str:
-    sys.path.insert(0, str(ROOT / "tests"))
-    return _unittest([
-        "test_streamlit_ui.StreamlitUiTests.test_runtime_requires_key_and_existing_index_directory",
-        "test_streamlit_ui.CaseIndexStatusTests",
-        "test_consultation_room.CaseIndexNoticeTests",
-        "test_web_api.WebApiTests.test_status_reports_statute_only_search_without_case_index",
-    ])
+def c17_before_after() -> str:
+    text = (ROOT / "docs/rag-before-after.md").read_text(encoding="utf-8").splitlines()
+    return "\n".join(["[docs/rag-before-after.md]", *text[:40]])
 
 
 def c07_graph() -> str:
@@ -179,7 +148,7 @@ def c21_secrets() -> str:
         "",
         "[.streamlit/config.toml] " + next(line for line in config.splitlines() if "showErrorDetails" in line),
         "[web/api.py] 처리하지 못한 오류는 고정 문구 GENERIC_ERROR만 응답하고 상세는 서버 로그에만 남김",
-        "화면 확인: c21_error_screen.png (내부 예외 메시지가 화면에 나오지 않음)",
+        "화면 확인: 21_오류_화면.png (실제 서버에서 GMS 주소를 잘못 넣어 낸 오류, 내부 예외 메시지가 화면에 나오지 않음)",
     ])
 
 
@@ -210,24 +179,16 @@ def c24_sources() -> str:
     return "\n".join(["[README.md]", *readme[start:start + 9], "", "[docs/data-source-inventory.md]", *inventory[:16]])
 
 
-def c20_response_time() -> str:
-    text = (ROOT / "docs/verification-results.md").read_text(encoding="utf-8").splitlines()
-    start = next(index for index, line in enumerate(text) if line.startswith("응답 시간 측정"))
-    end = next(index for index in range(start + 2, len(text)) if not text[index].startswith("|"))
-    return "\n".join(["[docs/verification-results.md 4.7절 · 2026-10-22 실제 서버 측정]", *text[start:end],
-                      "", "실행 1 = 처음 묻는 질문, 실행 2 = 같은 질문을 다시 물은 경우",
-                      "판례 수집이 새로 일어나는 질문은 c03_c04_enrichment_cache.png에서 보강 단계만 1회차 33.0초 → 2회차 11.7초"])
-
-
 def c03_c04_enrichment() -> str:
-    command = ["scripts/enrich_case_index.py", "--category", "labor", "--query", ENRICH_QUESTION]
+    command = ["scripts/enrich_case_index.py", "--category", ENRICH_CATEGORY, "--query", ENRICH_QUESTION]
     lines = [f"질문: {ENRICH_QUESTION}", ""]
     for run in (1, 2):
         output = _run(command)
         body = output[: output.rfind("(종료 코드")].strip()
         data = json.loads(body[body.index("{"):])
-        lines.append(f"[{run}회차] 처리 시간 {data['elapsed_seconds']}초 · cache_hit={data['cache_hit']} · "
-                     f"후보 {data['candidate_count']}건 · 새로 색인 {data['new_case_count']}건 · 선별 방식 {data['selection_mode']}")
+        lines.append(f"[{run}회차] 전체 {data['elapsed_seconds']}초 = 검색어 변환 {data['query_seconds']}초 + "
+                     f"판례 수집 {data['collection_seconds']}초 · cache_hit={data['cache_hit']}")
+        lines.append(f"  후보 {data['candidate_count']}건 · 새로 색인 {data['new_case_count']}건 · 선별 방식 {data['selection_mode']}")
         lines.append("  프롬프트1 검색어: " + ", ".join(data["legal_terms"]))
         for item in data["candidates"]:
             lines.append(f"  - {item['decision']:<9} {item['case_number']:<14} {item['case_name'][:34]}")
@@ -240,27 +201,20 @@ def c06_c16_topk_mmr() -> str:
     return f"$ python scripts/show_evidence.py \"{EVIDENCE_QUESTION}\" --category labor --compare-search --top-k 3 5\n\n" + _run(command)
 
 
-STEPS: dict[str, tuple[str, Callable[[], str], bool]] = {
-    "c01": ("1 · F2001 로드 건수와 색인 청크 수, 색인 텍스트", c01_counts, False),
-    "c02": ("2 · F2002 색인 두 번 실행", c02_reindex, False),
-    "c03": ("3·4 · F2003·F2004·NF2002 검색어·선별 결과와 재질문 시 수집 생략", c03_c04_enrichment, True),
-    "c05": ("5 · F2005 청크 크기·중복 길이별 청크 수", c05_chunk_sizes, False),
-    "c06": ("6·16 · F2006·F2014 Top-k 변경과 유사도/MMR 근거 비교", c06_c16_topk_mmr, True),
-    "c07": ("7 · F2007 LangGraph 노드 구성", c07_graph, False),
-    "c10": ("10 · F2009 항목·상담별 대화 분리 테스트", c10_conversation_isolation, False),
-    "c13": ("13 · F2012 키 없음·색인 없음 안내 테스트", c13_guidance, False),
-    "c20": ("20 · NF2001 첫 질문·두 번째 질문 처리 시간", c20_response_time, False),
-    "c21": ("21 · NF2003·NF2004 키 미포함·오류 비노출", c21_secrets, False),
-    "c22": ("22 · NF2005 모듈 분리", c22_modules, False),
-    "c23": ("23 · NF2006 재시도·호출 간격·User-Agent", c23_api_etiquette, False),
-    "c24": ("24 · NF2007 출처·이용 조건 기록", c24_sources, False),
-}
-FILE_NAMES = {
-    "c01": "c01_f2001_counts.png", "c02": "c02_f2002_reindex.png", "c03": "c03_c04_enrichment_cache.png",
-    "c05": "c05_f2005_chunk_sizes.png", "c06": "c06_c16_topk_mmr.png", "c07": "c07_f2007_langgraph.png",
-    "c10": "c10_f2009_isolation_tests.png", "c13": "c13_f2012_guidance_tests.png", "c20": "c20_nf2001_response_time.png",
-    "c21": "c21_nf2003_secrets.png",
-    "c22": "c22_nf2005_modules.png", "c23": "c23_nf2006_api_etiquette.png", "c24": "c24_nf2007_sources.png",
+# (제목, 실행 함수, GMS 필요 여부, 저장 파일명). 파일명은 양식 예시처럼 번호를 앞에 붙인 한글 이름이다.
+STEPS: dict[str, tuple[str, Callable[[], str], bool, str]] = {
+    "c01": ("1 · F2001 로드 건수와 색인 청크 수, 색인 텍스트", c01_counts, False, "01_색인_건수_일치.png"),
+    "c02": ("2 · F2002 색인 두 번 실행", c02_reindex, True, "02_재색인_청크수_유지.png"),
+    "c03": ("3·4 · F2003·F2004·NF2002 검색어·선별 결과와 재질문 시 수집 생략", c03_c04_enrichment, True,
+            "03_04_검색어_선별_재질문_캐시.png"),
+    "c05": ("5 · F2005 청크 크기·중복 길이를 바꿔 재색인", c05_chunk_sizes, True, "05_청크설정별_청크수.png"),
+    "c06": ("6·16 · F2006·F2014 Top-k 변경과 유사도/MMR 근거 비교", c06_c16_topk_mmr, True, "06_16_TopK_유사도_MMR_비교.png"),
+    "c07": ("7 · F2007 LangGraph 노드 구성", c07_graph, False, "07_LangGraph_노드구성.png"),
+    "c17": ("17·18 · F2015 RAG 사용 전후 비교 기록", c17_before_after, False, "17_18_RAG_전후비교_문서.png"),
+    "c21": ("21 · NF2003·NF2004 저장소 키 검색과 오류 비노출 설정", c21_secrets, False, "21_키_검색_결과.png"),
+    "c22": ("22 · NF2005 모듈 분리", c22_modules, False, "22_모듈_구성.png"),
+    "c23": ("23 · NF2006 재시도·호출 간격·User-Agent", c23_api_etiquette, False, "23_외부호출_재시도_헤더.png"),
+    "c24": ("24 · NF2007 출처·이용 조건 기록", c24_sources, False, "24_출처_이용조건.png"),
 }
 
 
@@ -303,16 +257,16 @@ def main() -> None:
         sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="셀프 체크리스트 명령 출력 증빙 PNG 생성")
     parser.add_argument("--only", nargs="+", choices=sorted(STEPS), help="일부 항목만 실행")
-    parser.add_argument("--with-gms", action="store_true", help="GMS가 필요한 항목(c03, c06)도 실행")
+    parser.add_argument("--with-gms", action="store_true", help="GMS를 실제로 호출하는 항목(c02, c03, c05, c06)도 실행")
     args = parser.parse_args()
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     for key in args.only or sorted(STEPS):
-        title, step, needs_gms = STEPS[key]
+        title, step, needs_gms, file_name = STEPS[key]
         if needs_gms and not args.with_gms:
             print(f"{key}: 건너뜀 (GMS 필요, --with-gms로 실행)")
             continue
         body = _scrub(step())
-        output = OUTPUT_DIR / FILE_NAMES[key]
+        output = OUTPUT_DIR / file_name
         render(title, body, output)
         print(f"{key}: {output.relative_to(ROOT)}")
         print(body)
