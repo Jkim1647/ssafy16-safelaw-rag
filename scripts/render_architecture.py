@@ -224,7 +224,7 @@ def build_svg() -> str:
     ])
     lane2 = draw_lane(svg, 1, "02", "Privacy & Context", "개인정보 보호 · 상담 맥락 · 질의 확장", "#3e8e57", "#eff7f1", [
         ("card", "User Question / 사용자 질문", ["상담 분야(접수 카드) + 자연어 상황", "이어지는 질문도 같은 상담 스레드로"]),
-        ("card", "Privacy Guard / 로컬 마스킹", ["규칙: 주민번호·전화·이메일·주소·카드·계좌", "이름·회사명(표시 뒤)·사용자 지정 단어", "날짜·금액은 유지 · 원문 미저장"],
+        ("card", "Privacy Guard / 로컬 마스킹", ["규칙: 주민번호·전화·이메일·주소·카드·계좌", "이름·회사명(표시 뒤)·사용자 지정 단어", "날짜·금액은 유지 · 원문은 세션 메모리만"],
          {"dot": "#d64545", "fill": "#fdf1f1", "stroke": "#e9a3a3"}),
         ("card", "Conversation Thread / 상담 스레드", ["LangGraph InMemorySaver · thread_id", "최근 질문 3개 + 현재 질문으로 검색"]),
         ("card", "Legal Query Expansion / 법률 질의 확장", ["일상어 → 법률 용어 JSON", "규칙 용어 보강 · 실패 시 규칙으로 대체"]),
@@ -280,7 +280,7 @@ def build_svg() -> str:
          [("질문 캐시 확인", "같은 질문은 재사용"), ("Case API", "용어 3개 · 있는 판례 제외"), ("LLM 후보 선별", "선택·탈락 기록"), ("Incremental Upsert", "없는 판례만 색인")],
          "새 질문마다 retrieve 검색 전에 실행 · LAW_API_OC 필요 · 실패해도 기존 판례로 검색", True),
         (MARGIN + 700, 560, "Local Security & Persistence / 로컬 보안·저장",
-         [(".env · Git 제외", "GMS_KEY · OC"), ("원문 미저장", "마스킹 문장만 외부로"), ("세션 메모리", "상담 기록·체크포인터"), ("Chroma", "SQLite + HNSW")],
+         [(".env · Git 제외", "GMS_KEY · OC"), ("원문 외부 미전송", "마스킹 문장만 외부로"), ("세션 메모리", "상담 기록·체크포인터"), ("Chroma", "SQLite + HNSW")],
          "파일·로그·Vector DB에 상담 원문과 마스킹 매핑을 남기지 않음", False),
         (MARGIN + 1294, 512, "Evaluation / 검색·생성 품질 평가",
          [("Recall@5", "법령 1.000"), ("MRR", "법령 0.740"), ("Citation Acc.", "1.000"), ("Refusal Acc.", "1.000")],

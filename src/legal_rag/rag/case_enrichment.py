@@ -1,10 +1,13 @@
-"""질의 시 부족한 공개 판례만 수집하고 증분 색인하는 캐시 계층."""
+"""새 질문마다 아직 없는 공개 판례만 수집하고 증분 색인하는 캐시 계층."""
 
 from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
+import tempfile
+import threading
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
@@ -68,11 +71,22 @@ def _read_json(path: Path, default: Any) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+# 수집 이력과 동적 판례 파일은 읽고-고치고-쓰는 순서라, 같은 프로세스의 동시 요청
+# (FastAPI 스레드, 여러 Streamlit 세션)이 서로의 기록을 덮지 않도록 이 구간만 잠근다.
+_STATE_LOCK = threading.Lock()
+
+
 def _write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    temporary.replace(path)
+    # 요청마다 다른 임시 파일에 쓴 뒤 교체해 임시 파일 이름이 겹치지 않게 한다.
+    handle, temporary = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(handle, "w", encoding="utf-8") as file:
+            file.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+        os.replace(temporary, path)
+    except BaseException:
+        Path(temporary).unlink(missing_ok=True)
+        raise
 
 
 def _document_from_dict(item: dict[str, Any]) -> CaseDocument:
@@ -195,11 +209,9 @@ class IncrementalCaseEnricher:
         ) if new_documents else []
         if chunks:
             index_chunks(chunks, self._embedder, self._store)  # type: ignore[arg-type]
-            dynamic_items.extend(_serialize(item) for item in new_documents)
-            _write_json(self._dynamic_dataset, dynamic_items)
 
         numbers = tuple(item.case_number for item in new_documents)
-        history.setdefault("entries", {})[key] = {
+        entry = {
             "category": category.value,
             "legal_terms": list(terms),
             "status": "completed",
@@ -212,7 +224,16 @@ class IncrementalCaseEnricher:
             "candidates": [{**asdict(item), "reason": ""} for item in decisions],
             "collected_at": datetime.now(timezone.utc).isoformat(),
         }
-        _write_json(self._history_path, history)
+        # API 호출 동안 다른 요청이 파일을 바꿨을 수 있으므로 잠근 뒤 최신 내용을 다시 읽어 합친다.
+        with _STATE_LOCK:
+            if new_documents:
+                latest_items = _read_json(self._dynamic_dataset, [])
+                known = {str(item.get("case_number", "")) for item in latest_items}
+                latest_items.extend(_serialize(item) for item in new_documents if item.case_number not in known)
+                _write_json(self._dynamic_dataset, latest_items)
+            latest_history = _read_json(self._history_path, {"schema_version": 1, "entries": {}})
+            latest_history.setdefault("entries", {})[key] = entry
+            _write_json(self._history_path, latest_history)
         return EnrichmentResult(key, False, len(candidates), len(new_documents), len(chunks), numbers,
                                 selection_mode=selection_mode, decisions=tuple(decisions))
 

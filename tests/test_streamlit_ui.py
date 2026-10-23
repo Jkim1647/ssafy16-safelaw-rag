@@ -15,6 +15,7 @@ from legal_rag.ui.streamlit_app import (
     EXAMPLE_QUESTIONS,
     STATUS_PRESENTATIONS,
     article_question,
+    case_index_status,
     chat_history,
     load_library_facts,
     parse_sensitive_terms,
@@ -75,6 +76,20 @@ class StreamlitUiTests(unittest.TestCase):
         self.assertTrue(question.startswith("[선택 조문: 근로기준법 제27조 (해고사유 등의 서면통지)]"))
         self.assertIn("[PERSON_1]이 카톡으로 해고했어요", question)
 
+
+
+class CaseIndexStatusTests(unittest.TestCase):
+    def test_missing_or_empty_case_index_means_statute_only_search(self):
+        # Windows에서는 Chroma가 SQLite 파일을 잡고 있어 임시 폴더 정리 오류를 무시한다.
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
+            missing_ready, missing_message = case_index_status(Path(folder) / "none")
+            empty_ready, empty_message = case_index_status(Path(folder))
+
+        self.assertFalse(missing_ready)
+        self.assertIn("법령만 검색", missing_message)
+        self.assertFalse(empty_ready)
+        self.assertIn("비어", empty_message)
+        self.assertFalse((Path(folder) / "none").exists())
 
 
 class LibraryFactsTests(unittest.TestCase):
