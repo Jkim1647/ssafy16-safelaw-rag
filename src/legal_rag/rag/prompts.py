@@ -10,6 +10,13 @@ from legal_rag.rag.citations import CaseEvidence, LegalEvidence
 from legal_rag.rag.retrieval import CATEGORY_LABELS
 
 
+# CONTEXT·citation_id는 모델에게만 쓰는 이름이다. 사용자에게 보이는 문장에는 풀어 쓴 말을 쓰게 한다.
+USER_FACING_WORDING = (
+    "text처럼 사용자에게 보이는 문장에는 CONTEXT·citation_id 같은 내부 용어를 쓰지 않고 "
+    "'검색된 법령·판례'처럼 풀어 쓴다."
+)
+
+
 def evidence_context(evidence: Sequence[LegalEvidence]) -> list[dict[str, object]]:
     """근거를 문서 유형과 citation_id가 붙은 CONTEXT 항목으로 바꾼다."""
 
@@ -83,6 +90,7 @@ def build_grounded_answer_messages(
                 "질문과 무관한 판례를 중요하다는 이유만으로 근거로 사용하지 않는다. 선고일 이후의 "
                 "법령 개정, 후속 판례, 상소·확정 여부 또는 법리의 현재 유효성을 CONTEXT 없이 추정하지 않는다. "
                 "승소 확률이나 단정적인 법률 자문을 제공하지 않는다. "
+                f"{USER_FACING_WORDING} "
                 "근거만으로 질문을 설명할 수 없으면 answerable을 false로 하고 나머지 필드는 생략한다. "
                 "반드시 마크다운 없이 JSON 객체 하나만 출력한다."
             ),

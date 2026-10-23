@@ -9,7 +9,7 @@
 | 필수 기능 F2001~F2012 | 12개 모두 통과 |
 | 심화 기능 | F2013 HTML/CSS/JS 화면 통과, F2014 MMR 통과, F2015 RAG 전후 비교 통과, F2016 부분 |
 | 비기능 NF2001~NF2007 | 7개 모두 통과 |
-| 자동 테스트 | 177개 통과 |
+| 자동 테스트 | 180개 통과 |
 | 남은 항목 | [7장](#7-남은-항목) 참고 |
 
 ## 2. 확인 항목별 결과 (명세서 4.1~4.7)
@@ -140,7 +140,7 @@
 
 ### 4.1 자동 테스트
 
-`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **177개 통과** (2026-10-23). 빈 Python 3.12 venv에서 `pip install -e .` 후 통과한 확인은 2026-10-22(당시 125개)에 했고, 2026-10-23에는 `.env`·로컬 색인·캐시가 없는 깨끗한 checkout에서 전체 테스트를 다시 돌렸다(아래 7절).
+`.\.venv\Scripts\python.exe -m unittest discover -s tests` → **180개 통과** (2026-10-23, 상호 점검 지적 반영 후). 빈 Python 3.12 venv에서 `pip install -e .` 후 통과한 확인은 2026-10-22(당시 125개)에 했고, 2026-10-23에는 `.env`·로컬 색인·캐시가 없는 깨끗한 checkout에서 전체 테스트(당시 177개)를 다시 돌렸다(아래 7절).
 
 | 모듈 | 개수 | 대상 |
 |---|---:|---|
@@ -148,14 +148,14 @@
 | test_consultation_room | 18 | 상담실 채팅 AppTest: 판례 색인 없음 안내, 분야 안내·상담실 안 분야 선택, 처음으로·상담실로·다른 조문 고르기 이동, 상담 약속 문구, 대화 누적·마스킹, 이어 묻기 안내, 새 상담 스레드, 지난 상담 복구·삭제, 체크리스트 요약·오른쪽 패널 전환·용어 풀이 |
 | test_glossary | 7 | 체크리스트 용어 풀이: 등장 순서, 긴 용어 우선, 조문식 표현 연결, 중복 제거 |
 | test_retrieval | 13 | 검색어 확장·규칙(유류분 포함), RRF, 판례 재정렬 |
-| test_issue_checklist | 11 | 체크리스트 파싱·항목 단위 검증·재시도 |
+| test_issue_checklist | 12 | 체크리스트 파싱·항목 단위 검증·재시도, 확인 질문의 내부 용어 거절 |
 | test_statute_items | 11 | 조문 카탈로그, 조건 탐색 |
 | test_redaction | 11 | 개인정보 마스킹, 추가 단어 증폭 방지, 하이픈 날짜는 남기고 계좌번호만 가림 |
 | test_web_api | 9 | F2013 API 요청·응답·오류 처리, 판례 색인 상태 응답, hidden 요소 표시 규칙 |
 | test_mmr | 7 | MMR 선택, 검색 방식 |
 | test_config | 6 | `.env` 설정, 검색어 변환 모델 기본값 |
 | test_streamlit_ui | 9 | 화면 문구, 조문별 대화 분리, 데이터셋 manifest 숫자 읽기, 판례 색인 상태 |
-| test_citations | 6 | 인용 검증 |
+| test_citations | 8 | 인용 검증, 근거 원문이 가리키는 조문 허용, 내부 용어 거절 |
 | test_case_enrichment | 8 | 판례 보강, 선택·탈락 기록, 캐시, 동시 보강에서 이력·판례 보존, 실패 시 경고 로그(예외 내용 제외) |
 | test_chunking | 5 | 조문 청킹, 삭제 조문 제외 |
 | test_case_selection | 5 | 판례 후보 선별 프롬프트 |
@@ -180,15 +180,26 @@
 | 선택한 심화 기능이 동작하고 필수 기능 결과와 비교 | 완료 (F2014 유사도 대비, F2015 RAG 미사용 대비) |
 | 증명용 스크린샷 첨부 | 완료 (위 화면 6장 + 아키텍처) |
 | 요구사항 정의서·RAG 파이프라인 설계문서·소스코드·README.md | 완료 ([requirements-definition.md](requirements-definition.md), [rag-pipeline-design.md](rag-pipeline-design.md)) |
-| 검증 결과(요구사항 대조표, 테스트 결과표, 셀프·상호 체크리스트) | 대조표·결과표 완료, 셀프 체크리스트 작성, 상호 체크리스트 양식 준비(점검자 작성 예정) |
+| 검증 결과(요구사항 대조표, 테스트 결과표, 셀프·상호 체크리스트) | 대조표·결과표 완료, 셀프 체크리스트(통과 27)·상호 체크리스트(최규정, 통과 27) 작성, 상호 지적 2건 반영 |
 
 ## 6. 셀프·상호 체크리스트
 
 셀프 점검은 [self_check/self_checklist.md](self_check/self_checklist.md)와 배포 엑셀 양식 [self_checklist.xlsx](self_check/self_checklist.xlsx)에 27항목 순서대로 정리했다(2026-10-23, 통과 27). 각 항목을 다시 실행했고 서비스·터미널·코드·문서 화면을 [`self_check/screenshots/`](self_check/screenshots/)에 PNG로 남겼다. 27번(셀프·상호 체크리스트 포함)은 상호 체크리스트를 작성할 예정이라 통과로 적었다.
 
-상호 점검은 점검자가 [cross_check/cross_checklist.md](cross_check/cross_checklist.md) 또는 [cross_checklist.xlsx](cross_check/cross_checklist.xlsx)에 작성하고, 증빙 사진은 [`cross_check/screenshots/`](cross_check/screenshots/)에 넣는다.
+상호 점검은 점검자가 [cross_check/cross_checklist.md](cross_check/cross_checklist.md)와 [cross_checklist.xlsx](cross_check/cross_checklist.xlsx)에 작성했고, 증빙 사진 27장은 [`cross_check/screenshots/`](cross_check/screenshots/)에 있다.
 
-상호 점검 결과(점검자, 점검일, 지적 사항, 반영 여부)는 점검을 받은 뒤 이 절에 추가한다.
+| 점검자 | 점검 일시 | 방법 | 결과 |
+|---|---|---|---|
+| 최규정 | 2026-10-23 17:01~17:20 | 작성자 PC에서 점검자 GMS 키로 앱·스크립트를 실제 실행 | 통과 27 · 실패 0 · 미확인 0 |
+
+점검자는 "근거 검증이 엄격해 무관한 질문은 답하지 않고, 근거 번호·근거 목록·체크리스트 인용 문구가 서로 맞으며 안내 문구가 명확하다"를 잘한 점으로 꼽았다. 개선할 점으로 지적한 두 가지와 반영 결과는 아래와 같다.
+
+| 지적 사항 | 원인 | 반영 | 확인 |
+|---|---|---|---|
+| 웹 답변 문장에 내부 용어 "CONTEXT"가 보임(전세 질문, "…규정은 이 CONTEXT에 없습니다") | 답변·체크리스트 프롬프트가 근거 묶음을 `CONTEXT`라고 부르는데, 사용자에게 보이는 문장에서 그 말을 쓰지 말라는 지시도 검사도 없었다 | 반영. 프롬프트에 "보이는 문장에는 CONTEXT·citation_id 같은 내부 용어를 쓰지 않는다"를 넣고(`rag/prompts.py`, `rag/issue_checklist.py`), 답변 주장과 체크리스트 확인 질문에 내부 용어가 있으면 검증 실패로 보고 다시 생성하게 했다(`rag/citations.py`의 `reject_internal_terms`) | 같은 전세 질문을 실제 GMS로 2회 실행: 2회 모두 `answered`, 답변에 CONTEXT 없음. `test_citations`·`test_issue_checklist`에 테스트 추가 |
+| 조문 채팅 제36조(금품 청산)에 "퇴사한 지 20일이 지났는데 마지막 달 월급을 아직 못 받았어요"를 물으면 `invalid_citations`로 답변이 표시되지 않음 | 모델이 [근거 4] 제37조(지연이자)만 인용한 문장에서 "제36조에 따라 지급해야 하는 임금"이라고 썼다. 제37조 원문에 "제36조에 따라"가 있는데도, 검증은 본문에 나온 조문 번호가 인용한 법령의 조문 번호와 같아야만 통과시켜 정상 답변을 버렸다. 세 번 모두 같은 이유로 버려지면 `invalid_citations`가 된다 | 반영. 본문에 나온 조문이 인용한 근거 원문 안에 그대로 있으면 그 근거로 뒷받침된 것으로 본다(`제36조의2`처럼 가지 번호가 붙은 조문과는 구분). 인용 근거 어디에도 없는 조문은 전처럼 거절한다 | 같은 질문을 실제 GMS로 2회 실행: 2회 모두 `answered`(1회는 인용 문구 불일치로 한 번 재생성). 기존 `test_rejects_article_not_linked_to_cited_evidence`는 그대로 통과하고, 원문이 가리키는 조문을 허용하는 테스트를 추가 |
+
+두 수정 후 전체 테스트 180개가 통과했다.
 
 ## 7. 남은 항목
 
@@ -200,7 +211,7 @@
 | 유류분 질문에서 민법 제1112조 미검색 | 완료 | 검색어 규칙 추가, 실제 색인에서 1위 |
 | 검색어 변환 모델 결정 | 완료 | 속도를 우선해 `gpt-5.4-mini` 유지. 법령 MRR 0.740, E2E 0.667을 감수. 프롬프트 보강(용어 6~10개)은 MRR 0.708로 더 낮아 되돌림 |
 | 법률 전문가 라벨 검수 | 대기 | [case-evaluation-review-sheet.md](case-evaluation-review-sheet.md) 서명 필요 |
-| 셀프·상호 체크리스트 | 셀프 완료, 상호 양식 준비 | 셀프 [self_checklist.md](self_check/self_checklist.md) 통과 27. 상호는 [cross_check/](cross_check/)에 점검자 작성 예정 |
+| 셀프·상호 체크리스트 | 완료 | 셀프 [self_checklist.md](self_check/self_checklist.md) 통과 27, 상호 [cross_checklist.md](cross_check/cross_checklist.md)(점검자 최규정) 통과 27. 상호 지적 2건(CONTEXT 노출, 제36조 인용 검증 실패) 반영 |
 | 원문 보관 설명 정정 | 완료 | 원문은 외부 API·로그·파일·Vector DB에 저장하지 않고, 마스킹 비교용으로 현재 Streamlit 세션 메모리(서버 프로세스)에만 일시 보관한다고 README·정책 문서·화면 문구를 실제 동작에 맞춤 |
 | 판례 색인 없음 안내 | 완료 | 판례 색인이 없거나 비어 있으면 Streamlit 사이드바와 웹 상태에 "법령만 검색합니다"를 표시하고, 첫 화면 약속에서 판례 수를 뺌 |
 | 판례 보강 동시 실행 | 완료 | 요청마다 다른 임시 파일로 쓰고, 같은 프로세스 안에서는 잠금 후 최신 파일을 다시 읽어 합침. 여러 프로세스(예: uvicorn 워커 여러 개)가 동시에 쓰는 경우는 막지 않는다. 그때 잃을 수 있는 것은 수집 이력과 동적 판례 목록의 일부이며, 같은 판례가 다시 검색되면 다시 받아 같은 청크 ID로 덮어써 Chroma 색인에 중복은 생기지 않음 |

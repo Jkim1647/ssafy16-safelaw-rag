@@ -5,7 +5,7 @@
 - [x] 1) 요구사항 정의서: [`requirements-definition.md`](requirements-definition.md) — 기능별 요구사항 표, 도메인 조건 충족 근거
 - [x] 2) RAG 파이프라인 설계문서: [`rag-pipeline-design.md`](rag-pipeline-design.md) (계층·보안 경계는 [`architecture.md`](architecture.md))
 - [x] 3) 검증 결과: [`verification-results.md`](verification-results.md) — 4장 항목별 실행 결과, 요구사항 대조표, 테스트 결과표, 화면 캡처
-- [ ] 3) 셀프·상호 체크리스트 — 셀프 [`self_check/`](self_check/) 작성(통과 27, 증빙 `self_check/screenshots/`), 상호 양식 [`cross_check/`](cross_check/) 준비, 점검자 작성 대기
+- [x] 3) 셀프·상호 체크리스트 — 셀프 [`self_check/`](self_check/) 통과 27, 상호 [`cross_check/`](cross_check/) 점검자 최규정 통과 27, 지적 2건 반영(검증 결과 6절)
 - [x] 3) 심화 결과 비교: MMR(README), RAG 전후([`rag-before-after.md`](rag-before-after.md))
 - [x] 4) 소스코드, 수집·색인 스크립트, 심화 기능 코드
 - [ ] 5) 셀프 체크리스트 결과 — [`self_checklist.md`](self_check/self_checklist.md)와 배포 양식에 채운 [`self_checklist.xlsx`](self_check/self_checklist.xlsx) 작성, 작성자 최종 확인 대기

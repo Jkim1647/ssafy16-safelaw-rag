@@ -141,6 +141,53 @@ class CitationValidationTests(unittest.TestCase):
         with self.assertRaises(CitationValidationError):
             parse_and_validate_draft(raw, evidence)
 
+    def test_accepts_article_referenced_inside_cited_source(self):
+        # 제37조 원문이 "제36조에 따라"를 담고 있으면, 제37조만 인용한 주장에서 제36조를 말해도 근거가 있다.
+        late_interest = RetrievedChunk(
+            chunk_id="labor-37",
+            document="사용자는 제36조에 따라 지급하여야 하는 임금의 전부 또는 일부를 지급하지 아니한 경우 지연이자를 지급하여야 한다.",
+            metadata={
+                "law_name": "근로기준법",
+                "article_no": "제37조",
+                "article_title": "미지급 임금에 대한 지연이자",
+                "source_url": "https://www.law.go.kr/법령/근로기준법/제37조",
+            },
+            distance=0.1,
+        )
+        evidence = build_statute_evidence([late_interest])
+        raw = json.dumps(
+            {
+                "answerable": True,
+                "summary": {
+                    "text": "지연이자는 제36조에 따라 지급해야 하는 임금에 적용됩니다.",
+                    "citations": [1],
+                    "evidence_quotes": [{"citation_id": 1, "quote": "제36조에 따라 지급하여야 하는 임금"}],
+                },
+            },
+            ensure_ascii=False,
+        )
+
+        draft = parse_and_validate_draft(raw, evidence)
+
+        self.assertEqual(draft.summary.citation_ids, (1,))
+
+    def test_rejects_internal_prompt_term_in_answer_text(self):
+        evidence = build_statute_evidence([hit()])
+        raw = json.dumps(
+            {
+                "answerable": True,
+                "summary": {
+                    "text": "보증금 반환 시기에 관한 규정은 이 CONTEXT에 없습니다.",
+                    "citations": [1],
+                    "evidence_quotes": [{"citation_id": 1, "quote": "해고사유와 해고시기를 서면으로 통지"}],
+                },
+            },
+            ensure_ascii=False,
+        )
+
+        with self.assertRaisesRegex(CitationValidationError, "내부 용어"):
+            parse_and_validate_draft(raw, evidence)
+
     def test_rejects_quote_not_found_in_retrieved_law(self):
         evidence = build_statute_evidence([hit()])
         raw = json.dumps(
