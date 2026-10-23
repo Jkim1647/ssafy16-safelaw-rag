@@ -73,7 +73,7 @@
 <text x="461.6" y="467.5" font-size="15.5" font-weight="600" fill="#111827" text-anchor="start" letter-spacing="0">Privacy Guard / 로컬 마스킹</text>
 <text x="461.6" y="488.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">규칙: 주민번호·전화·이메일·주소·카드·계좌</text>
 <text x="461.6" y="504.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">이름·회사명(표시 뒤)·사용자 지정 단어</text>
-<text x="461.6" y="520.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">날짜·금액은 유지 · 원문 미저장</text>
+<text x="461.6" y="520.5" font-size="12" font-weight="400" fill="#5b6472" text-anchor="start" letter-spacing="0">날짜·금액은 유지 · 원문은 세션 메모리만</text>
 <path d="M590.4,533.5 L590.4,539.0" fill="none" stroke="#6b7280" stroke-width="1.8" marker-end="url(#arrow)"/>
 <rect x="429.6" y="543.0" width="321.6" height="72.0" rx="9" fill="#ffffff" stroke="#e3e6ea" stroke-width="1.2"/>
 <circle cx="447.6" cy="563.0" r="5.5" fill="#3e8e57"/>
@@ -211,7 +211,7 @@
 <text x="810.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">.env · Git 제외</text>
 <text x="810.2" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">GMS_KEY · OC</text>
 <rect x="886.5" y="884.0" width="132.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
-<text x="952.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">원문 미저장</text>
+<text x="952.8" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">원문 외부 미전송</text>
 <text x="952.8" y="924.0" font-size="11.5" font-weight="400" fill="#5b6472" text-anchor="middle" letter-spacing="0">마스킹 문장만 외부로</text>
 <rect x="1029.0" y="884.0" width="132.5" height="52.0" rx="9" fill="#ffffff" stroke="#cfd6dd" stroke-width="1.2"/>
 <text x="1095.2" y="906.0" font-size="14" font-weight="600" fill="#111827" text-anchor="middle" letter-spacing="0">세션 메모리</text>

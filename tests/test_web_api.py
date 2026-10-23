@@ -50,12 +50,13 @@ class FakeChecklistBuilder:
                               sources=(STATUTE,), dropped_count=1)
 
 
-def client(pipeline=None, checklist=None, ready=True):
+def client(pipeline=None, checklist=None, ready=True, case_index=(True, "법령·판례 색인 사용")):
     services = WebServices(
         readiness=lambda: (ready, "준비됨" if ready else ".env에 GMS_KEY를 설정해 주세요."),
         pipeline=lambda: pipeline or FakePipeline(),
         checklist_builder=lambda: checklist or FakeChecklistBuilder(),
         top_k=5,
+        case_index=lambda: case_index,
     )
     return TestClient(create_app(services))
 
@@ -71,6 +72,13 @@ class WebApiTests(unittest.TestCase):
         self.assertIn("SafeLaw", page.text)
         self.assertIn('src="/static/app.js"', page.text)
         self.assertEqual(script.status_code, 200)
+
+    def test_status_reports_statute_only_search_without_case_index(self):
+        body = client(case_index=(False, "판례 색인이 없어 법령만 검색합니다.")).get("/api/status").json()
+
+        self.assertTrue(body["ready"])
+        self.assertFalse(body["case_search"])
+        self.assertEqual(body["notice"], "판례 색인이 없어 법령만 검색합니다.")
 
     def test_status_lists_categories_and_readiness(self):
         body = client(ready=False).get("/api/status").json()

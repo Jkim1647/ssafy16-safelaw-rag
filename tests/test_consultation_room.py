@@ -61,6 +61,8 @@ class ConsultationAppTestCase(unittest.TestCase):
         patches = [
             mock.patch.dict(os.environ, {"GMS_KEY": "test-key"}),
             mock.patch.object(streamlit_app, "INDEX_PATH", Path(self.index.name)),
+            # 판례 색인 유무가 PC마다 달라도 같은 결과가 나오게 고정한다.
+            mock.patch.object(streamlit_app, "case_index_status", lambda path=None: (True, "법령·판례 색인 사용")),
         ]
         for patch in patches:
             patch.start()
@@ -234,6 +236,20 @@ class ArticleNavigationTests(ConsultationAppTestCase):
 
         self.assertEqual(len(self.app.chat_input), 0)
         self.assertIsNone(self.app.selectbox(key="article_picker_labor").value)
+
+
+class CaseIndexNoticeTests(ConsultationAppTestCase):
+    def test_missing_case_index_is_announced_and_promises_drop_cases(self):
+        message = "판례 색인이 없어 법령만 검색합니다."
+        with mock.patch.object(streamlit_app, "case_index_status", lambda path=None: (False, message)):
+            self.app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=30)
+            self.app.session_state["safelaw_pipeline"] = self.pipeline
+            self.app.run()
+
+        self.assertIn(message, [warning.value for warning in self.app.sidebar.warning])
+        promises = " ".join(md.value for md in self.app.markdown if 'class="trust-row"' in md.value)
+        self.assertIn("381개 조문", promises)
+        self.assertNotIn("판례 50건", promises)
 
 
 class ChecklistPanelTests(ConsultationAppTestCase):

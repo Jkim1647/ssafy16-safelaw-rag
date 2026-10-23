@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -11,6 +12,8 @@ from typing import Any, Protocol
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.indexing import EmbeddingProvider
 from legal_rag.rag.mmr import mmr_select
+
+logger = logging.getLogger(__name__)
 
 
 CATEGORY_LABELS = {
@@ -442,9 +445,10 @@ class CombinedLegalRetriever:
         if self._case_enricher is not None:
             try:
                 self._case_enricher.enrich(plan, category=category)  # type: ignore[attr-defined]
-            except Exception:
+            except Exception as exc:
                 # 실시간 보강 실패가 기존 정적 판례 검색까지 중단시키지 않게 한다.
-                pass
+                # 예외 메시지에는 API 주소의 OC 값이나 질문이 섞일 수 있어 종류만 남긴다.
+                logger.warning("판례 실시간 보강에 실패해 기존 판례 색인으로 검색합니다: %s", type(exc).__name__)
         return self.retrieve_with_plan(plan, category=category, top_k=top_k)
 
     def retrieve_with_plan(self, plan: SearchPlan, *, category: LegalCategory,

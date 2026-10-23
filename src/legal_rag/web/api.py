@@ -35,6 +35,7 @@ from legal_rag.ui.streamlit_app import (
     UiConfigurationError,
     build_checklist_builder,
     build_pipeline,
+    case_index_status,
     runtime_readiness,
 )
 
@@ -59,6 +60,8 @@ class WebServices:
     pipeline: Callable[[], Any]
     checklist_builder: Callable[[], Any]
     top_k: int = 5
+    # 판례 색인이 없으면 법령만 검색한다는 사실을 상태 응답으로 알린다.
+    case_index: Callable[[], tuple[bool, str]] = lambda: (True, "")
 
 
 def _lazy(factory: Callable[[], Any]) -> Callable[[], Any]:
@@ -81,6 +84,7 @@ def default_services(settings: Settings | None = None) -> WebServices:
         pipeline=_lazy(lambda: build_pipeline(settings)),
         checklist_builder=_lazy(lambda: build_checklist_builder(settings)),
         top_k=settings.rag_top_k,
+        case_index=_lazy(case_index_status),
     )
 
 
@@ -140,9 +144,12 @@ def create_app(services: WebServices | None = None) -> FastAPI:
     @app.get("/api/status")
     def status() -> dict[str, Any]:
         ready, message = resolved.readiness()
+        case_search, case_message = resolved.case_index()
         return {
             "ready": ready,
             "message": message,
+            "case_search": case_search,
+            "notice": "" if case_search else case_message,
             "categories": [
                 {"value": category.value, "label": CATEGORY_LABELS[category],
                  "examples": list(EXAMPLE_QUESTIONS[category])}

@@ -1,6 +1,8 @@
 import json
 import sys
 import tempfile
+import threading
+import time
 import unittest
 from datetime import date
 from pathlib import Path
@@ -12,7 +14,7 @@ from legal_rag.collectors.court_cases import CaseSearchResult
 from legal_rag.domain.models import LegalCategory
 from legal_rag.rag.case_enrichment import IncrementalCaseEnricher
 from legal_rag.rag.case_selection import CaseSelectionError
-from legal_rag.rag.retrieval import SearchPlan
+from legal_rag.rag.retrieval import CombinedLegalRetriever, RetrievalResult, SearchPlan
 
 
 class FakeClient:
@@ -190,6 +192,86 @@ class CaseEnrichmentTests(unittest.TestCase):
             IncrementalCaseEnricher.cache_key(first, LegalCategory.LABOR),
             IncrementalCaseEnricher.cache_key(second, LegalCategory.LABOR),
         )
+
+
+
+class SlowPerTermClient:
+    """검색어마다 다른 판례를 돌려주고, 두 스레드가 겹치도록 검색을 늦춘다."""
+
+    def __init__(self):
+        self.lock = threading.Lock()
+
+    def search(self, query, *, display=5):
+        time.sleep(0.2)
+        number = "2099다1" if query == "부당해고" else "2099다2"
+        case_id = number[-1]
+        return [CaseSearchResult(case_id, number, query, "대법원", date(2099, 1, int(case_id)), "판결", "대법원")]
+
+    def fetch(self, case_id):
+        number = f"2099다{case_id}"
+        return {"판례정보일련번호": case_id, "사건번호": number, "법원명": "대법원",
+                "사건명": "부당해고 임금", "선고일자": f"2099010{case_id}", "판결유형": "판결",
+                "판시사항": "[1] 부당해고 임금", "판결요지": "부당해고 임금에 관한 판단",
+                "판례내용": "【주 문】 상고를 기각한다.\n【이 유】 부당해고 임금에 관한 판단이다.",
+                "참조조문": ""}
+
+
+class ConcurrentEnrichmentTests(unittest.TestCase):
+    def test_parallel_questions_keep_every_history_entry_and_case(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "static.json").write_text("[]", encoding="utf-8")
+            enricher = IncrementalCaseEnricher(SlowPerTermClient(), FakeEmbedder(), FakeStore(),
+                static_dataset=root / "static.json", dynamic_dataset=root / "dynamic.json",
+                history_path=root / "history.json")
+            plans = [SearchPlan("해고 질문", "부당해고", ("부당해고",), False),
+                     SearchPlan("임금 질문", "임금", ("임금",), False)]
+            errors = []
+
+            def run(plan):
+                try:
+                    enricher.enrich(plan, category=LegalCategory.LABOR)
+                except Exception as exc:  # 스레드 예외를 테스트 실패로 드러낸다.
+                    errors.append(exc)
+
+            threads = [threading.Thread(target=run, args=(plan,)) for plan in plans]
+            for thread in threads:
+                thread.start()
+            for thread in threads:
+                thread.join()
+
+            self.assertEqual(errors, [])
+            history = json.loads((root / "history.json").read_text(encoding="utf-8"))
+            dynamic = json.loads((root / "dynamic.json").read_text(encoding="utf-8"))
+            self.assertEqual(len(history["entries"]), 2)
+            self.assertEqual(sorted(item["case_number"] for item in dynamic), ["2099다1", "2099다2"])
+            self.assertEqual(list(root.glob("*.tmp")), [])
+
+
+class FailingEnricher:
+    def enrich(self, plan, *, category):
+        raise RuntimeError("https://www.law.go.kr/DRF/lawSearch.do?OC=secret-oc 응답 오류")
+
+
+class PlanOnlyRetriever:
+    def plan(self, query, category):
+        return SearchPlan(query, query, (), False)
+
+    def retrieve_with_plan(self, plan, *, category, top_k=5):
+        return RetrievalResult(plan=plan, hits=())
+
+
+class EnrichmentFailureLoggingTests(unittest.TestCase):
+    def test_failed_enrichment_is_logged_without_details_and_search_continues(self):
+        retriever = CombinedLegalRetriever(PlanOnlyRetriever(), PlanOnlyRetriever(), FailingEnricher())
+
+        with self.assertLogs("legal_rag.rag.retrieval", level="WARNING") as logs:
+            result = retriever.retrieve("질문", category=LegalCategory.LABOR)
+
+        self.assertEqual(result.hits, ())
+        joined = "\n".join(logs.output)
+        self.assertIn("RuntimeError", joined)
+        self.assertNotIn("secret-oc", joined)
 
 
 if __name__ == "__main__":

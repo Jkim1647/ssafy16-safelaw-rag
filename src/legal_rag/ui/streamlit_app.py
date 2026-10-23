@@ -190,6 +190,28 @@ def runtime_readiness(settings: Settings, index_path: Path | None = None) -> tup
     return True, "GMS와 법령 색인을 사용할 수 있습니다."
 
 
+def _case_index(st: Any) -> tuple[bool, str]:
+    # Chroma를 여는 비용이 있어 세션마다 한 번만 확인한다.
+    if "safelaw_case_index" not in st.session_state:
+        st.session_state.safelaw_case_index = case_index_status()
+    return st.session_state.safelaw_case_index
+
+
+def case_index_status(case_index_path: Path | None = None) -> tuple[bool, str]:
+    """판례 색인 상태를 알려 준다. 없거나 비어 있으면 법령만 검색하므로 화면에서 그 사실을 알린다."""
+
+    path = case_index_path or CASE_INDEX_PATH
+    if not path.exists():
+        return False, "판례 색인이 없어 법령만 검색합니다. build_case_index.py를 실행하면 판례도 함께 검색합니다."
+    try:
+        count = ChromaCaseVectorStore(path).count
+    except Exception as exc:  # Chroma 파일 손상 등. 법령 검색은 그대로 두고 화면에 알린다.
+        return False, f"판례 색인을 읽지 못해 법령만 검색합니다 ({type(exc).__name__})."
+    if count == 0:
+        return False, "판례 색인이 비어 있어 법령만 검색합니다. build_case_index.py를 실행해 주세요."
+    return True, f"법령·판례 색인을 모두 사용합니다 (판례 청크 {count:,}개)."
+
+
 def build_pipeline(settings: Settings, index_path: Path = INDEX_PATH) -> StatuteRagPipeline:
     ready, message = runtime_readiness(settings, index_path)
     if not ready:
@@ -451,6 +473,9 @@ def _render_sidebar(st: Any, settings: Settings, ready: bool, readiness_message:
         st.caption("개인정보 보호형 생활법률 상담실")
         if ready:
             st.success("시스템 준비 완료", icon="✅")
+            cases_ready, case_message = _case_index(st)
+            if not cases_ready:
+                st.warning(case_message, icon="⚠️")
         else:
             st.error(readiness_message, icon="⚠️")
 
@@ -598,14 +623,20 @@ def _consult_greeting(category: LegalCategory | None) -> str:
     )
 
 
-def _trust_row_html(facts: LibraryFacts | None) -> str:
+def _trust_row_html(facts: LibraryFacts | None, cases_indexed: bool = True) -> str:
     if facts is None:
         sources = "국가법령정보센터의 법령·판례 원문에서 찾은 근거만 인용해요."
-    else:
+    elif cases_indexed:
         sources = (
             f"국가법령정보센터의 현행 법령 {facts.law_count}개 법률 {facts.statute_articles}개 조문과 "
             f"판례 {facts.case_count}건({facts.oldest_decision[:4]}~{facts.latest_decision[:4]}년 선고)에서 "
             f"찾은 근거만 인용해요. 원문 기준일 {facts.collected}."
+        )
+    else:
+        # 판례 색인이 없으면 실제로 검색하지 않는 판례 수를 약속에 넣지 않는다.
+        sources = (
+            f"국가법령정보센터의 현행 법령 {facts.law_count}개 법률 {facts.statute_articles}개 조문에서 "
+            f"찾은 근거만 인용해요. 원문 기준일 {facts.collected}. 판례 색인은 아직 없어요."
         )
     return (
         '<div class="trust-row">'
@@ -613,7 +644,7 @@ def _trust_row_html(facts: LibraryFacts | None) -> str:
         "<div><strong>근거가 없으면 답하지 않아요</strong><p>답변의 인용 문구가 원문에 그대로 있는지 확인하고, "
         "확인되지 않으면 추측하지 않고 근거 부족으로 알려 드려요.</p></div>"
         "<div><strong>개인정보는 가리고 남기지 않아요</strong><p>이름·전화번호 등은 외부 모델에 보내기 전에 가리고, "
-        "상담 기록은 이 화면에만 두고 저장하지 않아요.</p></div>"
+        "원문과 상담 기록은 이번 접속 동안 서버 메모리에만 두고 파일·로그·DB에 남기지 않아요.</p></div>"
         "</div>"
     )
 
@@ -674,7 +705,9 @@ def _render_consultation_room(st: Any, settings: Settings, ready: bool, options:
         # 첫 질문 전에는 상담실이 지키는 약속을 데이터셋의 실제 숫자로 보여 준다.
         if "safelaw_library_facts" not in st.session_state:
             st.session_state.safelaw_library_facts = load_library_facts()
-        st.markdown(_trust_row_html(st.session_state.safelaw_library_facts), unsafe_allow_html=True)
+        st.markdown(
+            _trust_row_html(st.session_state.safelaw_library_facts, _case_index(st)[0]), unsafe_allow_html=True
+        )
         st.markdown(
             '<p class="trust-note">판례는 자동으로 모은 공개 판결로, 법률 전문가 검수 전이에요. '
             "구체적인 사건은 변호사나 대한법률구조공단(132)과 상의하세요.</p>",

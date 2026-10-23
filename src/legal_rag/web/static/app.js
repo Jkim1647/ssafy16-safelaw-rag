@@ -162,7 +162,8 @@ async function loadStatus() {
     $("category").append(
       ...body.categories.map((item) => new Option(item.label, item.value)),
     );
-    $("readiness").textContent = body.ready ? "✅ 시스템 준비 완료" : `⚠️ ${body.message}`;
+    const notice = body.ready && body.notice ? ` · ⚠️ ${body.notice}` : "";
+    $("readiness").textContent = body.ready ? `✅ 시스템 준비 완료${notice}` : `⚠️ ${body.message}`;
     $("readiness").className = `readiness ${body.ready ? "ok" : "bad"}`;
     $("submit").dataset.ready = String(body.ready);
     $("submit").disabled = !body.ready;
