@@ -5,10 +5,10 @@
 - [x] 1) 요구사항 정의서: [`requirements-definition.md`](requirements-definition.md) — 기능별 요구사항 표, 도메인 조건 충족 근거
 - [x] 2) RAG 파이프라인 설계문서: [`rag-pipeline-design.md`](rag-pipeline-design.md) (계층·보안 경계는 [`architecture.md`](architecture.md))
 - [x] 3) 검증 결과: [`verification-results.md`](verification-results.md) — 4장 항목별 실행 결과, 요구사항 대조표, 테스트 결과표, 화면 캡처
-- [ ] 3) 셀프·상호 체크리스트 — 셀프 초안 [`self-checklist.md`](self-checklist.md) 작성(통과 26 · 미확인 1, 증빙 `checklist/`), 작성자 확인과 상호 점검 대기
+- [ ] 3) 셀프·상호 체크리스트 — 셀프 [`self_check/`](self_check/) 작성(통과 27, 증빙 `self_check/screenshots/`), 상호 양식 [`cross_check/`](cross_check/) 준비, 점검자 작성 대기
 - [x] 3) 심화 결과 비교: MMR(README), RAG 전후([`rag-before-after.md`](rag-before-after.md))
 - [x] 4) 소스코드, 수집·색인 스크립트, 심화 기능 코드
-- [ ] 5) 셀프 체크리스트 결과 — 초안 [`self-checklist.md`](self-checklist.md)와 배포 양식에 채운 [`self-checklist.xlsx`](self-checklist.xlsx) 작성, 작성자 확인 대기
+- [ ] 5) 셀프 체크리스트 결과 — [`self_checklist.md`](self_check/self_checklist.md)와 배포 양식에 채운 [`self_checklist.xlsx`](self_check/self_checklist.xlsx) 작성, 작성자 최종 확인 대기
 - [x] 6) README: 개요·실행 방법, 필수/심화 기능 구분, 데이터 준비·색인 절차, 출처·이용 조건, 심화 요약
 - [ ] 제출 형식 확인: 명세서는 `AI코어프로젝트2_[주제명]_지역_반_성명.zip`을 lab.ssafy.com에 업로드, 안내받은 방식은 GitLab 레포. 2026-10-22 GitLab push를 제출로 판단했으나 공식 확인은 대기
 

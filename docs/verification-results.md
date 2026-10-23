@@ -180,11 +180,13 @@
 | 선택한 심화 기능이 동작하고 필수 기능 결과와 비교 | 완료 (F2014 유사도 대비, F2015 RAG 미사용 대비) |
 | 증명용 스크린샷 첨부 | 완료 (위 화면 6장 + 아키텍처) |
 | 요구사항 정의서·RAG 파이프라인 설계문서·소스코드·README.md | 완료 ([requirements-definition.md](requirements-definition.md), [rag-pipeline-design.md](rag-pipeline-design.md)) |
-| 검증 결과(요구사항 대조표, 테스트 결과표, 셀프·상호 체크리스트) | 대조표·결과표 완료, 셀프 체크리스트 초안 작성, 상호 체크리스트 대기 |
+| 검증 결과(요구사항 대조표, 테스트 결과표, 셀프·상호 체크리스트) | 대조표·결과표 완료, 셀프 체크리스트 작성, 상호 체크리스트 양식 준비(점검자 작성 예정) |
 
 ## 6. 셀프·상호 체크리스트
 
-셀프 점검은 [self-checklist.md](self-checklist.md)에 배포 양식의 27항목 순서대로 정리했다(2026-10-23, 통과 26 · 미확인 1). 각 항목을 다시 실행했고 명령 출력과 화면은 [`checklist/`](checklist/)에 PNG로 남겼다. 미확인 1건은 상호 체크리스트가 아직 없어서다.
+셀프 점검은 [self_check/self_checklist.md](self_check/self_checklist.md)와 배포 엑셀 양식 [self_checklist.xlsx](self_check/self_checklist.xlsx)에 27항목 순서대로 정리했다(2026-10-23, 통과 27). 각 항목을 다시 실행했고 서비스·터미널·코드·문서 화면을 [`self_check/screenshots/`](self_check/screenshots/)에 PNG로 남겼다. 27번(셀프·상호 체크리스트 포함)은 상호 체크리스트를 작성할 예정이라 통과로 적었다.
+
+상호 점검은 점검자가 [cross_check/cross_checklist.md](cross_check/cross_checklist.md) 또는 [cross_checklist.xlsx](cross_check/cross_checklist.xlsx)에 작성하고, 증빙 사진은 [`cross_check/screenshots/`](cross_check/screenshots/)에 넣는다.
 
 상호 점검 결과(점검자, 점검일, 지적 사항, 반영 여부)는 점검을 받은 뒤 이 절에 추가한다.
 
@@ -198,7 +200,7 @@
 | 유류분 질문에서 민법 제1112조 미검색 | 완료 | 검색어 규칙 추가, 실제 색인에서 1위 |
 | 검색어 변환 모델 결정 | 완료 | 속도를 우선해 `gpt-5.4-mini` 유지. 법령 MRR 0.740, E2E 0.667을 감수. 프롬프트 보강(용어 6~10개)은 MRR 0.708로 더 낮아 되돌림 |
 | 법률 전문가 라벨 검수 | 대기 | [case-evaluation-review-sheet.md](case-evaluation-review-sheet.md) 서명 필요 |
-| 셀프·상호 체크리스트 | 셀프 초안 완료, 상호 대기 | 셀프 [self-checklist.md](self-checklist.md) 통과 26 · 미확인 1. 상호 점검은 옆 교육생 점검 후 기록 |
+| 셀프·상호 체크리스트 | 셀프 완료, 상호 양식 준비 | 셀프 [self_checklist.md](self_check/self_checklist.md) 통과 27. 상호는 [cross_check/](cross_check/)에 점검자 작성 예정 |
 | 원문 보관 설명 정정 | 완료 | 원문은 외부 API·로그·파일·Vector DB에 저장하지 않고, 마스킹 비교용으로 현재 Streamlit 세션 메모리(서버 프로세스)에만 일시 보관한다고 README·정책 문서·화면 문구를 실제 동작에 맞춤 |
 | 판례 색인 없음 안내 | 완료 | 판례 색인이 없거나 비어 있으면 Streamlit 사이드바와 웹 상태에 "법령만 검색합니다"를 표시하고, 첫 화면 약속에서 판례 수를 뺌 |
 | 판례 보강 동시 실행 | 완료 | 요청마다 다른 임시 파일로 쓰고, 같은 프로세스 안에서는 잠금 후 최신 파일을 다시 읽어 합침. 여러 프로세스(예: uvicorn 워커 여러 개)가 동시에 쓰는 경우는 막지 않는다. 그때 잃을 수 있는 것은 수집 이력과 동적 판례 목록의 일부이며, 같은 판례가 다시 검색되면 다시 받아 같은 청크 ID로 덮어써 Chroma 색인에 중복은 생기지 않음 |
