@@ -27,7 +27,7 @@
 ## GitLab 제출물
 
 - [x] 프로젝트 소스 코드
-- [x] `.env`, API 키, 로컬 Chroma, 원시 상담 질문 Git 제외
+- [x] `.env`(API 키)와 원시 상담 질문은 Git 제외. 검증에 필요한 Chroma 색인·판례 보강 캐시는 Git 포함(키 값 검색 0건)
 - [x] RAG 파이프라인 설계 문서: `docs/rag-pipeline-design.md`, `docs/architecture.md`
 - [x] 검색 및 End-to-End 검증 결과
 - [x] 데이터 출처·API·이용 조건 현황
@@ -85,7 +85,7 @@
 
 # 비밀값·로컬 산출물 추적 여부
 git status --short
-git ls-files .env "data/indexes/**" "data/raw/**"
+git ls-files .env
 
 # 최종 커밋 확인
 git log -1 --oneline

@@ -1,0 +1,2711 @@
+{
+  "schema_version": 1,
+  "entries": {
+    "a7214f3d8898deba82d24120e74b7e4c59313f9646f317caad1f00ce95d3b13c": {
+      "category": "labor",
+      "legal_terms": [
+        "임금체불",
+        "근로기준법 위반",
+        "임금미지급"
+      ],
+      "status": "completed",
+      "candidate_count": 9,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "collected_at": "2026-10-21T06:54:45.771307+00:00"
+    },
+    "812ff89adae9b16133f929d2b78fce55a824243b2421522ccc6b22e0621cc6ce": {
+      "category": "labor",
+      "legal_terms": [
+        "근로기준법",
+        "임금체불",
+        "임금미지급"
+      ],
+      "status": "completed",
+      "candidate_count": 9,
+      "new_case_count": 6,
+      "new_chunk_count": 52,
+      "case_numbers": [
+        "2025다215010",
+        "2025다202901",
+        "2025다219757, 219758",
+        "2025다214123",
+        "2023다285438",
+        "2022다255454"
+      ],
+      "collected_at": "2026-10-21T06:55:07.006650+00:00"
+    },
+    "6786659a0b68bb6f2acce8e1e5ea7e52c1f7d7361093688283f777fb044a86a5": {
+      "category": "labor",
+      "legal_terms": [
+        "근로기준법 위반",
+        "임금 체불",
+        "임금 미지급"
+      ],
+      "status": "completed",
+      "candidate_count": 3,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "collected_at": "2026-10-21T06:55:56.083419+00:00"
+    },
+    "157fc3e894e2fddc96e93520f46edaa518f2c40abaac0c8923b3bcb13cad2e12": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수"
+      ],
+      "status": "completed",
+      "candidate_count": 5,
+      "new_case_count": 1,
+      "new_chunk_count": 9,
+      "case_numbers": [
+        "2026다200365"
+      ],
+      "collected_at": "2026-10-21T23:43:07.079555+00:00"
+    },
+    "dced0ce55c9630bb0929392de9e0e463cd73c61e071b8c3ea37564f571b24cca": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "collected_at": "2026-10-21T23:44:16.982934+00:00"
+    },
+    "19a47a4d147d6595341c0872aabedc51ec3f8d00ccd565b389464c733107987d": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 11,
+      "new_case_count": 4,
+      "new_chunk_count": 46,
+      "case_numbers": [
+        "2023두54914",
+        "2024도20470",
+        "2024두41038",
+        "2024두32973"
+      ],
+      "collected_at": "2026-10-21T23:45:01.146053+00:00"
+    },
+    "685f05a8ee9257cabf238bee61fd2decff5581ca55f20d8abbf015ce2a2524af": {
+      "category": "labor",
+      "legal_terms": [
+        "근로계약",
+        "부당해고",
+        "구제절차"
+      ],
+      "status": "completed",
+      "candidate_count": 9,
+      "new_case_count": 2,
+      "new_chunk_count": 41,
+      "case_numbers": [
+        "2024도17987",
+        "2018다296229"
+      ],
+      "collected_at": "2026-10-21T23:45:51.536840+00:00"
+    },
+    "4827466f693cc3f72e6e870abf802f474dcd25eb1a7aef8d87717a307be45f61": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "대항력",
+        "우선변제권",
+        "임차권등기명령"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 2,
+      "new_chunk_count": 13,
+      "case_numbers": [
+        "2026다201494",
+        "2023다217428"
+      ],
+      "collected_at": "2026-10-22T00:11:37.281096+00:00"
+    },
+    "e6ba0d3632b1aa923f6e7fb9ad8bb6b9447e8828bfa71bcdba3e95ff48024eb8": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "대항력",
+        "우선변제권",
+        "임차권등기명령"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "collected_at": "2026-10-22T00:17:37.668733+00:00"
+    },
+    "a9ee25a1d211343cf0111ce151c0d97e759ef435ec483a95cb75b069a18a7ff7": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "collected_at": "2026-10-22T01:42:43.967083+00:00"
+    },
+    "f869db8b3c03959603dbc11b46a8b1304c26f221ae743877f7ae692d377bbea0": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "collected_at": "2026-10-22T01:52:24.364644+00:00"
+    },
+    "658d82a4c48e2c2dba33b8cdf115e6a9d993309d2462d123dd0554431db4284d": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "collected_at": "2026-10-22T01:56:55.723687+00:00"
+    },
+    "0763bcbbff3ffdfc88492ea2d2e4ca3b4b97688145cb48f9a0d6dadc58560267": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "계약갱신요구권",
+        "묵시적 갱신",
+        "주택임대차보호법"
+      ],
+      "status": "completed",
+      "candidate_count": 8,
+      "new_case_count": 1,
+      "new_chunk_count": 8,
+      "case_numbers": [
+        "2023다307024"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024다317332",
+          "case_name": "건물인도·손해배상(기)[부속물 매매대금 채권을 수동채권으로 한 임대인의 상계 의사표시 이전 임차인의 목적물 점유가 불법점유인지 문제된 사건]",
+          "court": "대법원",
+          "decision_date": "2025-05-15",
+          "term": "계약갱신요구권",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024구단60339",
+          "case_name": "양도소득세부과처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2024-12-20",
+          "term": "계약갱신요구권",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두64808",
+          "case_name": "시정명령등취소[치킨 프랜차이즈업을 영위하는 가맹본부인 원고가 가맹점사업자단체 활동 등을 이유로 가맹점사업자에게 불이익을 주는 행위 등을 하였는지 여부가 문제된 사건]",
+          "court": "대법원",
+          "decision_date": "2024-07-11",
+          "term": "계약갱신요구권",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다307024",
+          "case_name": "임대차보증금[상가건물 임대차계약의 묵시적 갱신이 문제된 사건]",
+          "court": "대법원",
+          "decision_date": "2024-06-27",
+          "term": "계약갱신요구권",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "묵시적 갱신",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025나41158",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "부산지방법원",
+          "decision_date": "2026-01-21",
+          "term": "묵시적 갱신",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025누4540",
+          "case_name": "양도소득세부과처분취소",
+          "court": "서울고등법원",
+          "decision_date": "2025-12-12",
+          "term": "묵시적 갱신",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30078",
+          "case_name": "양도소득세부과처분취소",
+          "court": "대법원",
+          "decision_date": "2026-06-05",
+          "term": "주택임대차보호법",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:01:16.426019+00:00"
+    },
+    "6eec105a87cf5cc7b851691b6aac54294e7070070d6f9dbc99b0a92a31a0444a": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도10476",
+          "case_name": "사기[검사가 양형에 관한 의견을 법정에서 진술하지 않고 변론종결 후 서면으로 제출한 것이 공판중심주의에 위배되는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-08",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:15:52.418640+00:00"
+    },
+    "3c1e765a6682e9c8c6805464294fc742396638bfffc524c72b23b1d340dd67f8": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도10476",
+          "case_name": "사기[검사가 양형에 관한 의견을 법정에서 진술하지 않고 변론종결 후 서면으로 제출한 것이 공판중심주의에 위배되는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-08",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:27:16.482186+00:00"
+    },
+    "0eb8d5721e7ceebbebeda183f56ccf81520eeda23ea818682c030a8ee5189985": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수"
+      ],
+      "status": "completed",
+      "candidate_count": 3,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "임대차보증금",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다287663",
+          "case_name": "부당이득금[선순위 회생담보권자가 후순위 회생담보권자를 상대로 회생계획에서 정한 바에 따라 담보목적물의 매각대금이 선순위 회생담보권 원리금 채무에 우선 변제되어야 함에도 그와 달리 변제기가 도래한 각 회생담보권 원리금 채무에 분할 변제되었다고 주장하며 그 차액 상당의 부당이득반환을 구하는 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-20",
+          "term": "보증금 반환",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025나41158",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "부산지방법원",
+          "decision_date": "2026-01-21",
+          "term": "보증금 회수",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:28:19.923073+00:00"
+    },
+    "20f5bd4276cd9892e4e83d32e7c339c10e96ee27738faeb21722036f138aa9d6": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인"
+      ],
+      "status": "completed",
+      "candidate_count": 5,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024구합56313",
+          "case_name": "상속세부과처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2026-06-24",
+          "term": "상속포기",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2026도6500",
+          "case_name": "특수공무집행방해·허위공문서작성·허위작성공문서행사·대통령기록물관리에관한법률위반·공용서류손상·직권남용권리행사방해·대통령등의경호에관한법률위반교사·범인도피교사",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30417",
+          "case_name": "재산세등부과처분취소",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024도5902",
+          "case_name": "산업안전보건법위반·업무상과실치사·업무상과실치상",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다200335",
+          "case_name": "구상금",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:30:21.236373+00:00"
+    },
+    "9e99177c49e47aefbc9d15b64a3f6124a6cf7e13f77a1cf0c4cebea56f9d6340": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도10476",
+          "case_name": "사기[검사가 양형에 관한 의견을 법정에서 진술하지 않고 변론종결 후 서면으로 제출한 것이 공판중심주의에 위배되는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-08",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:31:08.592481+00:00"
+    },
+    "73931f49959e393a05c818fc2961b5c9a0e1090a039751fe016dea37b01c1d46": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도10476",
+          "case_name": "사기[검사가 양형에 관한 의견을 법정에서 진술하지 않고 변론종결 후 서면으로 제출한 것이 공판중심주의에 위배되는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-08",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:45:39.138107+00:00"
+    },
+    "62885e02406b1422a6f4d2314bdd75d16f454a95810f0d7643191d9b3a154f29": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도10476",
+          "case_name": "사기[검사가 양형에 관한 의견을 법정에서 진술하지 않고 변론종결 후 서면으로 제출한 것이 공판중심주의에 위배되는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-08",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T02:46:48.332708+00:00"
+    },
+    "9bd5d6d16aae80f2df9f1998a90fd7f5567a23943eaf9e0fff1ea67a37afe764": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "근로계약"
+      ],
+      "status": "completed",
+      "candidate_count": 3,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025구합54661",
+          "case_name": "징계결정취소",
+          "court": "서울행정법원",
+          "decision_date": "2026-04-23",
+          "term": "근로계약",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2022다225606",
+          "case_name": "근로자지위확인등[제철소의 협력업체 소속 근로자들이 근로자파견관계 성립을 주장한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-04-16",
+          "term": "근로계약",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:14:33.282678+00:00"
+    },
+    "eae111d19185078f9a82fcd4677ac39b85f9e861801d17c0f16f95153dff57e9": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도10476",
+          "case_name": "사기[검사가 양형에 관한 의견을 법정에서 진술하지 않고 변론종결 후 서면으로 제출한 것이 공판중심주의에 위배되는지 여부가 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-08",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:17:45.219599+00:00"
+    },
+    "e0d648c33949ce96aab7b65b937e2a12d2e1d0156acc79b681cc8fdb228aff93": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30542",
+          "case_name": "부가가치세부과처분무효확인등청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:26:09.495611+00:00"
+    },
+    "025bd26bb0d2c31d92de522ac2f21ea5ad5f3cdb16fcc87742ce9010bb937211": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30542",
+          "case_name": "부가가치세부과처분무효확인등청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:26:54.813547+00:00"
+    },
+    "db67153a0fbadf33c1b866c49a1e1e45497e54c871459bd65c1d7d906eda4d08": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30542",
+          "case_name": "부가가치세부과처분무효확인등청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:29:30.261896+00:00"
+    },
+    "11f4a1c500cd507f170e43551086da04b8c1dcd0563d04a8dab81bc0625e2ba6": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30542",
+          "case_name": "부가가치세부과처분무효확인등청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:29:53.576865+00:00"
+    },
+    "98a120641b2514e0fbd94222320f5c6c381df53bafcf86419903a5d66c961d69": {
+      "category": "labor",
+      "legal_terms": [
+        "근로자",
+        "회사 물품 파손",
+        "과실"
+      ],
+      "status": "completed",
+      "candidate_count": 9,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2026마6750",
+          "case_name": "채권압류및추심명령",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "근로자",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201325",
+          "case_name": "보험금",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "근로자",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024도5902",
+          "case_name": "산업안전보건법위반·업무상과실치사·업무상과실치상",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "근로자",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도6356",
+          "case_name": "특정범죄가중처벌등에관한법률위반(뇌물)·특정경제범죄가중처벌등에관한법률위반(배임)·직권남용권리행사방해",
+          "court": "대법원",
+          "decision_date": "2025-09-11",
+          "term": "회사 물품 파손",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2021고단3755",
+          "case_name": "부정경쟁방지및영업비밀보호에관한법률위반(영업비밀국외누설등)·산업기술의유출방지및보호에관한법률위반·부정경쟁방지및영업비밀보호에관한법률위반(영업비밀누설등)·부정경쟁방지및영업비밀보호에관한법률위반",
+          "court": "대구지방법원서부지원",
+          "decision_date": "2024-05-09",
+          "term": "회사 물품 파손",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026고합1",
+          "case_name": "업무상과실치사",
+          "court": "창원지방법원",
+          "decision_date": "2026-09-01",
+          "term": "과실",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024다208865",
+          "case_name": "임대료청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "과실",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025다217842",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "과실",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025다212067",
+          "case_name": "구상금",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "과실",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:33:59.484932+00:00"
+    },
+    "fbe646c6a6558076f5256288bb14c3e4ac30a991f750a21ee7e810e890f951df": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30542",
+          "case_name": "부가가치세부과처분무효확인등청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:37:00.943569+00:00"
+    },
+    "f1118265b72c1d9bc0fe13b01174290c6f1aa37c8f0eabb5541a2780a5e50e50": {
+      "category": "labor",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2026마6750",
+          "case_name": "채권압류및추심명령",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "임금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025다219757",
+          "case_name": "임금·임금등청구",
+          "court": "대법원",
+          "decision_date": "2026-04-30",
+          "term": "임금",
+          "decision": "duplicate",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도13141",
+          "case_name": "금융실명거래및비밀보장에관한법률위반·개인정보보호법위반[갑이 을을 상대로 제기한 민사소송과 병이 을을 상대로 제기한 민사소송에서 을의 소송대리인이 각각의 사건에서 재판부를 통해 확인한 갑과 병의 은행 거래내역 등을 다른 사건에서 증거자료로 제출한 경우, 금융실명거래 및 비밀보장에 관한 법률 및 개인정보 보호법 위반죄에 대하여 형법 제20조에 따라 위법성이 조각되는지 여부]",
+          "court": "대법원",
+          "decision_date": "2026-02-26",
+          "term": "체불",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022다217056",
+          "case_name": "하도급계약보증금",
+          "court": "대법원",
+          "decision_date": "2024-10-08",
+          "term": "체불",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:37:29.810294+00:00"
+    },
+    "7f10aefe3113271784e250350c0cddc1f34ed54b4d59287a753930ae543db2f5": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30542",
+          "case_name": "부가가치세부과처분무효확인등청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T04:38:03.676711+00:00"
+    },
+    "ca2290098c73e3496d8b3f09d57c39ee06035f854ab7b2d26052bb185f0fd884": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속",
+        "손자",
+        "피상속인"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025다211537",
+          "case_name": "손해배상청구의소·손해배상청구의소",
+          "court": "대법원",
+          "decision_date": "2026-01-08",
+          "term": "손자",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024도15789",
+          "case_name": "특정경제범죄가중처벌등에관한법률위반(수재등)·특정경제범죄가중처벌등에관한법률위반(증재등)·특정경제범죄가중처벌등에관한법률위반(수재등)방조[금융회사등의 임직원이 변호사비를 대납받거나 황금도장을 수수하는 등으로 직무에 관하여 금품이나 그 밖의 이익을 수수·요구·약속하였는지 여부가 문제된 사건]",
+          "court": "대법원",
+          "decision_date": "2025-04-10",
+          "term": "손자",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2019다255416",
+          "case_name": "소유권이전등기",
+          "court": "대법원",
+          "decision_date": "2024-12-19",
+          "term": "손자",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024노697",
+          "case_name": "특정경제범죄가중처벌등에관한법률위반(수재등)·특정경제범죄가중처벌등에관한법률위반(증재등)·특정경제범죄가중처벌등에관한법률위반(수재등)방조",
+          "court": "서울고등법원",
+          "decision_date": "2024-09-25",
+          "term": "손자",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T05:10:38.799082+00:00"
+    },
+    "201a3a31803a39309beb8c7ec58bdf4f373ffdfcf02945bf96f2ad043594e415": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속",
+        "직계비손",
+        "대습상속"
+      ],
+      "status": "completed",
+      "candidate_count": 1,
+      "new_case_count": 1,
+      "new_chunk_count": 6,
+      "case_numbers": [
+        "2024스525, 526"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024스525",
+          "case_name": "기여분결정및상속재산분할·기여분결정및상속재산분할",
+          "court": "대법원",
+          "decision_date": "2024-06-13",
+          "term": "대습상속",
+          "decision": "indexed",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T05:15:45.742467+00:00"
+    },
+    "013685ad2e375e77dc524c90448f5018006e0b1101023d0286b5ba64bc07ea76": {
+      "category": "inheritance",
+      "legal_terms": [
+        "대습상속",
+        "대습상속인",
+        "상속분"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024스525",
+          "case_name": "기여분결정및상속재산분할·기여분결정및상속재산분할",
+          "court": "대법원",
+          "decision_date": "2024-06-13",
+          "term": "대습상속",
+          "decision": "duplicate",
+          "reason": ""
+        },
+        {
+          "case_number": "2025다219693",
+          "case_name": "유언무효확인등",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "상속분",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024다260146",
+          "case_name": "유언효력확인청구의소",
+          "court": "대법원",
+          "decision_date": "2026-06-24",
+          "term": "상속분",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024다208261",
+          "case_name": "유류분반환[기여분에 관한 민법 제1008조의2를 유류분에 준용하지 않은 구 민법 제1118조에 대하여, 헌법재판소가 헌법불합치를 선언하면서 구 민법 제1118조가 일정 시한 내 입법자가 개정할 때까지 계속 적용된다고 한 결정이 병행사건에 미치는 효력 등이 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "상속분",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T05:22:23.012782+00:00"
+    },
+    "fd275d903ae76c440a4594af400f97256e322b7593adf3acc6b02f3ea7a84f35": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속",
+        "대습상속",
+        "대습상속인"
+      ],
+      "status": "completed",
+      "candidate_count": 1,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024스525",
+          "case_name": "기여분결정및상속재산분할·기여분결정및상속재산분할",
+          "court": "대법원",
+          "decision_date": "2024-06-13",
+          "term": "대습상속",
+          "decision": "duplicate",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T05:24:17.878298+00:00"
+    },
+    "73e570527be62f12069b65e5ea83b0014467d5b856c82a3ac8826c927bc0c7f9": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025다217842",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "임대차보증금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "임대차보증금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다287663",
+          "case_name": "부당이득금[선순위 회생담보권자가 후순위 회생담보권자를 상대로 회생계획에서 정한 바에 따라 담보목적물의 매각대금이 선순위 회생담보권 원리금 채무에 우선 변제되어야 함에도 그와 달리 변제기가 도래한 각 회생담보권 원리금 채무에 분할 변제되었다고 주장하며 그 차액 상당의 부당이득반환을 구하는 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-20",
+          "term": "보증금 반환",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025나41158",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "부산지방법원",
+          "decision_date": "2026-01-21",
+          "term": "보증금 회수",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T05:33:30.668946+00:00"
+    },
+    "d0cb6468411ab681e3808537fbf6a8709ac7baa100b4c4291b3cebb7bbd2cc33": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인"
+      ],
+      "status": "completed",
+      "candidate_count": 5,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024구합56313",
+          "case_name": "상속세부과처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2026-06-24",
+          "term": "상속포기",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026도6500",
+          "case_name": "특수공무집행방해·허위공문서작성·허위작성공문서행사·대통령기록물관리에관한법률위반·공용서류손상·직권남용권리행사방해·대통령등의경호에관한법률위반교사·범인도피교사",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30417",
+          "case_name": "재산세등부과처분취소",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다200335",
+          "case_name": "구상금",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024도5902",
+          "case_name": "산업안전보건법위반·업무상과실치사·업무상과실치상",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T06:15:51.469585+00:00"
+    },
+    "e49a85b0ec6e6126e129bdb8c8d26f3add30b23c9dda5b2e4e29650edeb12727": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인"
+      ],
+      "status": "completed",
+      "candidate_count": 5,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024구합56313",
+          "case_name": "상속세부과처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2026-06-24",
+          "term": "상속포기",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2026도6500",
+          "case_name": "특수공무집행방해·허위공문서작성·허위작성공문서행사·대통령기록물관리에관한법률위반·공용서류손상·직권남용권리행사방해·대통령등의경호에관한법률위반교사·범인도피교사",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30417",
+          "case_name": "재산세등부과처분취소",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다200335",
+          "case_name": "구상금",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024도5902",
+          "case_name": "산업안전보건법위반·업무상과실치사·업무상과실치상",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T06:30:43.133296+00:00"
+    },
+    "3ece236690a408941e45b372bf393b5560d4b2840e2fab50f373c9af21abcd66": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속재산",
+        "유언",
+        "유류분"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 5,
+      "new_chunk_count": 40,
+      "case_numbers": [
+        "2025다219693",
+        "2024다260146",
+        "2024다309430",
+        "2024다208261",
+        "2024나27577"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025다219693",
+          "case_name": "유언무효확인등",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "유언",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2024다260146",
+          "case_name": "유언효력확인청구의소",
+          "court": "대법원",
+          "decision_date": "2026-06-24",
+          "term": "유언",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다295978",
+          "case_name": "집행판결",
+          "court": "대법원",
+          "decision_date": "2026-04-30",
+          "term": "유언",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024다309430",
+          "case_name": "예금[구수증서에 의한 유언의 효력 유무가 문제 된 사안]",
+          "court": "대법원",
+          "decision_date": "2026-04-02",
+          "term": "유언",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2024다208261",
+          "case_name": "유류분반환[기여분에 관한 민법 제1008조의2를 유류분에 준용하지 않은 구 민법 제1118조에 대하여, 헌법재판소가 헌법불합치를 선언하면서 구 민법 제1118조가 일정 시한 내 입법자가 개정할 때까지 계속 적용된다고 한 결정이 병행사건에 미치는 효력 등이 문제 된 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "유류분",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2024나27577",
+          "case_name": "유언무효확인 등",
+          "court": "광주고등법원",
+          "decision_date": "2025-11-12",
+          "term": "유류분",
+          "decision": "indexed",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-22T06:33:43.478919+00:00"
+    },
+    "c9e7a20c84637f74e2328ef250b81a131e550938d7ed9dca02493fb901d993fe": {
+      "category": "labor",
+      "legal_terms": [
+        "수습기간",
+        "본채용",
+        "정규직 채용"
+      ],
+      "status": "completed",
+      "candidate_count": 13,
+      "new_case_count": 1,
+      "new_chunk_count": 13,
+      "case_numbers": [
+        "2019누41456"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "수습기간",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024나2013287",
+          "case_name": "임금등",
+          "court": "서울고등법원",
+          "decision_date": "2025-12-12",
+          "term": "수습기간",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2021가합580165",
+          "case_name": "손해배상(국)",
+          "court": "서울중앙지방법원",
+          "decision_date": "2025-10-24",
+          "term": "수습기간",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024구합70753",
+          "case_name": "과징금부과처분등취소청구의소",
+          "court": "서울행정법원",
+          "decision_date": "2025-08-14",
+          "term": "수습기간",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024구합70753",
+          "case_name": "과징금부과처분등취소청구의소",
+          "court": "서울행정법원",
+          "decision_date": "2025-08-14",
+          "term": "수습기간",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024구단60773",
+          "case_name": "요양급여불승인처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2025-05-14",
+          "term": "본채용",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024구단60773",
+          "case_name": "요양급여불승인처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2025-05-14",
+          "term": "본채용",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2019두59349",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "대법원",
+          "decision_date": "2023-11-16",
+          "term": "본채용",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2018두43958",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "대법원",
+          "decision_date": "2021-04-29",
+          "term": "본채용",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2019누41456",
+          "case_name": "부당해고구제재심판정취소",
+          "court": "서울고등법원",
+          "decision_date": "2019-10-24",
+          "term": "본채용",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2019노96",
+          "case_name": "특정범죄가중처벌등에관한법률위반(조세)(피고인2·피고인3·피고인4에대하여일부인정된죄명조세범처벌법위반방조)·특정범죄가중처벌등에관한법률위반(허위세금계산서교부등)·특정경제범죄가중처벌등에관한법률위반(횡령)·업무상횡령·업무상배임·조세범처벌법위반",
+          "court": "대전고등법원",
+          "decision_date": "2025-07-23",
+          "term": "정규직 채용",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2021다245528",
+          "case_name": "근로자지위확인등·근로자지위확인등[「파견근로자 보호 등에 관한 법률」(이하 ‘파견법’)상 직접고용의무 이행과 임금 등 차액 상당의 손해배상금 지급을 구하는 사건]",
+          "court": "대법원",
+          "decision_date": "2025-03-27",
+          "term": "정규직 채용",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2023가합86650",
+          "case_name": "우선재고용의무이행등청구의소",
+          "court": "서울중앙지방법원",
+          "decision_date": "2024-11-15",
+          "term": "정규직 채용",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T06:30:46.197196+00:00"
+    },
+    "adb56cead9f073264f14ebc4e02b3c3876cff261d44737b73345f6bbbec6860d": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025다217842",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "임대차보증금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "임대차보증금",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다287663",
+          "case_name": "부당이득금[선순위 회생담보권자가 후순위 회생담보권자를 상대로 회생계획에서 정한 바에 따라 담보목적물의 매각대금이 선순위 회생담보권 원리금 채무에 우선 변제되어야 함에도 그와 달리 변제기가 도래한 각 회생담보권 원리금 채무에 분할 변제되었다고 주장하며 그 차액 상당의 부당이득반환을 구하는 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-20",
+          "term": "보증금 반환",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025나41158",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "부산지방법원",
+          "decision_date": "2026-01-21",
+          "term": "보증금 회수",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T06:48:03.991712+00:00"
+    },
+    "1c378e2a4e7d700f05b20aec130751be08c38655cbbc32c3bd940a98c47882e6": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "서면통지"
+      ],
+      "status": "completed",
+      "candidate_count": 6,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30542",
+          "case_name": "부가가치세부과처분무효확인등청구의소",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두42020",
+          "case_name": "법인세경정거부처분취소",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201948",
+          "case_name": "계약금반환등·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두34425",
+          "case_name": "법인세경정거부처분취소[인도네시아에서 석유개발사업을 영위하는 원고가 인도네시아 국영 석유회사 및 인도네시아 정부 내 석유ㆍ가스 규제기관과 사이에 체결한 생산물 분배계약상 자신의 참여지분 중 일부가 제3자에게 양도되었다고 주장하며 법인세 감액경정청구 거부처분의 취소를 구한 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-29",
+          "term": "서면통지",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T06:49:18.855867+00:00"
+    },
+    "7ef8ab4bb7f453e49b95dd549befdb0c33ef46e7c6047b144261440d8c3fc2f7": {
+      "category": "labor",
+      "legal_terms": [
+        "직장 내 괴롭힘",
+        "인사발령",
+        "지점 발령"
+      ],
+      "status": "completed",
+      "candidate_count": 13,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025노2282",
+          "case_name": "가. 스토킹범죄의처벌등에관한법률위반  나. 스토킹방지및피해자보호등에관한법률위반방조 다. 모욕 라. 폭력행위등처벌에관한법률위반(공동상해)",
+          "court": "창원지방법원",
+          "decision_date": "2026-01-20",
+          "term": "직장 내 괴롭힘",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024고단353",
+          "case_name": "가. 스토킹범죄의처벌등에관한법률위반 나. 스토킹방지및피해자보호등에관한법률위반방조 다. 모욕 라. 폭력행위등처벌에관한법률위반(공동상해)",
+          "court": "창원지방법원밀양지원",
+          "decision_date": "2025-09-16",
+          "term": "직장 내 괴롭힘",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024나22197",
+          "case_name": "해고무효확인",
+          "court": "수원고등법원",
+          "decision_date": "2025-06-18",
+          "term": "직장 내 괴롭힘",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2024나25137",
+          "case_name": "방해금지청구",
+          "court": "광주고등법원",
+          "decision_date": "2025-06-12",
+          "term": "직장 내 괴롭힘",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024가합53111",
+          "case_name": "방해금지청구",
+          "court": "광주지방법원",
+          "decision_date": "2024-09-05",
+          "term": "직장 내 괴롭힘",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026노212",
+          "case_name": "특수공무집행방해, 허위공문서작성, 허위작성공문서행사, 대통령기록물관리에관한법률위반, 공용서류손상, 직권남용권리행사방해, 대통령등의경호에관한법률위반교사, 범인도피교사",
+          "court": "서울고등법원",
+          "decision_date": "2026-04-29",
+          "term": "인사발령",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025고합1010",
+          "case_name": "특수공무집행방해, 허위공문서작성, 허위작성공문서행사, 대통령기록물관리에관한법률위반, 공용서류손상, 직권남용권리행사방해, 대통령등의경호에관한법률위반교사, 범인도피교사",
+          "court": "서울중앙지방법원",
+          "decision_date": "2026-01-16",
+          "term": "인사발령",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024나2013287",
+          "case_name": "임금등",
+          "court": "서울고등법원",
+          "decision_date": "2025-12-12",
+          "term": "인사발령",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022다309344",
+          "case_name": "상여금지급청구의소",
+          "court": "대법원",
+          "decision_date": "2025-09-26",
+          "term": "인사발령",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "지점 발령",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024나115462",
+          "case_name": "집행문부여의 소",
+          "court": "창원지방법원",
+          "decision_date": "2025-11-20",
+          "term": "지점 발령",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2019노96",
+          "case_name": "특정범죄가중처벌등에관한법률위반(조세)(피고인2·피고인3·피고인4에대하여일부인정된죄명조세범처벌법위반방조)·특정범죄가중처벌등에관한법률위반(허위세금계산서교부등)·특정경제범죄가중처벌등에관한법률위반(횡령)·업무상횡령·업무상배임·조세범처벌법위반",
+          "court": "대전고등법원",
+          "decision_date": "2025-07-23",
+          "term": "지점 발령",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024나2017777",
+          "case_name": "임금",
+          "court": "서울고등법원",
+          "decision_date": "2025-07-09",
+          "term": "지점 발령",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T06:50:52.947849+00:00"
+    },
+    "2e69803c714e0456eb3944883fe9a6d085c57b9e8ef85af95fb654b255d68d43": {
+      "category": "inheritance",
+      "legal_terms": [
+        "유류분의 권리자와 유류분",
+        "유류분권리자",
+        "유류분 반환청구"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 1,
+      "new_chunk_count": 33,
+      "case_numbers": [
+        "2023나58049"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025다210352",
+          "case_name": "소유권이전등기",
+          "court": "대법원",
+          "decision_date": "2025-07-03",
+          "term": "유류분의 권리자와 유류분",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022다220014",
+          "case_name": "구상금[상속인이 다른 상속인을 상대로 상속세 등의 대납에 따른 구상금을 청구한 사건]",
+          "court": "대법원",
+          "decision_date": "2025-05-29",
+          "term": "유류분의 권리자와 유류분",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022가합54127",
+          "case_name": "유언무효확인 등",
+          "court": "광주지방법원",
+          "decision_date": "2024-12-10",
+          "term": "유류분의 권리자와 유류분",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2023나58049",
+          "case_name": "유류분반환",
+          "court": "부산고등법원",
+          "decision_date": "2024-09-11",
+          "term": "유류분의 권리자와 유류분",
+          "decision": "indexed",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T06:52:08.838033+00:00"
+    },
+    "009901e191d54d84d3094f8344755c58da612cfe137561deef6c20ab0ae3130b": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속채무",
+        "상속포기",
+        "한정승인"
+      ],
+      "status": "completed",
+      "candidate_count": 5,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024구합56313",
+          "case_name": "상속세부과처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2026-06-24",
+          "term": "상속포기",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30417",
+          "case_name": "재산세등부과처분취소",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026도6500",
+          "case_name": "특수공무집행방해·허위공문서작성·허위작성공문서행사·대통령기록물관리에관한법률위반·공용서류손상·직권남용권리행사방해·대통령등의경호에관한법률위반교사·범인도피교사",
+          "court": "대법원",
+          "decision_date": "2026-07-09",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다200335",
+          "case_name": "구상금",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024도5902",
+          "case_name": "산업안전보건법위반·업무상과실치사·업무상과실치상",
+          "court": "대법원",
+          "decision_date": "2026-06-25",
+          "term": "한정승인",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T07:16:09.911980+00:00"
+    },
+    "90d9948821713ed0767148c9be7c93f17600a462641777b242db1c6196915b76": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속재산",
+        "유언",
+        "유류분"
+      ],
+      "status": "completed",
+      "candidate_count": 1,
+      "new_case_count": 1,
+      "new_chunk_count": 8,
+      "case_numbers": [
+        "2023다295978"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다295978",
+          "case_name": "집행판결",
+          "court": "대법원",
+          "decision_date": "2026-04-30",
+          "term": "유언",
+          "decision": "indexed",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T07:17:35.958451+00:00"
+    },
+    "e0856ae0d117f44569689307f81396da24add8f627b50986aae3899a93c55f0a": {
+      "category": "inheritance",
+      "legal_terms": [
+        "상속재산",
+        "유언",
+        "유류분"
+      ],
+      "status": "completed",
+      "candidate_count": 0,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "disabled",
+      "candidates": [],
+      "collected_at": "2026-10-23T08:07:27.684713+00:00"
+    },
+    "a15514e55556dd65e5c1d72051483a6daef2c6519611a878c5d0efd7304023a6": {
+      "category": "labor",
+      "legal_terms": [
+        "해고",
+        "해고 통보",
+        "퇴직금"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 1,
+      "new_chunk_count": 10,
+      "case_numbers": [
+        "2024도14708"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026마6750",
+          "case_name": "채권압류및추심명령",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "퇴직금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도13141",
+          "case_name": "금융실명거래및비밀보장에관한법률위반·개인정보보호법위반[갑이 을을 상대로 제기한 민사소송과 병이 을을 상대로 제기한 민사소송에서 을의 소송대리인이 각각의 사건에서 재판부를 통해 확인한 갑과 병의 은행 거래내역 등을 다른 사건에서 증거자료로 제출한 경우, 금융실명거래 및 비밀보장에 관한 법률 및 개인정보 보호법 위반죄에 대하여 형법 제20조에 따라 위법성이 조각되는지 여부]",
+          "court": "대법원",
+          "decision_date": "2026-02-26",
+          "term": "퇴직금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024도14708",
+          "case_name": "근로자퇴직급여보장법위반",
+          "court": "대법원",
+          "decision_date": "2026-02-12",
+          "term": "퇴직금",
+          "decision": "indexed",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T08:11:19.163570+00:00"
+    },
+    "0223c517eef0665f6eb9926a2365e2fbd048d6d8f782f39da53c17eabcb9e0fe": {
+      "category": "labor",
+      "legal_terms": [
+        "근로계약",
+        "부당해고"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025구합54661",
+          "case_name": "징계결정취소",
+          "court": "서울행정법원",
+          "decision_date": "2026-04-23",
+          "term": "근로계약",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2022다225606",
+          "case_name": "근로자지위확인등",
+          "court": "대법원",
+          "decision_date": "2026-04-16",
+          "term": "근로계약",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다285162",
+          "case_name": "손해배상(국)",
+          "court": "대법원",
+          "decision_date": "2026-01-22",
+          "term": "부당해고",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2023도8339",
+          "case_name": "개인정보보호법위반·금융실명거래및비밀보장에관한법률위반",
+          "court": "대법원",
+          "decision_date": "2026-01-08",
+          "term": "부당해고",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T08:12:01.356428+00:00"
+    },
+    "33eb75f6f8a8f2cbdf96ef05d88508777321112f1d0dd373e9e205b154be0dca": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "임대차보증금",
+        "보증금 반환",
+        "보증금 회수"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2025다217842",
+          "case_name": "손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-08-13",
+          "term": "임대차보증금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "임대차보증금",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2023다287663",
+          "case_name": "부당이득금[선순위 회생담보권자가 후순위 회생담보권자를 상대로 회생계획에서 정한 바에 따라 담보목적물의 매각대금이 선순위 회생담보권 원리금 채무에 우선 변제되어야 함에도 그와 달리 변제기가 도래한 각 회생담보권 원리금 채무에 분할 변제되었다고 주장하며 그 차액 상당의 부당이득반환을 구하는 사건]",
+          "court": "대법원",
+          "decision_date": "2026-05-20",
+          "term": "보증금 반환",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025나41158",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "부산지방법원",
+          "decision_date": "2026-01-21",
+          "term": "보증금 회수",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T08:12:16.920324+00:00"
+    },
+    "b692d2c6cfb511147ea5c6d23f08c45b42250402034748ed71b8365895495307": {
+      "category": "labor",
+      "legal_terms": [
+        "임금",
+        "임금 지급",
+        "체불"
+      ],
+      "status": "completed",
+      "candidate_count": 4,
+      "new_case_count": 0,
+      "new_chunk_count": 0,
+      "case_numbers": [],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2026마6750",
+          "case_name": "채권압류및추심명령",
+          "court": "대법원",
+          "decision_date": "2026-08-12",
+          "term": "임금",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2025다219757",
+          "case_name": "임금·임금등청구",
+          "court": "대법원",
+          "decision_date": "2026-04-30",
+          "term": "임금",
+          "decision": "duplicate",
+          "reason": ""
+        },
+        {
+          "case_number": "2025도13141",
+          "case_name": "금융실명거래및비밀보장에관한법률위반·개인정보보호법위반[갑이 을을 상대로 제기한 민사소송과 병이 을을 상대로 제기한 민사소송에서 을의 소송대리인이 각각의 사건에서 재판부를 통해 확인한 갑과 병의 은행 거래내역 등을 다른 사건에서 증거자료로 제출한 경우, 금융실명거래 및 비밀보장에 관한 법률 및 개인정보 보호법 위반죄에 대하여 형법 제20조에 따라 위법성이 조각되는지 여부]",
+          "court": "대법원",
+          "decision_date": "2026-02-26",
+          "term": "체불",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022다217056",
+          "case_name": "하도급계약보증금",
+          "court": "대법원",
+          "decision_date": "2024-10-08",
+          "term": "체불",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T08:13:04.483290+00:00"
+    },
+    "e0636d57296aba0be1af1645fabe1d9892a9d71d72d54564ef23f50675c4424f": {
+      "category": "housing_lease",
+      "legal_terms": [
+        "계약갱신요구권",
+        "묵시적 갱신",
+        "임대차보호법"
+      ],
+      "status": "completed",
+      "candidate_count": 8,
+      "new_case_count": 2,
+      "new_chunk_count": 12,
+      "case_numbers": [
+        "2026다201337, 201338",
+        "2024다320215"
+      ],
+      "selection_mode": "llm",
+      "candidates": [
+        {
+          "case_number": "2024다317332",
+          "case_name": "건물인도·손해배상(기)[부속물 매매대금 채권을 수동채권으로 한 임대인의 상계 의사표시 이전 임차인의 목적물 점유가 불법점유인지 문제된 사건]",
+          "court": "대법원",
+          "decision_date": "2025-05-15",
+          "term": "계약갱신요구권",
+          "decision": "filtered",
+          "reason": ""
+        },
+        {
+          "case_number": "2024구단60339",
+          "case_name": "양도소득세부과처분취소",
+          "court": "서울행정법원",
+          "decision_date": "2024-12-20",
+          "term": "계약갱신요구권",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2022두64808",
+          "case_name": "시정명령등취소[치킨 프랜차이즈업을 영위하는 가맹본부인 원고가 가맹점사업자단체 활동 등을 이유로 가맹점사업자에게 불이익을 주는 행위 등을 하였는지 여부가 문제된 사건]",
+          "court": "대법원",
+          "decision_date": "2024-07-11",
+          "term": "계약갱신요구권",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2026다201337",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "대법원",
+          "decision_date": "2026-07-16",
+          "term": "묵시적 갱신",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2025나41158",
+          "case_name": "건물인도·손해배상(기)",
+          "court": "부산지방법원",
+          "decision_date": "2026-01-21",
+          "term": "묵시적 갱신",
+          "decision": "duplicate",
+          "reason": ""
+        },
+        {
+          "case_number": "2025누4540",
+          "case_name": "양도소득세부과처분취소",
+          "court": "서울고등법원",
+          "decision_date": "2025-12-12",
+          "term": "묵시적 갱신",
+          "decision": "rejected",
+          "reason": ""
+        },
+        {
+          "case_number": "2024다320215",
+          "case_name": "건물인도",
+          "court": "대법원",
+          "decision_date": "2026-06-24",
+          "term": "임대차보호법",
+          "decision": "indexed",
+          "reason": ""
+        },
+        {
+          "case_number": "2026두30078",
+          "case_name": "양도소득세부과처분취소",
+          "court": "대법원",
+          "decision_date": "2026-06-05",
+          "term": "임대차보호법",
+          "decision": "rejected",
+          "reason": ""
+        }
+      ],
+      "collected_at": "2026-10-23T08:20:12.308640+00:00"
+    }
+  }
+}

@@ -58,7 +58,7 @@
 
 2026-10-22 실제 실행 예: 임대차 계약 갱신 거절 질문에서 목록 후보 8건 중 선별 프롬프트가 상가건물 임대차 묵시적 갱신 판례(2023다307024) 1건만 골라 본문 조회가 8회에서 1회로 줄었다. 양도소득세·가맹사업 등 사건명이 쟁점과 무관한 7건은 `rejected`로 기록됐다. 같은 질문을 다시 실행하면 `cache_hit: true`와 함께 같은 결정 목록을 이력에서 돌려준다.
 
-`data/cache/dynamic_cases.json`과 `data/cache/case_collection_history.json`은 Git에서 제외한다. 동일 마스킹 질문은 LLM 검색어가 달라져도 완료 이력을 재사용한다. 외부 API 장애 시에도 기존 정적 검색은 계속 동작한다.
+`data/cache/dynamic_cases.json`(보강한 공개 판례)과 `data/cache/case_collection_history.json`(마스킹 질문의 SHA-256과 검색어만 저장)은 다른 사람이 같은 상태로 검증할 수 있도록 Git에 포함한다. 동일 마스킹 질문은 LLM 검색어가 달라져도 완료 이력을 재사용한다. 외부 API 장애 시에도 기존 정적 검색은 계속 동작한다.
 
 ## 재현
 

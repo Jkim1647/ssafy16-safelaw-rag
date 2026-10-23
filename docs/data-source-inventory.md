@@ -62,8 +62,8 @@
 | `data/processed/statute_chunks.json` | 382개 청크 | 최대 1200자 / 중첩 150자 | SHA-256 `2fa3e00061dd8fec4b5ed3844a4294249e8671601a89adaf0dcc88cd895b27b1` |
 | `data/processed/cases.json` | 50건 | 2023-08-17~2026-06-24 선고 | SHA-256 `eda97ce49a30d993a7429796936a81cc9d10c6f36d316d52e632722771aa6343` |
 | `data/processed/case_chunks.json` | 652개 청크 | 최대 1400자 / 중첩 180자 | SHA-256 `8d92761c3f4a179cad283f3a984e4988b8537c2121eba4c90f2194001e0c352a` |
-| 법령 Chroma | 382개 벡터 | `data/indexes/statutes/` | 재생성 가능·Git 제외 |
-| 판례 Chroma | 652개 벡터 | `data/indexes/cases/` | 재생성 가능·Git 제외 |
+| 법령 Chroma | 382개 벡터 | `data/indexes/statutes/` | 재생성 가능·Git 포함(바로 검증용) |
+| 판례 Chroma | 652개 벡터 | `data/indexes/cases/` | 재생성 가능·Git 포함(질문 보강 증분 포함) |
 
 - 법령 카테고리: 노동 158개, 임대차 96개, 상속 127개
 - 판례 카테고리: 노동 12건, 임대차 27건, 상속 11건
@@ -96,9 +96,10 @@
 | `LAW_API_OC` | `.env`에서만 읽고 URL 로그·manifest·Git에 저장하지 않음 |
 | `GMS_KEY` | `.env`에서만 읽고 예외·객체 표현·Git에 저장하지 않음 |
 | 사용자 원문 | 로컬 마스킹 후 폐기, 데이터셋·Chroma에 저장하지 않음 |
-| `.env` | `.gitignore` 적용 |
-| `data/raw/` | 원문 임시 저장 가능성을 고려해 Git 제외 |
-| `data/indexes/` | 재생성 가능한 벡터 DB로 Git 제외 |
+| `.env` | `.gitignore` 적용(비밀값이라 데이터 중 유일하게 Git 제외) |
+| `data/raw/` | API 원시 응답을 저장하지 않아 비어 있음(`.gitkeep`만 Git 포함) |
+| `data/indexes/` | 다른 사람이 색인 없이 바로 검증하도록 Chroma 벡터 DB를 Git 포함. 키·사용자 원문은 들어 있지 않음 |
+| `data/cache/` | 판례 증분 보강 결과(공개 판례)와 수집 이력(마스킹 질문의 SHA-256·검색어만)을 Git 포함 |
 | `data/processed/` | 공개 법률 문서 정규화본과 manifest만 Git 제출 |
 
 ## 재현 명령

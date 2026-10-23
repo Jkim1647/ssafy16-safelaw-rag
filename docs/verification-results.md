@@ -89,7 +89,7 @@
 |---|---|---|
 | NF2001 응답 시간 | 통과 | 분야별 예시 질문 2회씩, 답변+체크리스트 전체 8.3~16.7초 (아래 표). 검색어 변환 모델 변경 전에는 31.8~64.0초였다 |
 | NF2002 수집 캐시 | 통과 | 같은 질문 재실행 `cache_hit: true`, 보유 사건번호는 본문 미조회 (`test_case_enrichment`) |
-| NF2003 API 키 관리 | 통과 | `.env`는 `.gitignore` 대상, `git ls-files .env data/indexes data/raw data/cache` 결과 없음, 추적 파일에서 키 패턴 검색 결과 없음 |
+| NF2003 API 키 관리 | 통과 | `.env`는 `.gitignore` 대상이고 `git ls-files .env` 결과 없음. 2026-10-23부터 검증용으로 Chroma 색인·판례 보강 캐시를 Git에 포함했고, 데이터 바이너리까지 포함한 추적 파일 전체에서 `.env`의 실제 키 값·키 패턴 검색 결과 없음 |
 | NF2004 내부 정보 비노출 | 통과 | 처리한 오류는 고정 문구만 표시. `.streamlit/config.toml`에 `showErrorDetails = "none"`을 두어 처리하지 못한 예외도 추적 정보를 화면에 보이지 않음. 실행 정보에는 모델명만 표시 |
 | NF2005 모듈 분리 | 통과 | `collectors`·`rag`(chunking/indexing/retrieval/pipeline)·`adapters`·`security`·`ui` 분리, 수집 범위는 `data/*_sources.json` |
 | NF2006 외부 API 예절 | 통과 | 법령·판례 API 클라이언트에 재시도(지연 0.5초×시도), 요청 간격, `User-Agent: SafeLaw/0.1 (SSAFY AI Core Project)` |
