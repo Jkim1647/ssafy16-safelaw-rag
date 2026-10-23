@@ -24,6 +24,17 @@ class CitationValidationError(ValueError):
     """답변이 제공된 검색 근거에 묶여 있지 않을 때 발생한다."""
 
 
+# 프롬프트에서만 쓰는 이름이 사용자에게 보이는 문장에 섞이면 다시 생성하게 한다.
+INTERNAL_TERMS = re.compile(r"CONTEXT|citation_id|evidence_quotes", re.IGNORECASE)
+
+
+def reject_internal_terms(text: str) -> None:
+    if INTERNAL_TERMS.search(text):
+        raise CitationValidationError(
+            "화면에 보일 문장에 내부 용어(CONTEXT 등)가 있다. '검색된 법령·판례'처럼 풀어 써라."
+        )
+
+
 @dataclass(frozen=True, slots=True)
 class StatuteEvidence:
     citation_id: int
@@ -229,6 +240,7 @@ def parse_grounded_claim(value: Any, evidence_by_id: dict[int, LegalEvidence]) -
         raise CitationValidationError("근거가 필요한 주장에 본문이 없습니다.")
     if re.search(r"https?://", text, re.IGNORECASE):
         raise CitationValidationError("생성 답변 본문에 검증되지 않은 URL이 포함되어 있습니다.")
+    reject_internal_terms(text)
     if not isinstance(citations, list) or not citations:
         raise CitationValidationError("모든 주장에는 하나 이상의 근거 번호가 필요합니다.")
 
@@ -271,8 +283,14 @@ def parse_grounded_claim(value: Any, evidence_by_id: dict[int, LegalEvidence]) -
         for citation_id in citation_ids
         if isinstance(evidence_by_id[citation_id], StatuteEvidence)
     }
+    # 인용한 원문 자체가 가리키는 조문(예: 제37조의 "제36조에 따라")도 그 근거로 뒷받침된다.
+    cited_text = "".join(re.sub(r"\s+", "", evidence_by_id[citation_id].text) for citation_id in citation_ids)
     normalized_mentions = {re.sub(r"\s+", "", item) for item in mentioned_articles}
-    if not normalized_mentions.issubset(cited_articles):
+    unsupported = {
+        item for item in normalized_mentions
+        if item not in cited_articles and not re.search(re.escape(item) + r"(?!의\d)", cited_text)
+    }
+    if unsupported:
         raise CitationValidationError("본문에서 언급한 조문과 연결된 근거 번호가 일치하지 않습니다.")
 
     return GroundedClaim(

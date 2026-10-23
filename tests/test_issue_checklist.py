@@ -109,6 +109,14 @@ class ParseIssueChecklistTests(unittest.TestCase):
         with self.assertRaises(CitationValidationError):
             parse_issue_checklist(raw, EVIDENCE)
 
+    def test_rejects_internal_prompt_term_in_check_question(self):
+        raw = checklist_response(
+            item("요건", "unknown", "CONTEXT에 나온 문서를 받았나요?", 1, "해고사유와 해고시기를 서면으로 통지")
+        )
+
+        with self.assertRaisesRegex(CitationValidationError, "내부 용어"):
+            parse_issue_checklist(raw, EVIDENCE)
+
     def test_rejects_empty_question_and_empty_items(self):
         with self.assertRaises(CitationValidationError):
             parse_issue_checklist(
