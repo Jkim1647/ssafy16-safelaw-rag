@@ -96,7 +96,7 @@ SSAFY 16기 AI 코어 프로젝트 2회차(RAG) · 개인 프로젝트 · 2026�
 | [요구사항 정의서](docs/requirements-definition.md) | 도메인 선택 조건 충족 근거, 기능·비기능 요구사항 표(F2001~F2016, NF2001~NF2007) |
 | [RAG 파이프라인 설계문서](docs/rag-pipeline-design.md) | 컬렉션·메타데이터, 수집·청킹·색인, 병합·중복 제거, 프롬프트 3개, 청크·Top-k 선택 이유, 근거 표시, 특화 기능, 문제 해결 |
 | [검증 결과](docs/verification-results.md) | 명세서 4장 항목별 실행 결과, 요구사항 대조표, 테스트 결과표, 응답 시간, 남은 항목 |
-| [셀프 체크리스트](docs/self-checklist.md) | 3일차 셀프 점검 27항목 결과와 증빙 캡처(`docs/checklist/`) |
+| [셀프 체크리스트](docs/self-checklist.md) | 3일차 셀프 점검 27항목 결과와 증빙 캡처(`docs/checklist/`), 배포 양식 파일 [`self-checklist.xlsx`](docs/self-checklist.xlsx) |
 | [RAG 사용 전후 비교](docs/rag-before-after.md) | 심화 F2015 대표 질문 6개 비교 |
 | [웹 화면·API](docs/web-api.md) | 심화 F2013 HTML/CSS/JS 화면과 요청·응답 형식 |
 | [데이터 출처·이용 조건](docs/data-source-inventory.md) | API·수집 범위·건수·해시·이용 조건 |
