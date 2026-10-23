@@ -163,7 +163,7 @@ ai-2_safelaw_gwangju_03_kimjinyoung/
 │  ├─ show_evidence.py            # Top-k별 근거 목록 비교
 │  ├─ capture_ui_screenshots.py   # README 제출용 UI 캡처 자동 생성
 │  ├─ render_architecture.py      # 아키텍처 SVG 원본 생성과 4K PNG 렌더링
-│  ├─ capture_checklist_evidence.py # 셀프 체크리스트 명령 출력 증빙 PNG 생성
+│  ├─ capture_checklist_evidence.py # 셀프 체크리스트 명령 출력 증빙 실행(--print는 터미널 출력)
 │  └─ generate_data_source_inventory.py # manifest 기반 제출용 현황 문서 생성
 └─ tests/                          # 보안·도메인·RAG 검증
 ```

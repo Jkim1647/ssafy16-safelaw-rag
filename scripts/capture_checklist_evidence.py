@@ -1,10 +1,12 @@
-"""셀프·상호 체크리스트의 명령 출력 증빙을 실행하고 PNG로 저장한다.
+"""셀프·상호 체크리스트의 명령 출력 증빙을 실행한다.
 
+제출 증빙은 --print로 결과를 터미널에 출력하고 그 터미널 화면을 그대로 캡처한다
+(docs/checklist/*_터미널.png). --print 없이 실행하면 결과를 PNG로 그려 저장한다.
 재색인(2·5번), 판례 수집(3·4번), Top-k·MMR 비교(6·16번)는 GMS를 실제로 호출하므로
---with-gms를 줄 때만 실행한다. 앱 화면 증빙은 실제 서버를 띄워 따로 캡처한다.
+--with-gms를 줄 때만 실행한다.
 
+    .\\.venv\\Scripts\\python.exe scripts\\capture_checklist_evidence.py --only c01 --print
     .\\.venv\\Scripts\\python.exe scripts\\capture_checklist_evidence.py --with-gms
-    .\\.venv\\Scripts\\python.exe scripts\\capture_checklist_evidence.py --only c01 c07
 """
 
 from __future__ import annotations
@@ -258,6 +260,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="셀프 체크리스트 명령 출력 증빙 PNG 생성")
     parser.add_argument("--only", nargs="+", choices=sorted(STEPS), help="일부 항목만 실행")
     parser.add_argument("--with-gms", action="store_true", help="GMS를 실제로 호출하는 항목(c02, c03, c05, c06)도 실행")
+    parser.add_argument("--print", dest="print_only", action="store_true",
+                        help="PNG를 만들지 않고 결과만 터미널에 출력 (터미널 화면을 직접 캡처할 때)")
     args = parser.parse_args()
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     for key in args.only or sorted(STEPS):
@@ -266,6 +270,9 @@ def main() -> None:
             print(f"{key}: 건너뜀 (GMS 필요, --with-gms로 실행)")
             continue
         body = _scrub(step())
+        if args.print_only:
+            print(body)
+            continue
         output = OUTPUT_DIR / file_name
         render(title, body, output)
         print(f"{key}: {output.relative_to(ROOT)}")
