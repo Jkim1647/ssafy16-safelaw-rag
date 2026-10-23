@@ -58,6 +58,7 @@ class CitationValidationTests(unittest.TestCase):
 
         rendered = render_grounded_answer(draft, evidence)
         self.assertIn("법리가 변경·제한되었을 수 있습니다", rendered)
+        self.assertIn("- [근거 1] 판례 · [", rendered)
 
     def test_build_evidence_keeps_only_official_law_sources(self):
         evidence = build_statute_evidence(
@@ -105,6 +106,8 @@ class CitationValidationTests(unittest.TestCase):
 
         self.assertIn("[근거 1]", rendered)
         self.assertIn(evidence[0].source_url, rendered)
+        # 근거 목록에서 법령과 판례를 종류로 구분해 보여 준다.
+        self.assertIn("- [근거 1] 법령 · [", rendered)
 
     def test_rejects_claim_without_citation(self):
         evidence = build_statute_evidence([hit()])
