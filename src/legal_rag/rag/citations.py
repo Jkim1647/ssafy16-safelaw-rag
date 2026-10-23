@@ -351,7 +351,9 @@ def render_grounded_answer(draft: GroundedDraft, evidence: Sequence[LegalEvidenc
 
     lines.extend(("", "### 확인된 근거", ""))
     for item in cited_evidence(draft, evidence):
-        lines.append(f"- [근거 {item.citation_id}] [{item.label}]({item.source_url})")
+        # 항목 메타데이터(법령 조문)와 외부 문서(판례)를 목록에서도 구분한다.
+        kind = "판례" if isinstance(item, CaseEvidence) else "법령"
+        lines.append(f"- [근거 {item.citation_id}] {kind} · [{item.label}]({item.source_url})")
     lines.extend(
         (
             "",

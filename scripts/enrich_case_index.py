@@ -1,6 +1,6 @@
 """한 질문으로 판례 API 캐시와 Chroma 증분 색인을 점검한다."""
 from __future__ import annotations
-import argparse, json, os, sys
+import argparse, json, os, sys, time
 from dataclasses import asdict
 from pathlib import Path
 from dotenv import load_dotenv
@@ -35,6 +35,7 @@ def main() -> int:
     category = LegalCategory(args.category)
     settings = Settings.from_environment()
     sanitized = PrivacyGuard().redact(args.query).sanitized_text
+    started = time.perf_counter()
     plan = LegalQueryExpander(GmsChatClient(gms_key, model_name=query_model, base_url=base_url)).expand(sanitized, category)
     result = IncrementalCaseEnricher(
         CourtCaseOpenApiClient(law_oc),
@@ -46,7 +47,10 @@ def main() -> int:
         selector=CaseCandidateSelector(GmsChatClient(gms_key, model_name=answer_model, base_url=base_url)),
         chunk_max_chars=settings.case_chunk_size, chunk_overlap_chars=settings.case_chunk_overlap,
     ).enrich(plan, category=category)
-    print(json.dumps({"cache_hit": result.cache_hit, "candidate_count": result.candidate_count,
+    elapsed = time.perf_counter() - started
+    # 프롬프트1이 뽑은 검색어와 처리 시간을 함께 남겨 재질문 시 수집이 생략되는지 비교한다.
+    print(json.dumps({"legal_terms": list(plan.legal_terms), "elapsed_seconds": round(elapsed, 2),
+        "cache_hit": result.cache_hit, "candidate_count": result.candidate_count,
         "new_case_count": result.new_case_count, "new_chunk_count": result.new_chunk_count,
         "case_numbers": result.case_numbers, "selection_mode": result.selection_mode,
         "candidates": [asdict(item) for item in result.decisions]}, ensure_ascii=False, indent=2))
